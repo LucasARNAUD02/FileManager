@@ -1,0 +1,19 @@
+{
+    "name": "lucas/file-manager",
+    "description": "File Manager",
+    "type": "librairy",
+    "license": "mit",
+    "autoload": {
+        "psr-4": {
+            "Lucas\\FileManager\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lucas Arnaud",
+            "email": "83358481+LucasARNAUD02@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
