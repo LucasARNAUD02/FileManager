@@ -4,5 +4,5 @@ namespace Lucas\FileManager;
 
 class FileManager
 {
-    
+
 }
