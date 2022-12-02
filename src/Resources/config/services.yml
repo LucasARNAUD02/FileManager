@@ -1,0 +1,27 @@
+services:
+
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    Lucas\FileManager\Controller\:
+        resource: '../../Controller/*'
+
+    Lucas\FileManager\Twig\FileTypeExtension:
+        tags:
+            - { name: twig.extension }
+        arguments: ['@Lucas\FileManager\Service\FileTypeService']
+
+    Lucas\FileManager\Service\FileTypeService:
+        arguments: ['@router']
+
+    Lucas\FileManager\Twig\OrderExtension:
+        tags:
+            - { name: twig.extension }
+        arguments: ['@router']
+
+    Lucas\FileManager\Service\FilemanagerService:
+        arguments: ['%file_manager%', '@service_container']
+
+
+    Twig\Extension\StringLoaderExtension: ~
