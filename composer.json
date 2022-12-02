@@ -1,5 +1,5 @@
 {
-    "name": "lucas-arnaud/file-manager",
+    "name": "lucas-arnaud/yapa-bundle",
     "description": "File Manager",
     "type": "librairy",
     "license": "mit",
@@ -11,7 +11,7 @@
     "authors": [
         {
             "name": "Lucas Arnaud",
-            "email": "83358481+LucasARNAUD02@users.noreply.github.com"
+            "email": "lucasarnd022@gmail.com"
         }
     ],
     "minimum-stability": "dev",
