@@ -41,7 +41,7 @@ class File
             $kb = $this->translator->trans('size.kb');
             $mb = $this->translator->trans('size.mb');
 
-            return $size > 1000 ? number_format(($size / 1000), 1, '.', '').' '.$mb : number_format($size, 1, '.', '').' '.$kb;
+            return $size > 1000 ? number_format(($size / 1000), 1, '.', '') . ' File.php' .$mb : number_format($size, 1, '.', '') . ' File.php' .$kb;
         }
         return null;
     }

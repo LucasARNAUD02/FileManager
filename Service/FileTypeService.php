@@ -21,7 +21,7 @@ class FileTypeService {
 
     public function preview(FileManager $fileManager, SplFileInfo $file) {
         if ($fileManager->getImagePath()) {
-            $filePath = $fileManager->getImagePath().$file->getFilename();
+            $filePath = $fileManager->getImagePath() . $file->getFilename();
         } else {
             $filePath = $this->router->generate(
                 'file_manager_file',
@@ -39,7 +39,7 @@ class FileTypeService {
             $href = $this->router->generate(
                 'file_manager', array_merge(
                 $fileManager->getQueryParameters(),
-                ['route' => $fileManager->getRoute().'/'.rawurlencode($file->getFilename())]
+                ['route' => $fileManager->getRoute() . 'FileTypeService.php/' .rawurlencode($file->getFilename())]
             )
             );
 

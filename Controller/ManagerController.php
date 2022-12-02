@@ -50,7 +50,7 @@ class ManagerController extends AbstractController {
     }
 
     /**
-     * @Route("/cloud", name="file_manager")
+     * @Route("/", name="file_manager")
      */
     public function indexAction(Request $request, FileTypeService $fileTypeService): JsonResponse|Response {
         $queryParameters = $request->query->all();
@@ -176,7 +176,7 @@ class ManagerController extends AbstractController {
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $fs = new Filesystem();
-            $directory = $directorytmp = $fileManager->getCurrentPath().\DIRECTORY_SEPARATOR.$data['name'];
+            $directory = $directorytmp = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$data['name'];
             $i = 1;
 
             while ($fs->exists($directorytmp)) {
@@ -214,8 +214,8 @@ class ManagerController extends AbstractController {
             $newfileName = $data['name'].$extension;
             if ($newfileName !== $fileName && isset($data['name'])) {
                 $fileManager = $this->newFileManager($queryParameters);
-                $NewfilePath = $fileManager->getCurrentPath().\DIRECTORY_SEPARATOR.$newfileName;
-                $OldfilePath = realpath($fileManager->getCurrentPath().\DIRECTORY_SEPARATOR.$fileName);
+                $NewfilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$newfileName;
+                $OldfilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$fileName);
                 if (0 !== mb_strpos($NewfilePath, $fileManager->getCurrentPath())) {
                     $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
                 } else {
@@ -243,7 +243,7 @@ class ManagerController extends AbstractController {
         $fileManager = $this->newFileManager($request->query->all());
 
         $options = [
-            'upload_dir' => $fileManager->getCurrentPath().\DIRECTORY_SEPARATOR,
+            'upload_dir' => $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR,
             'upload_url' => implode('/', array_map('rawurlencode', explode('/', $fileManager->getImagePath()))),
             'accept_file_types' => $fileManager->getRegex(),
             'print_response' => false,
@@ -282,7 +282,7 @@ class ManagerController extends AbstractController {
     public function binaryFileResponseAction(Request $request, string $fileName): BinaryFileResponse {
         $fileManager = $this->newFileManager($request->query->all());
 
-        $file = $fileManager->getCurrentPath().\DIRECTORY_SEPARATOR.urldecode($fileName);
+        $file = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .urldecode($fileName);
         $this->dispatch(FileManagerEvents::FILE_ACCESS, ['path' => $file]);
 
         return new BinaryFileResponse($file);
@@ -302,7 +302,7 @@ class ManagerController extends AbstractController {
             if (isset($queryParameters['delete'])) {
                 $is_delete = false;
                 foreach ($queryParameters['delete'] as $fileName) {
-                    $filePath = realpath($fileManager->getCurrentPath().\DIRECTORY_SEPARATOR.$fileName);
+                    $filePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$fileName);
                     if (0 !== mb_strpos($filePath, $fileManager->getCurrentPath())) {
                         $this->addFlash('danger', 'file.deleted.danger');
                     } else {

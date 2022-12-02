@@ -1,4 +1,4 @@
-blueimp*/*
+blueimp-tmpl/js
 !blueimp*/js
 !blueimp*/img
 !blueimp*/css

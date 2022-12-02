@@ -54,8 +54,8 @@
   font-style: normal; 
   font-weight: normal;
 
-  src: url("font/context-menu-icons.eot?2lkho");
-  src: url("font/context-menu-icons.eot?2lkho#iefix") format("embedded-opentype"), url("font/context-menu-icons.woff2?2lkho") format("woff2"), url("font/context-menu-icons.woff?2lkho") format("woff"), url("font/context-menu-icons.ttf?2lkho") format("truetype");
+  src: url("vendor/lucas-arnaud/yapa-bundle/Resources/public/libs/jQuery-contextMenu/dist/font/context-menu-icons.eot?2lkho");
+  src: url("vendor/lucas-arnaud/yapa-bundle/Resources/public/libs/jQuery-contextMenu/dist/font/context-menu-icons.eot?2lkho#iefix") format("embedded-opentype"), url("vendor/lucas-arnaud/yapa-bundle/Resources/public/libs/jQuery-contextMenu/dist/font/context-menu-icons.woff2?2lkho") format("woff2"), url("vendor/lucas-arnaud/yapa-bundle/Resources/public/libs/jQuery-contextMenu/dist/font/context-menu-icons.woff?2lkho") format("woff"), url("vendor/lucas-arnaud/yapa-bundle/Resources/public/libs/jQuery-contextMenu/dist/font/context-menu-icons.ttf?2lkho") format("truetype");
 }
 
 .context-menu-icon-add:before {

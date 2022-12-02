@@ -51,7 +51,7 @@ class UploadHandler
 
     public function __construct($options = null, $initialize = true, $error_messages = null) {
         $this->options = array(
-            'script_url' => $this->get_full_url().'/'.$this->basename($this->get_server_var('SCRIPT_NAME')),
+            'script_url' => $this->get_full_url() . 'UploadHandler.php/' .$this->basename($this->get_server_var('SCRIPT_NAME')),
             'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/files/',
             'upload_url' => $this->get_full_url().'/files/',
             'input_stream' => 'php://input',
@@ -244,7 +244,7 @@ class UploadHandler
 
     protected function get_user_path() {
         if ($this->options['user_dirs']) {
-            return $this->get_user_id().'/';
+            return $this->get_user_id() . 'UploadHandler.php/';
         }
         return '';
     }
@@ -286,7 +286,7 @@ class UploadHandler
             if ($version_url) {
                 return $version_url.$this->get_user_path().rawurlencode($file_name);
             }
-            $version_path = rawurlencode($version).'/';
+            $version_path = rawurlencode($version) . 'UploadHandler.php/';
         }
         return $this->options['upload_url'].$this->get_user_path()
             .$version_path.rawurlencode($file_name);
@@ -569,7 +569,7 @@ class UploadHandler
             $parts = explode('.', $name);
             if (count($parts) > 2) {
                 $ext = array_pop($parts);
-                $name = implode($replacement, $parts).'.'.$ext;
+                $name = implode($replacement, $parts) . 'Helpers' .$ext;
             }
         }
         // Use a timestamp for empty filenames:
@@ -1102,7 +1102,7 @@ class UploadHandler
             return self::IMAGETYPE_JPEG;
         }
         // PNG: 89 50 4E 47
-        if (bin2hex(@$data[0]).substr($data, 1, 4) === '89PNG') {
+        if (UploadHandler . phpbin2hex(@$data[0]) === '89PNG') {
             return self::IMAGETYPE_PNG;
         }
         return false;

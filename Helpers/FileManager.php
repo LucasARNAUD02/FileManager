@@ -54,7 +54,7 @@ class FileManager {
     }
 
     public function getCurrentPath(): bool|string {
-        return realpath($this->getBasePath().$this->getCurrentRoute());
+        return realpath($this->getBasePath() . $this->getCurrentRoute());
     }
 
     // parent url
