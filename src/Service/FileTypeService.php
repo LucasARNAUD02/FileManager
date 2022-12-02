@@ -94,7 +94,7 @@ class FileTypeService {
                     $imageTemplate = str_replace('$IMAGE$', 'file_path', $twigExtension);
                 }
 
-                $html = $this->twig->render('@ArtgrisFileManager/views/preview.html.twig', [
+                $html = $this->twig->render('@FileManager/views/preview.html.twig', [
                     'filename' => $fileName,
                     'size' => $size,
                     'lazy' => $lazy,

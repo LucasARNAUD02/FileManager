@@ -50,7 +50,7 @@ class ManagerController extends AbstractController {
     }
 
     /**
-     * @Route("/", name="file_manager")
+     * @Route("/cloud", name="file_manager")
      */
     public function indexAction(Request $request, FileTypeService $fileTypeService): JsonResponse|Response {
         $queryParameters = $request->query->all();
@@ -146,7 +146,7 @@ class ManagerController extends AbstractController {
             'formDelete' => $formDelete,
         ];
         if ($isJson) {
-            $fileList = $this->renderView('@ArtgrisFileManager/views/_manager_view.html.twig', $parameters);
+            $fileList = $this->renderView('@FileManager/views/_manager_view.html.twig', $parameters);
 
             return new JsonResponse(['data' => $fileList, 'badge' => $finderFiles->count(), 'treeData' => $directoriesArbo]);
         }
@@ -197,7 +197,7 @@ class ManagerController extends AbstractController {
         $parameters['form'] = $form->createView();
         $parameters['formRename'] = $formRename->createView();
 
-        return $this->render('@ArtgrisFileManager/manager.html.twig', $parameters);
+        return $this->render('@FileManager/manager.html.twig', $parameters);
     }
 
     /**
@@ -436,7 +436,7 @@ class ManagerController extends AbstractController {
         if (!isset($queryParameters['conf'])) {
             throw new \RuntimeException('Please define a conf parameter in your route');
         }
-        $webDir = $this->getParameter('artgris_file_manager')['web_dir'];
+        $webDir = $this->getParameter('file_manager')['web_dir'];
         $this->fileManager = new FileManager($queryParameters, $this->filemanagerService->getBasePath($queryParameters), $this->router, $this->dispatcher, $webDir);
 
         return $this->fileManager;

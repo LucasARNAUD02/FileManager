@@ -33,7 +33,7 @@ class OrderExtension extends AbstractExtension
 
         $href = $this->router->generate('file_manager', $parameters);
 
-        return $environment->render('@ArtgrisFileManager/extension/_order.html.twig', [
+        return $environment->render('@FileManager/extension/_order.html.twig', [
             'active' => $active,
             'href' => $href,
             'icon' => $icon,

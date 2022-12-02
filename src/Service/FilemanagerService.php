@@ -6,12 +6,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FilemanagerService {
 
-    public function __construct(private array $artgrisFileManagerConfig,private ContainerInterface $container) {
+    public function __construct(private array $fileManagerConfig,private ContainerInterface $container) {
     }
 
     public function getBasePath(array $queryParameters): array {
         $conf = $queryParameters['conf'];
-        $managerConf = $this->artgrisFileManagerConfig['conf'];
+        $managerConf = $this->fileManagerConfig['conf'];
         if (isset($managerConf[$conf]['dir'])) {
             return $managerConf[$conf];
         }

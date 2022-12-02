@@ -8,19 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block stylesheets %}
         <link rel="stylesheet"
-              href="{{ asset('bundles/artgrisfilemanager/libs/bootstrap/dist/css/bootstrap.min.css') }}">
+              href="{{ asset('bundles/filemanager/libs/bootstrap/dist/css/bootstrap.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('assets/css/material-symbols.css') }}"/>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
               integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
               crossorigin="anonymous">
         <link rel="stylesheet"
-              href="{{ asset('bundles/artgrisfilemanager/libs/jstree/dist/themes/default/style.min.css') }}">
+              href="{{ asset('bundles/filemanager/libs/jstree/dist/themes/default/style.min.css') }}">
         <link rel="stylesheet"
-              href="{{ asset('bundles/artgrisfilemanager/libs/blueimp-file-upload/css/jquery.fileupload.css') }}">
-        <link rel="stylesheet" href="{{ asset('bundles/artgrisfilemanager/css/manager.css') }}">
+              href="{{ asset('bundles/filemanager/libs/blueimp-file-upload/css/jquery.fileupload.css') }}">
+        <link rel="stylesheet" href="{{ asset('bundles/filemanager/css/manager.css') }}">
         <link rel="stylesheet"
-              href="{{ asset('bundles/artgrisfilemanager/libs/jQuery-contextMenu/dist/jquery.contextMenu.min.css') }}">
+              href="{{ asset('bundles/filemanager/libs/jQuery-contextMenu/dist/jquery.contextMenu.min.css') }}">
     {% endblock %}
     <title>{% block title %}AFR cloud{% endblock %}</title>
 </head>
@@ -135,28 +135,28 @@
                     {% endif %}
                     {% block content %}
                         <form id="form-multiple-delete">
-                            {% include '@ArtgrisFileManager/views/_manager_view.html.twig' with {'fileManager' :fileManager,  'fileArray' : fileArray, 'formDelete' : formDelete} only %}
+                            {% include '@FileManager/views/_manager_view.html.twig' with {'fileManager' :fileManager,  'fileArray' : fileArray, 'formDelete' : formDelete} only %}
                         </form>
                     {% endblock %}
                 </div>
             </div>
         </div>
-        {% include '@ArtgrisFileManager/views/_modals.html.twig' %}
+        {% include '@FileManager/views/_modals.html.twig' %}
     </div>
 {% endblock %}
 {% block javascripts %}
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/jstree/dist/jstree.min.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/blueimp-file-upload/js/vendor/jquery.ui.widget.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/blueimp-file-upload/js/jquery.iframe-transport.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/blueimp-file-upload/js/jquery.fileupload.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/blueimp-file-upload/js/jquery.fileupload-process.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') }}"></script>
-    <script src="{{ asset('bundles/artgrisfilemanager/libs/jQuery-contextMenu/dist/jquery.contextMenu.min.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/jstree/dist/jstree.min.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/vendor/jquery.ui.widget.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/jquery.iframe-transport.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/jquery.fileupload.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/jquery.fileupload-process.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/jQuery-contextMenu/dist/jquery.contextMenu.min.js') }}"></script>
     <script type="text/javascript"
-            src="{{ asset('bundles/artgrisfilemanager/libs/jquery-lazy/jquery.lazy.min.js') }}"></script>
+            src="{{ asset('bundles/filemanager/libs/jquery-lazy/jquery.lazy.min.js') }}"></script>
     <script>
         var treedata = {{ treeData|raw }};
         var tree = {{ fileManager.tree ? 'true' : 'false' }}
@@ -199,7 +199,7 @@
         {% endfor %}
         {% endfor %}
     </script>
-    <script src="{{ asset('bundles/artgrisfilemanager/js/manager.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/js/manager.js') }}"></script>
 {% endblock %}
 </body>
 </html>
