@@ -76,10 +76,23 @@ $(function () {
 
         var href = addParameterToURL($previewModalButton.data('href'), 'time=' + new Date().getTime());
 
-        if($previewModalButton.data('bs-target') === "#js-display-image"){
-            $('#js-display-image').find('img').attr('src', href);
+        let target = $previewModalButton.data('bs-target');
+
+        if (target === "#js-display-image") {
+
+            $(target).find('img').attr('src', href);
+
         } else {
-            $('#js-display-pdf').find('object').attr('data', href);
+
+            $(target).find('.modal-body').html(
+                `
+                 <object type=""
+                            data="${href}"
+                            width="750"
+                            height="600">
+                    </object>
+                `
+            );
         }
     }
 
@@ -270,7 +283,7 @@ $(function () {
 
             let message = `Le fichier ${file.name} n'a pas pu être ajouté.`;
 
-            if(file.size > 8000000){
+            if (file.size > 8000000) {
                 message = `Le fichier ${file.name} est trop volumineux pour être ajouté, sa taille ne doit pas dépasser 8 mo.`;
             }
 
@@ -307,11 +320,11 @@ $(function () {
 
     lazy();
 
-    $('#search').on("input", function() {
+    $('#search').on("input", function () {
 
         var value = removeAccent($(this).val().toLowerCase().trim());
 
-        $('#form-multiple-delete .file-wrapper').filter(function() {
+        $('#form-multiple-delete .file-wrapper').filter(function () {
             $(this).toggle(removeAccent($(this).text().toLowerCase()).indexOf(value) > -1);
         });
     });
