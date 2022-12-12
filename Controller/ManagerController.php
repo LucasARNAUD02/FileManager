@@ -58,6 +58,7 @@ class ManagerController extends AbstractController {
         if ($isJson) {
             unset($queryParameters['json']);
         }
+
         $fileManager = $this->newFileManager($queryParameters);
 
         // Folder search
