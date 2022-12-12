@@ -2,12 +2,10 @@ blueimp-tmpl/js
 !blueimp*/js
 !blueimp*/img
 !blueimp*/css
-bootstrap*/*
 !bootstrap*/dist
 components-font-awesome/*
 !components-font-awesome/css
 !components-font-awesome/fonts
-jquery/*
 !jquery/dist
 remarkable-bootstrap-notify/*
 !remarkable-bootstrap-notify/dist
