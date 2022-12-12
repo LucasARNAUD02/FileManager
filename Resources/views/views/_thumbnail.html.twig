@@ -1,20 +1,28 @@
-<div class="row margin-bottom thumbnail-blk">
+<div class="row m-2">
     {% block select_all %}
         <div class="col-md-12 select-all">
-            <input type="checkbox" id="select-all" title="{{ 'select-all'|trans }}"> <label
-                    for="select-all">{{ 'select-all'|trans }}</label>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="select-all" title="{{ 'select-all'|trans }}">
+                <label class="form-check-label" for="select-all">
+                    {{ 'select-all'|trans }}
+                </label>
+            </div>
         </div>
     {% endblock %}
+</div>
+
+<div class="d-flex justify-content-evenly flex-wrap align-content-center pt-5">
     {% for fileEntity in fileArray %}
         {% set file = fileEntity.file %}
-        <div class="file-wrapper {{ fileEntity.isImage() ? 'img' : file.type }} col-xs-6 col-sm-4 col-md-{{ fileManager.tree == 0 ? 3 : 4 }} col-lg-2 text-center thumbnail">
+        <div class="file-wrapper text-center thumbnail {{ fileEntity.isImage() ? 'img' : file.type }}">
             {% block file_checkbox %}
-                <input type="checkbox" class="checkbox" name="delete[]"
-                       value="{{ file.fileName }}"
-                       title="{{ file.fileName }}">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="delete[]" value="{{ file.fileName }}" title="{{ file.fileName }}">
+                </div>
             {% endblock %}
             {% block file_preview %}
-                <div class="thumbnail-img">
+                <div class="thumbnail-img p-2">
                     {{ fileEntity.preview ? fileEntity.preview.html|raw }}
                 </div>
             {% endblock %}
@@ -29,9 +37,10 @@
                 {% endblock %}
                 <br>
             </p>
-            <div class="row">
+            <div class="d-flex justify-content-center">
                 {% block list_action %}
-                    <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
+                    <div class="pe-2">
+                        <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
                         <button type="button"
                                 class="btn btn-sm btn-danger js-delete-modal"
                                 data-trigger="click"
@@ -44,9 +53,11 @@
                            <span class="material-symbols-sharp">delete</span>
                         </button>
                     </span>
-                    <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
+                    </div>
+                    <div class="pe-2">
+                        <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
                     <button type="button"
-                            class="btn btn-sm btn-default js-rename-modal"
+                            class="btn btn-sm btn-success js-rename-modal"
                             data-trigger="click"
                             data-container="body"
                             data-toggle="modal"
@@ -59,17 +70,21 @@
                    <span class="material-symbols-sharp">edit</span>
                     </button>
                 </span>
+                    </div>
                     {% if file.type == "file" %}
-                        <a data-placement="left" title="{{ 'title.download'|trans }}"
-                           class="btn btn-sm btn-default js-download"
-                           href="{{ path('file_manager_file', fileManager.queryParameters|merge({'fileName':file.fileName})) }}"
-                           download>
-                            <span class="material-symbols-sharp">cloud_download</span>
-                        </a>
+                        <div class="pe-2">
+                            <a data-placement="left" title="{{ 'title.download'|trans }}"
+                               class="btn btn-sm btn-info js-download"
+                               href="{{ path('file_manager_file', fileManager.queryParameters|merge({'fileName':file.fileName})) }}"
+                               download>
+                                <span class="material-symbols-sharp">cloud_download</span>
+                            </a>
+                        </div>
                         {% if fileEntity.isImage() %}
-                            <span data-toggle="tooltip" title="{{ 'title.preview.file'|trans }}">
+                            <div class="pe-2">
+                                <span data-toggle="tooltip" title="{{ 'title.preview.file'|trans }}">
                                 <button type="button"
-                                        class="btn btn-sm btn-default js-open-modal"
+                                        class="btn btn-sm btn-primary js-open-modal"
                                         data-trigger="click"
                                         data-container="body"
                                         data-toggle="modal"
@@ -79,6 +94,7 @@
                                 <span class="material-symbols-sharp">visibility</span>
                                 </button>
                             </span>
+                            </div>
                         {% endif %}
                     {% endif %}
                 {% endblock %}

@@ -1,8 +1,13 @@
 $(function () {
 
+    // enlever les form group dans les formulaires car ca pete les modal
+
+    $('form[name=rename_f], form[name=rename], form[name=delete_f]').find('div[class=form-group]').removeAttr('class');
+
     var $renameModal = $('#js-confirm-rename');
     var $deleteModal = $('#js-confirm-delete');
     var $displayModal = $('#js-display-image');
+
     var callback = function (key, opt) {
         switch (key) {
             case 'edit':
@@ -36,6 +41,7 @@ $(function () {
             "download": {name: downloadMessage, icon: "fas fa-download"},
         }
     });
+
     $.contextMenu({
         selector: '.img',
         callback: callback,
@@ -46,6 +52,7 @@ $(function () {
             "preview": {name: previewMessage, icon: "fas fa-eye"},
         }
     });
+
     $.contextMenu({
         selector: '.dir',
         callback: callback,
@@ -66,8 +73,14 @@ $(function () {
     }
 
     function previewFile($previewModalButton) {
+
         var href = addParameterToURL($previewModalButton.data('href'), 'time=' + new Date().getTime());
-        $('#js-display-image').find('img').attr('src', href);
+
+        if($previewModalButton.data('bs-target') === "#js-display-image"){
+            $('#js-display-image').find('img').attr('src', href);
+        } else {
+            $('#js-display-pdf').find('object').attr('data', href);
+        }
     }
 
     function addParameterToURL(_url, param) {
@@ -80,6 +93,7 @@ $(function () {
     }
 
     function initTree(treedata) {
+
         $('#tree').jstree({
             'core': {
                 'data': treedata,
@@ -135,7 +149,7 @@ $(function () {
         // checkbox
         .on('click', '#form-multiple-delete :checkbox', function () {
             var $jsDeleteMultipleModal = $('#js-delete-multiple-modal');
-            if ($(".checkbox").is(':checked')) {
+            if ($("input[type=checkbox][class=form-check-input]").is(':checked')) {
                 $jsDeleteMultipleModal.removeClass('disabled');
             } else {
                 $jsDeleteMultipleModal.addClass('disabled');
@@ -156,78 +170,72 @@ $(function () {
         });
     });
 
+    //
+    // // Module Tiny
+    // if (moduleName === 'tiny') {
+    //
+    //     $('#form-multiple-delete').on('click', '.select', function () {
+    //
+    //
+    //         var windowManager = top != undefined && top.tinymceWindowManager != undefined ? top.tinymceWindowManager : '';
+    //
+    //         // tinymce 5
+    //         if (windowManager != '') {
+    //             if (top.tinymceCallBackURL != undefined)
+    //                 top.tinymceCallBackURL = $(this).attr("data-path");
+    //             windowManager.close();
+    //         } else {
+    //             // tinymce 4
+    //             var args = top.tinymce.activeEditor.windowManager.getParams();
+    //             var input = args.input;
+    //             var document = args.window.document;
+    //             var divInputSplit = document.getElementById(input).parentNode.id.split("_");
+    //
+    //             // set url
+    //             document.getElementById(input).value = $(this).attr("data-path");
+    //
+    //             // set width and height
+    //             var baseId = divInputSplit[0] + '_';
+    //             var baseInt = parseInt(divInputSplit[1], 10);
+    //
+    //             divWidth = baseId + (baseInt + 3);
+    //             divHeight = baseId + (baseInt + 5);
+    //
+    //             document.getElementById(divWidth).value = $(this).attr("data-width");
+    //             document.getElementById(divHeight).value = $(this).attr("data-height");
+    //
+    //             top.tinymce.activeEditor.windowManager.close();
+    //         }
+    //
+    //     });
+    // }
 
-    // Module Tiny
-    if (moduleName === 'tiny') {
-
-        $('#form-multiple-delete').on('click', '.select', function () {
-
-
-            var windowManager = top != undefined && top.tinymceWindowManager != undefined ? top.tinymceWindowManager : '';
-
-            // tinymce 5
-            if (windowManager != '') {
-                if (top.tinymceCallBackURL != undefined)
-                    top.tinymceCallBackURL = $(this).attr("data-path");
-                windowManager.close();
-            } else {
-                // tinymce 4
-                var args = top.tinymce.activeEditor.windowManager.getParams();
-                var input = args.input;
-                var document = args.window.document;
-                var divInputSplit = document.getElementById(input).parentNode.id.split("_");
-
-                // set url
-                document.getElementById(input).value = $(this).attr("data-path");
-
-                // set width and height
-                var baseId = divInputSplit[0] + '_';
-                var baseInt = parseInt(divInputSplit[1], 10);
-
-                divWidth = baseId + (baseInt + 3);
-                divHeight = baseId + (baseInt + 5);
-
-                document.getElementById(divWidth).value = $(this).attr("data-width");
-                document.getElementById(divHeight).value = $(this).attr("data-height");
-
-                top.tinymce.activeEditor.windowManager.close();
-            }
-
-        });
-    }
-
-    // Module CKEditor
-    if (moduleName === 'ckeditor') {
-        $('#form-multiple-delete').on('click', '.select', function () {
-            var regex = new RegExp("[\\?&]CKEditorFuncNum=([^&#]*)");
-            var funcNum = regex.exec(location.search)[1];
-            var fileUrl = $(this).attr("data-path");
-            window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
-            window.close();
-        });
-    }
-
-    // Global functions
-    // display error alert
-    function displayError(msg) {
-        displayAlert('danger', msg)
-    }
-
-    // display success alert
-    function displaySuccess(msg) {
-        displayAlert('success', msg)
-    }
+    // // Module CKEditor
+    // if (moduleName === 'ckeditor') {
+    //     $('#form-multiple-delete').on('click', '.select', function () {
+    //         var regex = new RegExp("[\?&]CKEditorFuncNum=([^&#]*)");
+    //         var funcNum = regex.exec(location.search)[1];
+    //         var fileUrl = $(this).attr("data-path");
+    //         window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+    //         window.close();
+    //     });
+    // }
 
     // file upload
     $('#fileupload').fileupload({
+
         dataType: 'json',
         processQueue: false,
         dropZone: $('#dropzone')
+
     }).on('fileuploaddone', function (e, data) {
+
         $.each(data.result.files, function (index, file) {
-            const fileName = $("<strong>").text(file.name).html();
+
+            const fileName = file.name;
+
             if (file.url) {
-                displaySuccess(fileName+' ' + successMessage)
+                displayToast("success", fileName + ' ' + successMessage, 3000);
                 // Ajax update view
                 $.ajax({
                     dataType: "json",
@@ -248,17 +256,27 @@ $(function () {
                     $('#js-delete-multiple-modal').addClass('disabled');
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    displayError('<strong>Ajax call error :</strong> ' + jqXHR.status + ' ' + errorThrown)
+                    displayToast("error", "Une erreur est survenue, essayez de recharger la page (CTRL + SHIFT + R).", 3000);
                 });
 
             } else if (file.error) {
-                displayError(fileName+' ' + file.error)
+                displayToast("error", `${fileName} ${file.error}`);
             }
         });
+
     }).on('fileuploadfail', function (e, data) {
+
         $.each(data.files, function (index, file) {
-            displayError('File upload failed.')
+
+            let message = `Le fichier ${file.name} n'a pas pu être ajouté.`;
+
+            if(file.size > 8000000){
+                message = `Le fichier ${file.name} est trop volumineux pour être ajouté, sa taille ne doit pas dépasser 8 mo.`;
+            }
+
+            displayToast("error", message, 3000);
         });
+
     }).on('fileuploadprogressall', function (e, data) {
 
         if (e.isDefaultPrevented()) {
@@ -272,9 +290,11 @@ $(function () {
             .css('width', progress + '%');
 
     }).on('fileuploadstop', function (e) {
+
         if (e.isDefaultPrevented()) {
             return false;
         }
+
         $('.progress-bar')
             .addClass("notransition")
             .attr('aria-valuenow', 0)
@@ -287,12 +307,13 @@ $(function () {
 
     lazy();
 
-    $('#search').on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $('#form-multiple-delete .file-wrapper').filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
+    $('#search').on("input", function() {
 
+        var value = removeAccent($(this).val().toLowerCase().trim());
+
+        $('#form-multiple-delete .file-wrapper').filter(function() {
+            $(this).toggle(removeAccent($(this).text().toLowerCase()).indexOf(value) > -1);
+        });
     });
-})
-;
+
+});

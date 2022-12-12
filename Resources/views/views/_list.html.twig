@@ -1,10 +1,10 @@
-<div class="table-responsive list-blk">
+<div class="table-responsive">
     <table class="table">
         <colgroup>
             <col>
             <col>
-            <col class="col-lg-7">
-            <col class="col-lg-1">
+            <col class="col-lg-6">
+            <col class="col-lg-2">
             <col class="col-lg-1">
             <col class="col-lg-1">
             <col class="col-lg-2">
@@ -13,7 +13,11 @@
         <tr>
             <th>
                 {% block select_all %}
-                    <input type="checkbox" id="select-all" title="{{ 'select-all'|trans }}">
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="select-all"
+                               title="{{ 'select-all'|trans }}">
+                    </div>
                 {% endblock %}
             </th>
             <th></th>
@@ -33,13 +37,18 @@
         </tr>
         </thead>
         <tbody>
+
         {% for fileEntity in fileArray %}
+
             {% set file = fileEntity.file %}
+
             <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : file.type }}">
                 <td>
                     {% block file_checkbox %}
-                        <input type="checkbox" class="checkbox" name="delete[]" value="{{ file.fileName }}"
-                               title="{{ file.fileName }}">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="delete[]" value="{{ file.fileName }}"
+                                   title="{{ file.fileName }}">
+                        </div>
                     {% endblock %}
                 </td>
                 <td>
@@ -54,7 +63,7 @@
                 </td>
                 <td class="hidden-xs">
                     {% block file_date %}
-                        <small>{{ file.mTime|date('d/m/Y') }}</small>
+                        <small>{{ file.mTime|date('d/m/Y H:i') }}</small>
                     {% endblock %}
                 </td>
                 <td class="hidden-xs">
@@ -71,12 +80,11 @@
                     {% block file_action %}
                         <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
                         <button type="button"
-                                class="btn btn-xs btn-danger js-delete-modal"
+                                class="btn btn-sm btn-danger js-delete-modal"
                                 data-trigger="click"
                                 data-container="body"
-                                data-toggle="modal"
-                                data-target="#js-confirm-delete"
-                                data-placement="left"
+                                data-bs-toggle="modal"
+                                data-bs-target="#js-confirm-delete"
                                 data-html="true"
                                 data-href='{{ path('file_manager_delete', fileManager.queryParameters|merge({'delete[]':file.fileName})) }}'>
                              <span class="material-symbols-sharp">delete</span>
@@ -85,12 +93,11 @@
                     </span>
                         <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
                         <button type="button"
-                                class="btn btn-xs btn-default js-rename-modal"
+                                class="btn btn-sm btn-success js-rename-modal"
                                 data-trigger="click"
                                 data-container="body"
-                                data-toggle="modal"
-                                data-target="#js-confirm-rename"
-                                data-placement="left"
+                                data-bs-toggle="modal"
+                                data-bs-target="#js-confirm-rename"
                                 data-html="true"
                                 data-name='{{ file.basename('.'~file.extension) }}'
                                 data-extension='{{ file.extension }}'
@@ -100,20 +107,19 @@
                     </span>
                         {% if file.type == "file" %}
                             <a data-placement="left" title="{{ 'title.download'|trans }}"
-                               class="btn btn-xs btn-default js-download"
+                               class="btn btn-sm btn-info js-download"
                                href="{{ path('file_manager_file', fileManager.queryParameters|merge({'fileName':file.fileName})) }}"
                                download="{{ file.basename() }}">
                                 <span class="material-symbols-sharp">cloud_download</span>
                             </a>
-                            {% if fileEntity.isImage() %}
+                            {% if fileEntity.isPreviewPossible %}
                                 <span data-toggle="tooltip" title="{{ 'title.preview.file'|trans }}">
                                 <button type="button"
-                                        class="btn btn-xs btn-default js-open-modal"
+                                        class="btn btn-sm btn-primary js-open-modal"
                                         data-trigger="click"
                                         data-container="body"
-                                        data-toggle="modal"
-                                        data-target="#js-display-image"
-                                        data-placement="left"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#{{ fileEntity.isPdf ? 'js-display-pdf' : 'js-display-image'}}"
                                         data-href='{{ fileEntity.preview.path }}'>
                                     <span class="material-symbols-sharp">visibility</span>
                                 </button>

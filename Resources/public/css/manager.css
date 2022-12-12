@@ -62,31 +62,13 @@ body {
     padding: 10px 5px;
 }
 
-.thumbnail {
-    padding: 20px 14px;
-    margin-bottom: 0;
-    border-left: none;
-    border-radius: inherit;
-    border-top: none;
-    border-bottom: 1px #dcdcdc solid;
-    border-right: 1px #dcdcdc solid;
-}
-
-.thumbnail p {
-    height: 85px;
-}
-
-.thumbnail-img {
-    height: 115px;
-    padding: 5px;
-}
+/*.thumbnail-img {*/
+/*    height: 115px;*/
+/*    padding: 5px;*/
+/*}*/
 
 .thumbnail-img img {
     max-width: 100%;
-}
-
-.thumbnail-img .fa, .thumbnail-img .fas, .thumbnail-img .far {
-    font-size: 6em;
 }
 
 .thumbnail-blk .select {
@@ -148,3 +130,19 @@ button i {
 
 }
 
+.form-check-input{
+    border: 2px solid #6e84a3;
+    background-color: white;
+}
+
+tr.file-wrapper i[class*=icofont]{
+    font-size: 18px;
+}
+
+div.file-wrapper i[class*=icofont]{
+    font-size: 60px;
+}
+
+input[id=search]{
+    max-height: 30px;
+}

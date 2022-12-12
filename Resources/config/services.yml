@@ -10,7 +10,7 @@ services:
     Lucas\FileManager\Twig\FileTypeExtension:
         tags:
             - { name: twig.extension }
-        arguments: ['@FileManager\Service\FileTypeService']
+        arguments: ['@Lucas\FileManager\Service\FileTypeService']
 
     Lucas\FileManager\Service\FileTypeService:
         arguments: ['@router']

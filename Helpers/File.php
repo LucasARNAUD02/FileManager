@@ -1,6 +1,6 @@
 <?php
 
-namespace  Lucas\FileManager\Helpers;
+namespace Lucas\FileManager\Helpers;
 
 use Lucas\FileManager\Service\FileTypeService;
 use Symfony\Component\Finder\SplFileInfo;
@@ -41,7 +41,7 @@ class File
             $kb = $this->translator->trans('size.kb');
             $mb = $this->translator->trans('size.mb');
 
-            return $size > 1000 ? number_format(($size / 1000), 1, '.', '') . ' File.php' .$mb : number_format($size, 1, '.', '') . ' File.php' .$kb;
+            return $size > 1000 ? number_format(($size / 1000), 1, '.', '').' '.$mb : number_format($size, 1, '.', '').' '.$kb;
         }
         return null;
     }
@@ -71,6 +71,10 @@ class File
         return \array_key_exists('image', $this->preview);
     }
 
+    public function isPdf(): bool {
+        return preg_match('/(pdf)$/i', $this->file->getExtension());
+    }
+
     public function getFile(): SplFileInfo {
         return $this->file;
     }
@@ -87,5 +91,9 @@ class File
     public function setPreview(array $preview) :void
     {
         $this->preview = $preview;
+    }
+
+    public function isPreviewPossible() : bool|int {
+        return $this->isImage() || $this->isPdf();
     }
 }

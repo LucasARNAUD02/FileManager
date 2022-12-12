@@ -12,7 +12,7 @@ class OrderExtension extends AbstractExtension
 {
     const ASC = 'asc';
     const DESC = 'desc';
-    const ICON = [self::ASC => 'up', self::DESC => 'down'];
+    const ICON = [self::ASC => 'arrow_drop_up', self::DESC => 'arrow_drop_down'];
 
     /**
      * OrderExtension constructor.
@@ -29,7 +29,7 @@ class OrderExtension extends AbstractExtension
         $orderBy['order'] = $active ? ($order ? self::DESC : self::ASC) : self::ASC;
         $parameters = array_merge($fileManager->getQueryParameters(), $orderBy);
 
-        $icon = $active ? '-'.($order ? self::ICON[self::ASC] : self::ICON[self::DESC]) : '';
+        $icon = $active ? ($order ? self::ICON[self::ASC] : self::ICON[self::DESC]) : 'unfold_more';
 
         $href = $this->router->generate('file_manager', $parameters);
 

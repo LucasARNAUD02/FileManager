@@ -39,14 +39,14 @@ class FileTypeService {
             $href = $this->router->generate(
                 'file_manager', array_merge(
                 $fileManager->getQueryParameters(),
-                ['route' => $fileManager->getRoute() . 'FileTypeService.php/' .rawurlencode($file->getFilename())]
+                    ['route' => $fileManager->getRoute().'/'.rawurlencode($file->getFilename())]
             )
             );
 
             return [
                 'path' => $filePath,
-                'html' => "<i class='fas fa-folder-open' aria-hidden='true'></i>",
-                'folder' => '<a  href="'.$href.'">'.$file->getFilename().'</a>',
+                'html' => '<i class="icofont-ui-folder"></i>',
+                'folder' => '<a  href="'.$href.'" title="Ouvrir le dossier">'.$file->getFilename().'</a>',
             ];
         }
     }
@@ -76,10 +76,10 @@ class FileTypeService {
         switch (true) {
             case $this->isYoutubeVideo($filePath):
             case preg_match('/(mp4|ogg|webm|avi|wmv|mov)$/i', $extension):
-                $fa = 'far fa-file-video';
+                $class = 'icofont-file-video';
                 break;
             case preg_match('/(mp3|wav)$/i', $extension):
-                $fa = 'far fa-file-audio';
+                $class = 'icofont-file-audio';
                 break;
             case preg_match('/(gif|png|jpe?g|svg)$/i', $extension):
 
@@ -110,30 +110,30 @@ class FileTypeService {
                     'image' => true,
                 ];
             case preg_match('/(pdf)$/i', $extension):
-                $fa = 'far fa-file-pdf';
+                $class = 'icofont-file-pdf';
                 break;
             case preg_match('/(docx?)$/i', $extension):
-                $fa = 'far fa-file-word';
+                $class = 'icofont-file-word';
                 break;
             case preg_match('/(xlsx?|csv)$/i', $extension):
-                $fa = 'far fa-file-excel';
+                $class = 'icofont-file-excel';
                 break;
             case preg_match('/(pptx?)$/i', $extension):
-                $fa = 'far fa-file-powerpoint';
+                $class = 'icofont-file-powerpoint';
                 break;
             case preg_match('/(zip|rar|gz)$/i', $extension):
-                $fa = 'far fa-file-archive';
+                $class = 'icofont-file-zip';
                 break;
             case filter_var($filePath, FILTER_VALIDATE_URL):
-                $fa = 'fab fa-internet-explorer';
+                $class = 'icofont-web';
                 break;
             default:
-                $fa = 'far fa-file';
+                $class = 'icofont-file-alt';
         }
 
         return [
             'path' => $filePath,
-            'html' => "<i class='{$fa}' aria-hidden='true'></i>",
+            'html' => "<i class='{$class}'></i>",
         ];
     }
 
@@ -146,5 +146,9 @@ class FileTypeService {
                 ~x';
 
         return preg_match($rx, $url, $matches);
+    }
+
+    public function isPdf($extension) : bool|int {
+        return preg_match('/(pdf)$/i', $extension);
     }
 }

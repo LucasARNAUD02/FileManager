@@ -112,6 +112,7 @@ class ManagerController extends AbstractController {
 
         $formDelete = $this->createDeleteForm()->createView();
         $fileArray = [];
+
         foreach ($finderFiles as $file) {
             $fileArray[] = new File($file, $this->translator, $fileTypeService, $fileManager);
         }
@@ -176,7 +177,7 @@ class ManagerController extends AbstractController {
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $fs = new Filesystem();
-            $directory = $directorytmp = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$data['name'];
+            $directory = $directorytmp = $fileManager->getCurrentPath().\DIRECTORY_SEPARATOR.$data['name'];
             $i = 1;
 
             while ($fs->exists($directorytmp)) {
@@ -331,7 +332,7 @@ class ManagerController extends AbstractController {
 
                 $this->dispatch(FileManagerEvents::POST_DELETE_FOLDER);
                 $queryParameters['route'] = \dirname($fileManager->getCurrentRoute());
-                if ($queryParameters['route'] == '/') {
+                if ($queryParameters['route'] == "\\" || $queryParameters['route'] === "/") {
                     unset($queryParameters['route']);
                 }
 
@@ -343,6 +344,7 @@ class ManagerController extends AbstractController {
     }
 
     private function createDeleteForm(): FormInterface|Form {
+
         return $this->formFactory->createNamedBuilder('delete_f')
             ->add('DELETE', SubmitType::class, [
                 'translation_domain' => 'messages',
@@ -357,6 +359,7 @@ class ManagerController extends AbstractController {
     private function createRenameForm(): FormInterface|Form {
         return $this->formFactory->createNamedBuilder('rename_f')
             ->add('name', TextType::class, [
+                'attr' => ['class' => 'form-control'],
                 'constraints' => [
                     new NotBlank(),
                 ],
@@ -433,9 +436,11 @@ class ManagerController extends AbstractController {
     }
 
     private function newFileManager(array $queryParameters): FileManager {
+        
         if (!isset($queryParameters['conf'])) {
             throw new \RuntimeException('Please define a conf parameter in your route');
         }
+        
         $webDir = $this->getParameter('file_manager')['web_dir'];
         $this->fileManager = new FileManager($queryParameters, $this->filemanagerService->getBasePath($queryParameters), $this->router, $this->dispatcher, $webDir);
 
