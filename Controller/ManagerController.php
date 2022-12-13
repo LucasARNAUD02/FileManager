@@ -50,7 +50,7 @@ class ManagerController extends AbstractController {
     }
 
     /**
-     * @Route("/", name="file_manager")
+     * @Route("/", name="file_manager", options={"expose"=true})
      */
     public function indexAction(Request $request, FileTypeService $fileTypeService): JsonResponse|Response {
         $queryParameters = $request->query->all();
