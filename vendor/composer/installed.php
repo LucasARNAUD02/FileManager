@@ -3,7 +3,7 @@
         'name' => 'lucas-arnaud/yapa-bundle',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'c4905911d7144b11fcfa8feec867716eba983068',
+        'reference' => '24b1c9b577f9b520d1c95f676d6b63b3fe8e7991',
         'type' => 'symfony-bundle',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -24,7 +24,7 @@
         'lucas-arnaud/yapa-bundle' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'c4905911d7144b11fcfa8feec867716eba983068',
+            'reference' => '24b1c9b577f9b520d1c95f676d6b63b3fe8e7991',
             'type' => 'symfony-bundle',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

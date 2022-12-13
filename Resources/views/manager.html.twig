@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" id="dropzone">
+<html lang="fr" translate="no" id="dropzone">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,8 +10,8 @@
         <link rel="stylesheet" href="{{ asset('assets/css/libs.bundle.css') }}">
 
         <link rel="stylesheet" href="{{ asset('assets/css/material-symbols.css') }}"/>
-        <link rel="stylesheet" href="{{asset('assets/css/icofont.css')}}" />
-        <link rel="stylesheet" href="{{asset('assets/css/toast.css')}}" />
+        <link rel="stylesheet" href="{{ asset('assets/css/icofont.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('assets/css/toast.css') }}"/>
 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
               integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
@@ -44,13 +44,6 @@
         <div class="row">
             {% block actions %}
             <div class="col-lg-auto">
-{#                <a type="button" title="{{ 'button.tree'|trans }}"#}
-{#                   href="{{ path('file_manager', fileManager.queryParameters|merge({'tree': fileManager.tree == true ? 0 : 1 })) }}"#}
-{#                   class="btn btn-sm btn-outline-secondary {{ fileManager.tree ? 'active' }} mb-2">#}
-{#                           <span class="material-symbols-sharp">#}
-{#                            account_tree#}
-{#                            </span>#}
-{#                </a>#}
                 {% if fileManager.parent %}
                     <a class="btn btn-sm btn-outline-secondary mb-2"
                        title="{{ 'button.parent'|trans }}"
@@ -59,11 +52,11 @@
                          keyboard_return
                         </span></a>
                 {% endif %}
-                <button type="button" title="{{ 'button.refresh'|trans }}" class="mb-2 btn btn-sm btn-outline-secondary"
+                <button type="button" title="{{ 'button.refresh'|trans }}" class="mb-2 btn btn-sm btn-light"
                         onClick="window.location.reload()">
                     <span class="material-symbols-sharp">sync</span>
                 </button>
-                <span class="btn btn-success btn-sm fileinput-button btn-action mb-2">
+                <span class="btn btn-success btn-sm fileinput-button mb-2">
                         <span class="material-symbols-sharp">note_add</span>
                         <span class="bar-action">{{ 'button.add.files'|trans }}</span>
                             <input id="fileupload" type="file"
@@ -72,7 +65,7 @@
                                    accept="{{ fileManager.configuration.accept is defined ? fileManager.configuration.accept : (fileManager.type ? accept(fileManager.type)) }}">
                     </span>
 
-                <button type="button" class="btn btn-primary btn-sm btn-action mb-2" data-bs-toggle="modal"
+                <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal"
                         data-bs-target="#addFolder">
 
                     <span class="material-symbols-sharp">create_new_folder</span>
@@ -80,7 +73,7 @@
                 </button>
                 {% if fileManager.parent %}
                     <button type="button"
-                            class="mb-2 btn btn-sm btn-danger btn-action js-delete-modal"
+                            class="mb-2 btn btn-sm btn-danger js-delete-modal"
                             data-trigger="click"
                             data-container="body"
                             data-bs-toggle="modal"
@@ -92,14 +85,14 @@
                     </button>
                 {% endif %}
                 <button id="js-delete-multiple-modal"
-                   class="mb-2 btn btn-sm btn-danger btn-action disabled"
-                   type="button"
-                   data-trigger="click"
-                   data-container="body"
-                   data-bs-toggle="modal"
-                   data-bs-target="#js-confirm-delete"
-                   data-placement="center"
-                   data-html="true">
+                        class="mb-2 btn btn-sm btn-danger disabled"
+                        type="button"
+                        data-trigger="click"
+                        data-container="body"
+                        data-bs-toggle="modal"
+                        data-bs-target="#js-confirm-delete"
+                        data-placement="center"
+                        data-html="true">
                     <span class="material-symbols-sharp">check_box</span>
                     <span class="bar-action">{{ 'button.delete.selected'|trans }}</span>
                 </button>
@@ -113,43 +106,16 @@
                                aria-describedby="search">
                     </div>
                 </div>
-{#                <div class="col">#}
-
-{#                    <div class="float-end">#}
-
-{#                        {% if fileManager.view != "list" %}#}
-{#                            {{ order(fileManager, 'name') }}#}
-{#                            {{ order(fileManager, 'date') }}#}
-{#                            {{ order(fileManager, 'size') }}#}
-{#                            {{ order(fileManager, 'dimension') }}#}
-
-{#                        {% endif %}#}
-
-{#                        <a type="button"#}
-{#                           href="{{ path('file_manager', fileManager.queryParameters|merge({'view':"list"})) }}"#}
-{#                           class="btn btn-outline-secondary btn-sm {{ fileManager.view == 'list' ? 'active' }}">#}
-{#                            <span class="material-symbols-sharp">list</span>#}
-{#                        </a>#}
-{#                        <a type="button"#}
-{#                           href="{{ path('file_manager', fileManager.queryParameters|merge({'view':'thumbnail'})) }}"#}
-{#                           class="btn btn-outline-secondary btn-sm {{ fileManager.view == 'thumbnail' ? 'active' }}">#}
-{#                            <span class="material-symbols-sharp">grid_view</span>#}
-{#                        </a>#}
-{#                    </div>#}
-{#                </div>#}
             {% endblock %}
         </div>
-
-        <div class="row">
+        <div class="d-flex flex-wrap">
             {% if fileManager.tree %}
-            <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
+            <div class="mt-3 col-auto">
                 {% block tree %}
-                    <div class="table-responsive">
-                        <div id="tree"></div>
-                    </div>
+                    <div id="tree"></div>
                 {% endblock %}
             </div>
-            <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 no-tree-blk">
+            <div class="px-3 mt-3 flex-grow-1 no-tree-blk">
                 {% else %}
                 <div class="col-lg-12">
                     {% endif %}
@@ -200,11 +166,11 @@
         var noResultMessage = "{{ 'title.search.file'|trans }}";
 
         {% for message in app.flashes('success') %}
-            displayToast("success", `{{ message }}`);
+        displayToast("success", `{{ message }}`);
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-            displayToast("error", `{{ message }}`);
+        displayToast("error", `{{ message }}`);
         {% endfor %}
 
     </script>

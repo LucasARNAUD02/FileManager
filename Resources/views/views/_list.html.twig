@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table">
+    <table class="table table-wrap table-bordered table-striped">
         <colgroup>
             <col>
             <col>
@@ -33,7 +33,9 @@
             <th class="hidden-xs">
                 {{ order(fileManager, 'dimension') }}
             </th>
-            <th class="text-right">{{ 'table.actions'|trans }}</th>
+            <th class="text-right">
+                <a href="javascript:void(0);">{{ 'table.actions'|trans }}</a>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -58,7 +60,7 @@
                 </td>
                 <td data-value="{{ file.fileName }}" {{ fileEntity.attribut|raw }}>
                     {% block file_name %}
-                        {{ (fileEntity.preview.folder is defined ? fileEntity.preview.folder|raw : file.fileName) }}
+                        {{ (fileEntity.preview.folder is defined ? fileEntity.preview.folder|raw : file.fileName }}
                     {% endblock %}
                 </td>
                 <td class="hidden-xs">
@@ -78,22 +80,31 @@
                 </td>
                 <td class="text-right">
                     {% block file_action %}
-                        <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
-                        <button type="button"
-                                class="btn btn-sm btn-danger js-delete-modal"
-                                data-trigger="click"
-                                data-container="body"
-                                data-bs-toggle="modal"
-                                data-bs-target="#js-confirm-delete"
-                                data-html="true"
-                                data-href='{{ path('file_manager_delete', fileManager.queryParameters|merge({'delete[]':file.fileName})) }}'>
-                             <span class="material-symbols-sharp">delete</span>
+                        {% if file.type == "file" %}
+                            {% if fileEntity.isPreviewPossible %}
+                                <span data-toggle="tooltip" title="{{ 'title.preview.file'|trans }}">
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-primary mb-2 js-open-modal"
+                                        data-trigger="click"
+                                        data-container="body"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#{{ fileEntity.isPdf ? 'js-display-pdf' : 'js-display-image' }}"
+                                        data-href='{{ fileEntity.preview.path }}'>
+                                    <span class="material-symbols-sharp">visibility</span>
+                                </button>
+                            </span>
+                            {% endif %}
+                            <a data-placement="left" title="{{ 'title.download'|trans }}"
+                               class="btn btn-sm btn-outline-info mb-2 js-download"
+                               href="{{ path('file_manager_file', fileManager.queryParameters|merge({'fileName':file.fileName})) }}"
+                               download="{{ file.basename() }}">
+                                <span class="material-symbols-sharp">cloud_download</span>
+                            </a>
 
-                        </button>
-                    </span>
+                        {% endif %}
                         <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
                         <button type="button"
-                                class="btn btn-sm btn-success js-rename-modal"
+                                class="btn btn-sm btn-outline-success mb-2 js-rename-modal"
                                 data-trigger="click"
                                 data-container="body"
                                 data-bs-toggle="modal"
@@ -104,28 +115,21 @@
                                 data-href='{{ path('file_manager_rename', fileManager.queryParameters|merge({'fileName':file.fileName})) }}'>
                             <span class="material-symbols-sharp">edit</span>
                         </button>
+                        </span>
+
+                        <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-danger mb-2 js-delete-modal"
+                                data-trigger="click"
+                                data-container="body"
+                                data-bs-toggle="modal"
+                                data-bs-target="#js-confirm-delete"
+                                data-html="true"
+                                data-href='{{ path('file_manager_delete', fileManager.queryParameters|merge({'delete[]':file.fileName})) }}'>
+                             <span class="material-symbols-sharp">delete</span>
+
+                        </button>
                     </span>
-                        {% if file.type == "file" %}
-                            <a data-placement="left" title="{{ 'title.download'|trans }}"
-                               class="btn btn-sm btn-info js-download"
-                               href="{{ path('file_manager_file', fileManager.queryParameters|merge({'fileName':file.fileName})) }}"
-                               download="{{ file.basename() }}">
-                                <span class="material-symbols-sharp">cloud_download</span>
-                            </a>
-                            {% if fileEntity.isPreviewPossible %}
-                                <span data-toggle="tooltip" title="{{ 'title.preview.file'|trans }}">
-                                <button type="button"
-                                        class="btn btn-sm btn-primary js-open-modal"
-                                        data-trigger="click"
-                                        data-container="body"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#{{ fileEntity.isPdf ? 'js-display-pdf' : 'js-display-image'}}"
-                                        data-href='{{ fileEntity.preview.path }}'>
-                                    <span class="material-symbols-sharp">visibility</span>
-                                </button>
-                            </span>
-                            {% endif %}
-                        {% endif %}
                     {% endblock %}
                 </td>
             </tr>

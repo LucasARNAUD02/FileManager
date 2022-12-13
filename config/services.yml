@@ -5,7 +5,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     Lucas\FileManager\Controller\:
-        resource: '../../Controller/*'
+        resource: '../Controller/*'
 
     Lucas\FileManager\Twig\FileTypeExtension:
         tags:

@@ -10,11 +10,11 @@
                     {{ 'confirm.delete'|trans }}
                 </div>
                 <div class="modal-footer p-2">
+                    <button type="button" class="btn btn-secondary" title="{{ 'button.cancel'|trans }}"
+                            data-bs-dismiss="modal"> {{ 'button.cancel'|trans }}</button>
                     {{ form_start(formDelete) }}
                     {{ form_widget(formDelete) }}
                     {{ form_end(formDelete) }}
-                    <button type="button" class="btn btn-secondary" title="{{ 'button.cancel'|trans }}"
-                            data-bs-dismiss="modal"> {{ 'button.cancel'|trans }}</button>
                 </div>
             </div>
         </div>

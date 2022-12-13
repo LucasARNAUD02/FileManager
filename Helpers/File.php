@@ -8,12 +8,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class File
 {
-    private $preview;
+    private ?array $preview;
 
     /**
      * File constructor.
      */
-    public function __construct(private SplFileInfo $file,private TranslatorInterface $translator,private FileTypeService $fileTypeService,private FileManager $fileManager)
+    public function __construct(private SplFileInfo $file, private TranslatorInterface $translator, private FileTypeService $fileTypeService, private FileManager $fileManager)
     {
         $this->preview = $this->fileTypeService->preview($this->fileManager, $this->file);
     }
@@ -21,32 +21,36 @@ class File
     /**
      * @return array|false|string
      */
-    public function getDimension(): bool|array|string {
+    public function getDimension(): bool|array|string
+    {
         return preg_match('/(gif|png|jpe?g|svg)$/i', $this->file->getExtension()) ?
             @getimagesize($this->file->getPathname()) : '';
     }
 
-    public function getHTMLDimension(): ?string {
+    public function getHTMLDimension(): ?string
+    {
         $dimension = $this->getDimension();
         if ($dimension) {
-            return "{$dimension[0]} × {$dimension[1]}";
+            return "{$dimension[0]}px × {$dimension[1]}px";
         }
 
         return null;
     }
 
-    public function getHTMLSize(): ?string {
+    public function getHTMLSize(): ?string
+    {
         if ('file' === $this->getFile()->getType()) {
             $size = $this->file->getSize() / 1000;
             $kb = $this->translator->trans('size.kb');
             $mb = $this->translator->trans('size.mb');
 
-            return $size > 1000 ? number_format(($size / 1000), 1, '.', '').' '.$mb : number_format($size, 1, '.', '').' '.$kb;
+            return $size > 1000 ? number_format(($size / 1000), 1, '.', '') . ' ' . $mb : number_format($size, 1, '.', '') . ' ' . $kb;
         }
         return null;
     }
 
-    public function getAttribut(): ?string {
+    public function getAttribut(): ?string
+    {
         if ($this->fileManager->getModule()) {
             $attr = '';
             $dimension = $this->getDimension();
@@ -67,33 +71,38 @@ class File
         return null;
     }
 
-    public function isImage(): bool {
+    public function isImage(): bool
+    {
         return \array_key_exists('image', $this->preview);
     }
 
-    public function isPdf(): bool {
+    public function isPdf(): bool
+    {
         return preg_match('/(pdf)$/i', $this->file->getExtension());
     }
 
-    public function getFile(): SplFileInfo {
+    public function getFile(): SplFileInfo
+    {
         return $this->file;
     }
 
-    public function setFile(SplFileInfo $file) :void
+    public function setFile(SplFileInfo $file): void
     {
         $this->file = $file;
     }
 
-    public function getPreview(): array {
+    public function getPreview(): array
+    {
         return $this->preview;
     }
 
-    public function setPreview(array $preview) :void
+    public function setPreview(array $preview): void
     {
         $this->preview = $preview;
     }
 
-    public function isPreviewPossible() : bool|int {
+    public function isPreviewPossible(): bool|int
+    {
         return $this->isImage() || $this->isPdf();
     }
 }

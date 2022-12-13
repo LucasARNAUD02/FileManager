@@ -8,7 +8,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
 class FileTypeService {
-    const IMAGE_SIZE = [
+    public const IMAGE_SIZE = [
         FileManager::VIEW_LIST => '22',
         FileManager::VIEW_THUMBNAIL => '100',
     ];

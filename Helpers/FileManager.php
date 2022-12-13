@@ -14,8 +14,8 @@ use Symfony\Component\Routing\RouterInterface;
  * @author Arthur Gribet <a.gribet@gmail.com>
  */
 class FileManager {
-    const VIEW_THUMBNAIL = 'thumbnail';
-    const VIEW_LIST = 'list';
+    public const VIEW_THUMBNAIL = 'thumbnail';
+    public const VIEW_LIST = 'list';
 
     /**
      * FileManager constructor.
@@ -176,24 +176,10 @@ class FileManager {
     }
 
     private function mergeQueryAndConf(string $parameter, $default = null) {
-        if (null !== $this->getQueryParameter($parameter)) {
-            return $this->getQueryParameter($parameter);
-        }
-        if (null !== $this->getConfigurationParameter($parameter)) {
-            return $this->getConfigurationParameter($parameter);
-        }
-
-        return $default;
+        return $this->getQueryParameter($parameter) ?? $this->getConfigurationParameter($parameter) ?? $default;
     }
 
     private function mergeConfAndQuery(string $parameter, $default = null) {
-        if (null !== $this->getConfigurationParameter($parameter)) {
-            return $this->getConfigurationParameter($parameter);
-        }
-        if (null !== $this->getQueryParameter($parameter)) {
-            return $this->getQueryParameter($parameter);
-        }
-
-        return $default;
+        return $this->getConfigurationParameter($parameter) ?? $this->getQueryParameter($parameter) ?? $default;
     }
 }

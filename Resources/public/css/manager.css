@@ -1,5 +1,9 @@
 body {
     padding-bottom: 20px;
+    background-color: inherit;
+}
+.table > :not(caption) > * > *{
+    padding: 0.5rem;
 }
 
 .select {
@@ -35,10 +39,6 @@ body {
     background-color: #beebff;
 }
 
-/*i.fa,i.far,i.fas {*/
-/*font-size: 1.4em;*/
-/*}*/
-
 .alert > [data-notify="message"] {
     font-size: 80%;
 }
@@ -59,13 +59,13 @@ body {
 
 .jstree {
     background-color: #f9f9f9;
-    padding: 10px 5px;
+    padding: 5px 10px;
+    border-radius: 6px;
 }
 
-/*.thumbnail-img {*/
-/*    height: 115px;*/
-/*    padding: 5px;*/
-/*}*/
+.form-check {
+    padding-left: 1.8rem;
+}
 
 .thumbnail-img img {
     max-width: 100%;
@@ -133,6 +133,7 @@ button i {
 .form-check-input{
     border: 2px solid #6e84a3;
     background-color: white;
+    background-size: 100%;
 }
 
 tr.file-wrapper i[class*=icofont]{
