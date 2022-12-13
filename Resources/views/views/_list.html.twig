@@ -42,7 +42,7 @@
 
             {% set file = fileEntity.file %}
 
-            <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : 'file'}}">
+            <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : file.type == "file" ? 'file' : 'dir' }}">
                 <td>
                     {% block file_checkbox %}
                         <div class="form-check">
