@@ -6,7 +6,8 @@ $(function () {
 
     var $renameModal = $('#js-confirm-rename');
     var $deleteModal = $('#js-confirm-delete');
-    var $displayModal = $('#js-display-image');
+    var $displayImageModal = $('#js-display-image');
+    var $displayPdfModal = $('#js-display-pdf');
 
     var callback = function (key, opt) {
         switch (key) {
@@ -24,10 +25,16 @@ $(function () {
                 var $downloadButton = opt.$trigger.find(".js-download")
                 downloadFile($downloadButton)
                 break;
-            case 'preview':
-                var $previewModalButton = opt.$trigger.find(".js-open-modal")
+            case 'preview-image':
+                var $previewModalButton = opt.$trigger.find(".js-open-modal");
                 previewFile($previewModalButton)
-                $displayModal.modal("show");
+                $displayImageModal.modal("show");
+                break;
+
+            case 'preview-pdf':
+                var $previewModalButton = opt.$trigger.find(".js-open-modal");
+                previewFile($previewModalButton)
+                $displayPdfModal.modal("show");
                 break;
         }
     };
@@ -43,13 +50,24 @@ $(function () {
     });
 
     $.contextMenu({
+        selector: '.pdf',
+        callback: callback,
+        items: {
+            "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
+            "edit": {name: renameMessage, icon: "far fa-edit"},
+            "download": {name: downloadMessage, icon: "fas fa-download"},
+            "preview-pdf": {name: previewMessage, icon: "fas fa-eye"},
+        }
+    });
+
+    $.contextMenu({
         selector: '.img',
         callback: callback,
         items: {
             "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
             "edit": {name: renameMessage, icon: "far fa-edit"},
             "download": {name: downloadMessage, icon: "fas fa-download"},
-            "preview": {name: previewMessage, icon: "fas fa-eye"},
+            "preview-image": {name: previewMessage, icon: "fas fa-eye"},
         }
     });
 
