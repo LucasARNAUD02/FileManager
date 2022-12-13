@@ -205,7 +205,7 @@ class ManagerController extends AbstractController
         }
 
         $webDir = $this->getParameter('file_manager')['web_dir'];
-        $this->fileManager = new FileManager($queryParameters, $this->filemanagerService->getBasePath($queryParameters), $this->router, $this->dispatcher, $webDir);
+        $this->fileManager = new FileManager($queryParameters, $this->fileManagerService->getBasePath($queryParameters), $this->router, $this->dispatcher, $webDir);
 
         return $this->fileManager;
     }
