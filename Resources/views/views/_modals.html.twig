@@ -2,7 +2,7 @@
     <div class="modal fade" id="js-confirm-delete" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header py-4">
                     <h3 class="modal-title">{{ 'title.delete'|trans }}</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -26,7 +26,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 {{ form_start(formRename) }}
-                <div class="modal-header">
+                <div class="modal-header py-4">
                     <h3 class="modal-title">{{ 'title.rename.file'|trans }}</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -50,14 +50,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 {{ form_start(form) }}
-                <div class="modal-header">
+                <div class="modal-header py-4">
                     <h3 class="modal-title">{{ 'title.add.folder'|trans }}</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {{ form_row(form.name) }}
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer p-2">
                     <button type="button" class="btn btn-sm btn-secondary"
                             data-bs-dismiss="modal">{{ 'button.close'|trans }}
                     </button>
@@ -73,14 +73,14 @@
     <div class="modal fade" id="js-display-image" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header py-4">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
                     <img src="" class="img-fluid img-thumbnail" alt="">
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-primary" title="{{ 'button.close'|trans }}"
+                <div class="modal-footer p-2">
+                    <button type="button" class="btn btn-sm btn-secondary" title="{{ 'button.close'|trans }}"
                             data-bs-dismiss="modal">{{ 'button.close'|trans }}
                     </button>
                 </div>
@@ -93,12 +93,12 @@
     <div class="modal fade" id="js-display-pdf" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header py-4">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer p-2">
                     <button type="button" class="btn btn-sm btn-secondary"
                             data-bs-dismiss="modal">{{ 'button.close'|trans }}
                     </button>
