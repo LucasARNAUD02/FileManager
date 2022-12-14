@@ -23,15 +23,17 @@
             <th></th>
             <th>
                 {{ order(fileManager, 'name') }}
+                <a href="javascript:void(0);">{{ 'table.name'|trans }}</a>
             </th>
             <th class="hidden-xs">
                 {{ order(fileManager, 'date') }}
+                <a href="javascript:void(0);">{{ 'table.date'|trans }}</a>
             </th>
             <th class="hidden-xs">
-                {{ order(fileManager, 'size') }}
+                <a href="javascript:void(0);">{{ 'table.size'|trans }}</a>
             </th>
             <th class="hidden-xs">
-                {{ order(fileManager, 'dimension') }}
+                <a href="javascript:void(0);">{{ 'table.dimension'|trans }}</a>
             </th>
             <th class="text-right">
                 <a href="javascript:void(0);">{{ 'table.actions'|trans }}</a>
@@ -53,7 +55,7 @@
                         </div>
                     {% endblock %}
                 </td>
-                <td>
+                <td class="text-center">
                     {% block file_preview %}
                         {{ fileEntity.preview ? fileEntity.preview.html|raw }}
                     {% endblock %}
@@ -133,6 +135,10 @@
                     {% endblock %}
                 </td>
             </tr>
+            {% else %}
+                <tr>
+                    <td class="text-center text-muted" colspan="7" >C'est vide par ici.. 👻</td>
+                </tr>
         {% endfor %}
         </tbody>
     </table>
