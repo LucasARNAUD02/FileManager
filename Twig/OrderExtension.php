@@ -10,9 +10,9 @@ use Twig\TwigFunction;
 
 class OrderExtension extends AbstractExtension
 {
-    const ASC = 'asc';
-    const DESC = 'desc';
-    const ICON = [self::ASC => 'arrow_drop_up', self::DESC => 'arrow_drop_down'];
+    public const ASC = 'asc';
+    public const DESC = 'desc';
+    public const ICON = [self::ASC => 'arrow_drop_up', self::DESC => 'arrow_drop_down'];
 
     /**
      * OrderExtension constructor.
