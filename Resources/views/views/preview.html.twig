@@ -2,7 +2,7 @@
     {% if twig_extension %}
         {% set filename = include(template_from_string("{{"~image_template~"}}")) %}
     {% endif %}
-    <img class="img-responsive img-thumbnail lazy" data-src="{{ asset(filename) }}" height="{{ size }}" width="60">
+    <img class="lazy" data-src="{{ asset(filename) }}" height="{{ size }}">
 {% else %}
-    <img class="img-responsive img-thumbnail lazy" src="{{ asset(filename) }}" height="{{ size }}" width="60">
+    <img class="lazy" src="{{ asset(filename) }}" height="{{ size }}">
 {% endif %}

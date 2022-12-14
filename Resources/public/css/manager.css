@@ -147,3 +147,7 @@ div.file-wrapper i[class*=icofont]{
 input[id=search]{
     max-height: 30px;
 }
+
+.false-link {
+    cursor: default;
+}
