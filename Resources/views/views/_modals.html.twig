@@ -3,15 +3,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ 'title.delete'|trans }}</h4>
+                    <h3 class="modal-title">{{ 'title.delete'|trans }}</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {{ 'confirm.delete'|trans }}
                 </div>
                 <div class="modal-footer p-2">
-                    <button type="button" class="btn btn-secondary" title="{{ 'button.cancel'|trans }}"
-                            data-bs-dismiss="modal"> {{ 'button.cancel'|trans }}</button>
+                    <button type="button" class="btn btn-sm btn-secondary" title="{{ 'button.close'|trans }}"
+                            data-bs-dismiss="modal"> {{ 'button.close'|trans }}</button>
                     {{ form_start(formDelete) }}
                     {{ form_widget(formDelete) }}
                     {{ form_end(formDelete) }}
@@ -27,15 +27,15 @@
             <div class="modal-content">
                 {{ form_start(formRename) }}
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ 'title.rename.file'|trans }}</h4>
+                    <h3 class="modal-title">{{ 'title.rename.file'|trans }}</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {{ form_row(formRename.name) }}
                 </div>
                 <div class="modal-footer p-2">
-                    <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ 'button.cancel'|trans }}
+                    <button type="button" class="btn btn-sm btn-secondary"
+                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
                     </button>
                     {{ form_row(formRename.send) }}
                 </div>
@@ -51,15 +51,15 @@
             <div class="modal-content">
                 {{ form_start(form) }}
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ 'title.add.folder'|trans }}</h4>
+                    <h3 class="modal-title">{{ 'title.add.folder'|trans }}</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {{ form_row(form.name) }}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ 'button.cancel'|trans }}
+                    <button type="button" class="btn btn-sm btn-secondary"
+                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
                     </button>
                     {{ form_row(form.send) }}
                 </div>
@@ -76,12 +76,12 @@
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <img src="" class="img-fluid" alt="">
+                <div class="modal-body text-center">
+                    <img src="" class="img-fluid img-thumbnail" alt="">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ 'button.cancel'|trans }}
+                    <button type="button" class="btn btn-sm btn-primary" title="{{ 'button.close'|trans }}"
+                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
                     </button>
                 </div>
             </div>
@@ -99,8 +99,8 @@
                 <div class="modal-body text-center">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ 'button.cancel'|trans }}
+                    <button type="button" class="btn btn-sm btn-secondary"
+                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
                     </button>
                 </div>
             </div>

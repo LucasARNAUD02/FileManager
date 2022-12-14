@@ -19,6 +19,7 @@ folder:
     unauthorized: "Le dossier n'existe plus ou vous n'êtes pas autorisé à accéder à cette page."
 button:
   cancel: "Annuler"
+  close: "Fermer"
   refresh: "Rafraîchir"
   parent: "Parent"
   save: "Enregistrer"
@@ -36,9 +37,9 @@ title:
   add:
     folder: "Nouveau dossier"
   rename:
-    file: "Renommer"
-  delete: "Supprimer"
-  download: "Télécharger"
+    file: "Renommage"
+  delete: "Suppression"
+  download: "Téléchargement"
   preview:
     file: "Ouvrir"
   search:
