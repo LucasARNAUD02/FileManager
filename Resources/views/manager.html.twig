@@ -155,7 +155,7 @@
         var treedata = {{ treeData|raw }};
         var tree = {{ fileManager.tree ? 'true' : 'false' }};
         var moduleName = '{{ fileManager.module ? fileManager.module : 0 }}';
-        var successMessage = '{{ 'file.add.success'|trans }}';
+        var successMessage = 'a été téléchargé avec succès';
         var url = "{{ path('file_manager', fileManager.queryParameters|merge({'json':true}))|e('js') }}";
         var urldelete = "{{ path('file_manager_delete', fileManager.queryParameters )|e('js') }}";
 
