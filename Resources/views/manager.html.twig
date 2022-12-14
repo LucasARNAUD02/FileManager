@@ -41,73 +41,6 @@
             </div>
         {% endblock %}
 
-        <div class="row">
-            {% block actions %}
-            <div class="col-lg-auto">
-                {% if fileManager.parent %}
-                    <a class="btn btn-sm btn-outline-secondary mb-2"
-                       title="{{ 'button.parent'|trans }}"
-                       href="{{ fileManager.parent }}">
-                        <span class="material-symbols-sharp">
-                         keyboard_return
-                        </span></a>
-                {% endif %}
-                <button type="button" title="{{ 'button.refresh'|trans }}" class="mb-2 btn btn-sm btn-light"
-                        onClick="window.location.reload()">
-                    <span class="material-symbols-sharp">sync</span>
-                </button>
-                <span class="btn btn-success btn-sm fileinput-button mb-2">
-                        <span class="material-symbols-sharp">note_add</span>
-                        <span class="bar-action">{{ 'button.add.files'|trans }}</span>
-                            <input id="fileupload" type="file"
-                                   data-url="{{ path('file_manager_upload', fileManager.queryParameters) }}"
-                                   name="files[]" multiple=""
-                                   accept="{{ fileManager.configuration.accept is defined ? fileManager.configuration.accept : (fileManager.type ? accept(fileManager.type)) }}">
-                    </span>
-
-                <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal"
-                        data-bs-target="#addFolder">
-
-                    <span class="material-symbols-sharp">create_new_folder</span>
-                    <span class="bar-action">{{ 'button.add.folder'|trans }}</span>
-                </button>
-                {% if fileManager.parent %}
-                    <button type="button"
-                            class="mb-2 btn btn-sm btn-danger js-delete-modal"
-                            data-trigger="click"
-                            data-container="body"
-                            data-bs-toggle="modal"
-                            data-bs-target="#js-confirm-delete"
-                            data-html="true"
-                            data-href='{{ path('file_manager_delete', fileManager.queryParameters) }}'>
-                        <span class="material-symbols-sharp">delete</span>
-                        <span class="bar-action">{{ 'button.delete.current'|trans }}</span>
-                    </button>
-                {% endif %}
-                <button id="js-delete-multiple-modal"
-                        class="mb-2 btn btn-sm btn-danger disabled"
-                        type="button"
-                        data-trigger="click"
-                        data-container="body"
-                        data-bs-toggle="modal"
-                        data-bs-target="#js-confirm-delete"
-                        data-placement="center"
-                        data-html="true">
-                    <span class="material-symbols-sharp">check_box</span>
-                    <span class="bar-action">{{ 'button.delete.selected'|trans }}</span>
-                </button>
-                {% endblock %}
-            </div>
-            {% block display %}
-                <div class="col">
-                    <div class="float-end">
-                        <input type="search" class="form-control"
-                               name="search" id="search" placeholder="{{ 'search.placeholder'|trans }}"
-                               aria-describedby="search">
-                    </div>
-                </div>
-            {% endblock %}
-        </div>
         <div class="d-flex flex-sm-wrap">
             {% if fileManager.tree %}
             <div class="mt-3 col-auto">
@@ -116,6 +49,85 @@
                 {% endblock %}
             </div>
             <div class="px-3 mt-3 flex-grow-1 no-tree-blk">
+
+                <div class="row">
+                    {% block actions %}
+                    <div class="col-lg-auto">
+                        {% if fileManager.parent %}
+                            <a class="btn btn-sm btn-secondary mb-2"
+                               title="{{ 'button.parent'|trans }}"
+                               href="{{ fileManager.parent }}">
+                        <span class="material-symbols-sharp">
+                         subdirectory_arrow_left
+                        </span> Retour</a>
+                        {% endif %}
+                        <button type="button" title="{{ 'button.refresh'|trans }}" class="mb-2 btn btn-sm btn-light"
+                                onClick="window.location.reload()">
+                            <span class="material-symbols-sharp">sync</span>
+                        </button>
+
+                        <button id="btnGroupActions" type="button" class="mb-2 btn btn-sm btn-secondary dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Actions
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupActions">
+                            <li class="dropdown-item">
+                                <a href="javascript:void(0);">
+                                <span class="fileinput-button">
+                                <span class="material-symbols-sharp">note_add</span>
+                                <span class="bar-action">{{ 'button.add.files'|trans }}</span>
+                                    <input id="fileupload" type="file"
+                                       data-url="{{ path('file_manager_upload', fileManager.queryParameters) }}"
+                                       name="files[]" multiple=""
+                                       accept="{{ fileManager.configuration.accept is defined ? fileManager.configuration.accept : (fileManager.type ? accept(fileManager.type)) }}">
+                                </span>
+                                </a>
+                            </li>
+                            <li class="dropdown-item mb-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#addFolder">
+                                    <span class="material-symbols-sharp">create_new_folder</span>
+                                    <span class="bar-action">{{ 'button.add.folder'|trans }}</span>
+                                </a>
+                            </li>
+                            {% if fileManager.parent %}
+                                <li class="dropdown-item mb-2">
+                                    <a data-trigger="click"
+                                       data-container="body"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#js-confirm-delete"
+                                       data-html="true" href="javascript:void(0);"
+                                       data-href='{{ path('file_manager_delete', fileManager.queryParameters) }}'>
+                                        <span class="material-symbols-sharp">delete</span>
+                                        <span class="bar-action">{{ 'button.delete.current'|trans }}</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li class="dropdown-item mb-2">
+                                <a id="js-delete-multiple-modal" class="link-disabled" data-trigger="click"
+                                   data-container="body"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#js-confirm-delete" href="javascript:void(0);"
+                                   data-placement="center"
+                                   data-html="true">
+                                    <span class="material-symbols-sharp">check_box</span>
+                                    <span class="bar-action">{{ 'button.delete.selected'|trans }}</span>
+                                </a>
+                            </li>
+                        </div>
+
+                        {% endblock %}
+                    </div>
+                    {% block display %}
+                        <div class="col">
+                            <div class="float-end">
+                                <input type="search" class="form-control"
+                                       name="search" id="search" placeholder="{{ 'search.placeholder'|trans }}"
+                                       aria-describedby="search">
+                            </div>
+                        </div>
+                    {% endblock %}
+                </div>
                 {% else %}
                 <div class="col-lg-12">
                     {% endif %}
@@ -138,6 +150,11 @@
     <script src="{{ asset('assets/js/Toasty/toasty-config.js') }}"></script>
     <script src='{{ asset('assets/js/Toasty/notification.js') }}'></script>
     <script src="{{ asset('bundles/filemanager/libs/jquery/jquery.min.js') }}"></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+            integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+            crossorigin="anonymous"
+    ></script>
     <script src="{{ asset('bundles/filemanager/libs/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/jstree/dist/jstree.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/vendor/jquery.ui.widget.js') }}"></script>

@@ -181,9 +181,9 @@ $(function () {
         .on('click', '#form-multiple-delete :checkbox', function () {
             var $jsDeleteMultipleModal = $('#js-delete-multiple-modal');
             if ($("input[type=checkbox][class=form-check-input]").is(':checked')) {
-                $jsDeleteMultipleModal.removeClass('disabled');
+                $jsDeleteMultipleModal.removeClass('link-disabled');
             } else {
-                $jsDeleteMultipleModal.addClass('disabled');
+                $jsDeleteMultipleModal.addClass('link-disabled');
             }
         });
 
@@ -233,7 +233,7 @@ $(function () {
                     }
 
                     $('#select-all').prop('checked', false);
-                    $('#js-delete-multiple-modal').addClass('disabled');
+                    $('#js-delete-multiple-modal').addClass('link-disabled');
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     displayToast("error", "Une erreur est survenue, essayez de recharger la page (CTRL + SHIFT + R).", 3000);
