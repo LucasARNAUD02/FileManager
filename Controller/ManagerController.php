@@ -159,7 +159,7 @@ class ManagerController extends AbstractController
             ])
             ->add('send', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-sm btn-primary',
+                    'class' => 'btn btn-primary',
                 ],
                 'label' => $this->translator->trans('button.save'),
             ])
@@ -237,12 +237,16 @@ class ManagerController extends AbstractController
             $fileSpan = '';
             if (true === $fileManager->getConfiguration()['show_file_count']) {
                 $filesNumber = $this->retrieveFilesNumber($directory->getPathname(), $fileManager->getRegex());
-                $fileSpan = $filesNumber > 0 ? " <span class='label label-default'>{$filesNumber}</span>" : '';
+                $directoriesNumber = $this->retrieveDirectoriesNumber($directory->getPathname());
+                $total = $filesNumber + $directoriesNumber;
+                $fileSpan = $total > 0 ? " <span class='badge bg-secondary'>$total</span>" : '';
             }
 
             if ($fileName === '' && isset($fileManager->getConfiguration()['root_name'])) {
                 $directoryFileName = $fileManager->getConfiguration()['root_name'];
             }
+
+            $opened = str_replace(['/', '\\'], '', $fileName) === str_replace(['/', '\\'], '', $fileManager->getCurrentRoute());
 
             $directoriesList[] = [
                 'text' => $directoryFileName . $fileSpan,
@@ -252,10 +256,11 @@ class ManagerController extends AbstractController
                     'href' => $fileName ? $this->generateUrl('file_manager', $queryParameters) : $this->generateUrl('file_manager', $queryParametersRoute),
                 ],
                 'state' => [
-                    'selected' => $fileManager->getCurrentRoute() === $fileName,
-                    'opened' => true,
+                    'opened' => $opened,
+                    'selected' => $opened,
                 ],
             ];
+
         }
 
         return $directoriesList;
@@ -278,10 +283,23 @@ class ManagerController extends AbstractController
     private function retrieveFilesNumber(string $path, string $regex): int
     {
         $files = new Finder();
+
         $files->in($path)->files()->depth(0)->name($regex);
+
         $this->dispatch(FileManagerEvents::POST_FILE_FILTER_CONFIGURATION, ['finder' => $files]);
 
         return iterator_count($files);
+    }
+
+    private function retrieveDirectoriesNumber(string $path): int
+    {
+        $directories = new Finder();
+
+        $directories->in($path)->directories()->depth(0);
+
+        $this->dispatch(FileManagerEvents::POST_FILE_FILTER_CONFIGURATION, ['finder' => $directories]);
+
+        return iterator_count($directories);
     }
 
     private function createDeleteForm(): FormInterface|Form
@@ -291,7 +309,7 @@ class ManagerController extends AbstractController
             ->add('DELETE', SubmitType::class, [
                 'translation_domain' => 'messages',
                 'attr' => [
-                    'class' => 'btn btn-sm btn-danger',
+                    'class' => 'btn btn-danger',
                 ],
                 'label' => 'button.delete.action',
             ])
@@ -310,7 +328,7 @@ class ManagerController extends AbstractController
             ])->add('extension', HiddenType::class)
             ->add('send', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-sm btn-success',
+                    'class' => 'btn btn-primary',
                 ],
                 'label' => 'button.rename.action',
             ])
