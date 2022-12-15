@@ -159,3 +159,8 @@ input[id=search]{
     text-decoration: none;
     pointer-events: none;
 }
+
+span.badge.bg-secondary {
+    padding: 2px 3px;
+}
+
