@@ -1,5 +1,17 @@
 $(function () {
 
+    $('#arbo').click(function(){
+
+        if(!$('#tree_div').is(':visible')){
+            $('#tree_div').removeClass('d-none').hide().show(200);
+            $.cookie('tree_visible', true)
+        } else {
+            $('#tree_div').hide(200);
+            $.cookie('tree_visible', false)
+        }
+
+    });
+
     // enlever les form group dans les formulaires car ca pete les modal
 
     $('form[name=rename_f], form[name=rename], form[name=delete_f]').find('div[class=form-group]').removeAttr('class');
@@ -244,8 +256,6 @@ $(function () {
             }
         });
 
-        $('.dropdown-menu').removeClass('show');
-
     }).on('fileuploadfail', function (e, data) {
 
         $.each(data.files, function (index, file) {
@@ -258,7 +268,6 @@ $(function () {
 
             displayToast("error", message, 3000);
         });
-
 
     }).on('fileuploadprogressall', function (e, data) {
 
