@@ -244,6 +244,8 @@ $(function () {
             }
         });
 
+        $('.dropdown-menu').removeClass('show');
+
     }).on('fileuploadfail', function (e, data) {
 
         $.each(data.files, function (index, file) {
@@ -256,6 +258,7 @@ $(function () {
 
             displayToast("error", message, 3000);
         });
+
 
     }).on('fileuploadprogressall', function (e, data) {
 
