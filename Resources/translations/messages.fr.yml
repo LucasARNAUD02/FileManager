@@ -28,7 +28,7 @@ button:
     folder: "Nouveau dossier"
   delete:
     current: "Supprimer le dossier courant"
-    selected: "Supprimer les fichiers sélectionnés"
+    selected: "Supprimer les éléments sélectionnés"
     action: "Supprimer"
   rename:
     action: "Renommer"

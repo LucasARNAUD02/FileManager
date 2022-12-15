@@ -159,7 +159,7 @@ class ManagerController extends AbstractController
             ])
             ->add('send', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-primary',
+                    'class' => 'btn btn-sm btn-primary',
                 ],
                 'label' => $this->translator->trans('button.save'),
             ])
@@ -235,6 +235,7 @@ class ManagerController extends AbstractController
             unset($queryParametersRoute['route']);
 
             $fileSpan = '';
+
             if (true === $fileManager->getConfiguration()['show_file_count']) {
                 $filesNumber = $this->retrieveFilesNumber($directory->getPathname(), $fileManager->getRegex());
                 $directoriesNumber = $this->retrieveDirectoriesNumber($directory->getPathname());
@@ -309,7 +310,7 @@ class ManagerController extends AbstractController
             ->add('DELETE', SubmitType::class, [
                 'translation_domain' => 'messages',
                 'attr' => [
-                    'class' => 'btn btn-danger',
+                    'class' => 'btn btn-sm btn-danger',
                 ],
                 'label' => 'button.delete.action',
             ])
@@ -328,7 +329,7 @@ class ManagerController extends AbstractController
             ])->add('extension', HiddenType::class)
             ->add('send', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-primary',
+                    'class' => 'btn btn-sm btn-primary',
                 ],
                 'label' => 'button.rename.action',
             ])

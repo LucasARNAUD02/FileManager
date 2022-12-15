@@ -162,5 +162,6 @@ input[id=search]{
 
 span.badge.bg-secondary {
     padding: 3px 4px;
+    min-width: 16px;
 }
 
