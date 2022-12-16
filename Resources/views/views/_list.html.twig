@@ -46,12 +46,10 @@
         <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : file.type == "file" ? 'file' : 'dir' }}">
             <td>
                 {% block file_checkbox %}
-                    {% if file.type == "file" %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="delete[]" value="{{ file.fileName }}"
-                                   title="{{ file.fileName }}">
-                        </div>
-                    {% endif %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="delete[]" value="{{ file.fileName }}"
+                               title="{{ file.fileName }}">
+                    </div>
                 {% endblock %}
             </td>
             <td class="text-center">
