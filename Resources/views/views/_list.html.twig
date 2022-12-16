@@ -1,90 +1,89 @@
-<div class="table-responsive">
-    <table class="table table-wrap table-bordered table-striped">
-        <colgroup>
-            <col>
-            <col>
-            <col class="col-lg-6">
-            <col class="col-lg-2">
-            <col class="col-lg-1">
-            <col class="col-lg-1">
-            <col class="col-lg-2">
-        </colgroup>
-        <thead class="thead-default">
-        <tr>
-            <th>
-                {% block select_all %}
+<table class="table table-wrap table-bordered table-striped">
+    <colgroup>
+        <col>
+        <col>
+        <col class="col-lg-6">
+        <col class="col-lg-2">
+        <col class="col-lg-1">
+        <col class="col-lg-1">
+        <col class="col-lg-2">
+    </colgroup>
+    <thead class="thead-default">
+    <tr>
+        <th>
+            {% block select_all %}
 
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="select-all"
-                               title="{{ 'select-all'|trans }}">
-                    </div>
-                {% endblock %}
-            </th>
-            <th></th>
-            <th>
-                {{ order(fileManager, 'name') }}
-            </th>
-            <th class="hidden-xs">
-                {{ order(fileManager, 'date') }}
-            </th>
-            <th class="hidden-xs">
-                <a class="false-link" href="javascript:void(0);">{{ 'table.size'|trans }}</a>
-            </th>
-            <th class="hidden-xs">
-                <a class="false-link" href="javascript:void(0);">{{ 'table.dimension'|trans }}</a>
-            </th>
-            <th class="text-right">
-                <a class="false-link" href="javascript:void(0);">{{ 'table.actions'|trans }}</a>
-            </th>
-        </tr>
-        </thead>
-        <tbody>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="select-all"
+                           title="{{ 'select-all'|trans }}">
+                </div>
+            {% endblock %}
+        </th>
+        <th></th>
+        <th>
+            {{ order(fileManager, 'name') }}
+        </th>
+        <th class="hidden-xs">
+            {{ order(fileManager, 'date') }}
+        </th>
+        <th class="hidden-xs">
+            <a class="false-link" href="javascript:void(0);">{{ 'table.size'|trans }}</a>
+        </th>
+        <th class="hidden-xs">
+            <a class="false-link" href="javascript:void(0);">{{ 'table.dimension'|trans }}</a>
+        </th>
+        <th class="text-right">
+            <a class="false-link" href="javascript:void(0);">{{ 'table.actions'|trans }}</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
 
-        {% for fileEntity in fileArray %}
+    {% for fileEntity in fileArray %}
 
-            {% set file = fileEntity.file %}
+        {% set file = fileEntity.file %}
 
-            <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : file.type == "file" ? 'file' : 'dir' }}">
-                <td>
-                    {% block file_checkbox %}
-                        {% if file.type == "file" %}
+        <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : file.type == "file" ? 'file' : 'dir' }}">
+            <td>
+                {% block file_checkbox %}
+                    {% if file.type == "file" %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="delete[]" value="{{ file.fileName }}"
                                    title="{{ file.fileName }}">
                         </div>
-                        {% endif %}
-                    {% endblock %}
-                </td>
-                <td class="text-center">
-                    {% block file_preview %}
-                        {{ fileEntity.preview ? fileEntity.preview.html|raw }}
-                    {% endblock %}
-                </td>
-                <td data-value="{{ file.fileName }}" {{ fileEntity.attribut|raw }}>
-                    {% block file_name %}
-                        {{ (fileEntity.preview.folder is defined ? fileEntity.preview.folder|raw : file.fileName) }}
-                    {% endblock %}
-                </td>
-                <td class="hidden-xs">
-                    {% block file_date %}
-                        <small>{{ file.mTime|date('d/m/Y H:i') }}</small>
-                    {% endblock %}
-                </td>
-                <td class="hidden-xs">
-                    {% block file_size %}
-                        <small>{{ fileEntity.HTMLSize }}</small>
-                    {% endblock %}
-                </td>
-                <td class="hidden-xs">
-                    {% block file_dimension %}
-                        <small>{{ fileEntity.HTMLDimension }}</small>
-                    {% endblock %}
-                </td>
-                <td class="text-right">
-                    {% block file_action %}
-                        {% if file.type == "file" %}
-                            {% if fileEntity.isPreviewPossible %}
-                                <span data-toggle="tooltip" title="{{ 'title.preview.file'|trans }}">
+                    {% endif %}
+                {% endblock %}
+            </td>
+            <td class="text-center">
+                {% block file_preview %}
+                    {{ fileEntity.preview ? fileEntity.preview.html|raw }}
+                {% endblock %}
+            </td>
+            <td data-value="{{ file.fileName }}" {{ fileEntity.attribut|raw }}>
+                {% block file_name %}
+                    {{ (fileEntity.preview.folder is defined ? fileEntity.preview.folder|raw : file.fileName) }}
+                {% endblock %}
+            </td>
+            <td class="hidden-xs">
+                {% block file_date %}
+                    <small>{{ file.mTime|date('d/m/Y H:i') }}</small>
+                {% endblock %}
+            </td>
+            <td class="hidden-xs">
+                {% block file_size %}
+                    <small>{{ fileEntity.HTMLSize }}</small>
+                {% endblock %}
+            </td>
+            <td class="hidden-xs">
+                {% block file_dimension %}
+                    <small>{{ fileEntity.HTMLDimension }}</small>
+                {% endblock %}
+            </td>
+            <td class="text-right">
+                {% block file_action %}
+                    {% if file.type == "file" %}
+                        {% if fileEntity.isPreviewPossible %}
+                            <span data-toggle="tooltip" title="{{ 'title.preview.file'|trans }}">
                                 <button type="button"
                                         class="btn btn-sm btn-outline-primary mb-2 js-open-modal"
                                         data-trigger="click"
@@ -95,16 +94,16 @@
                                     <span class="material-symbols-sharp">visibility</span>
                                 </button>
                             </span>
-                            {% endif %}
-                            <a data-placement="left" title="{{ 'title.download'|trans }}"
-                               class="btn btn-sm btn-outline-info mb-2 js-download"
-                               href="{{ path('file_manager_file', fileManager.queryParameters|merge({'fileName':file.fileName})) }}"
-                               download="{{ file.basename() }}">
-                                <span class="material-symbols-sharp">cloud_download</span>
-                            </a>
-
                         {% endif %}
-                        <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
+                        <a data-placement="left" title="{{ 'title.download'|trans }}"
+                           class="btn btn-sm btn-outline-info mb-2 js-download"
+                           href="{{ path('file_manager_file', fileManager.queryParameters|merge({'fileName':file.fileName})) }}"
+                           download="{{ file.basename() }}">
+                            <span class="material-symbols-sharp">cloud_download</span>
+                        </a>
+
+                    {% endif %}
+                    <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
                         <button type="button"
                                 class="btn btn-sm btn-outline-success mb-2 js-rename-modal"
                                 data-trigger="click"
@@ -119,7 +118,7 @@
                         </button>
                         </span>
 
-                        <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
+                    <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
                         <button type="button"
                                 class="btn btn-sm btn-outline-danger mb-2 js-delete-modal"
                                 data-trigger="click"
@@ -132,14 +131,13 @@
 
                         </button>
                     </span>
-                    {% endblock %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td class="text-center text-muted" colspan="7">C'est vide par ici.. 👻</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+                {% endblock %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td class="text-center text-muted" colspan="7">C'est vide par ici.. 👻</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

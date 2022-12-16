@@ -41,7 +41,7 @@
             </div>
         {% endblock %}
 
-        <div class="d-flex flex-wrap">
+        <div class="d-flex flex-wrap table-responsive">
             {% if fileManager.tree %}
             <div class="mt-3 col-auto {{ app.request.cookies.get('tree_visible') == "null" or app.request.cookies.get('tree_visible') == "false" ? 'd-none' : '' }}" id="tree_div">
                 {% block tree %}
