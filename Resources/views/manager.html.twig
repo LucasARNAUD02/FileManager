@@ -176,6 +176,7 @@
         var moduleName = '{{ fileManager.module ? fileManager.module : 0 }}';
         var successMessage = 'a été téléchargé avec succès';
         var url = "{{ path('file_manager', fileManager.queryParameters|merge({'json':true}))|e('js') }}";
+        let urlLastRoute = "{{ path('file_manager', fileManager.queryParameters) }}";
         var urldelete = "{{ path('file_manager_delete', fileManager.queryParameters )|e('js') }}";
 
         var deleteMessage = "{{ 'title.delete'|trans }}";

@@ -14,6 +14,8 @@ $(function () {
 
     });
 
+    $.cookie('last_route', urlLastRoute, {path: '/'});
+
     // enlever les form group dans les formulaires car ca pete les modal
 
     $('form[name=rename_f], form[name=rename], form[name=delete_f]').find('div[class=form-group]').removeAttr('class');
