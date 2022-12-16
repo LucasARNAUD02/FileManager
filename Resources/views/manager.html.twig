@@ -41,7 +41,7 @@
             </div>
         {% endblock %}
 
-        <div class="d-flex flex-sm-wrap">
+        <div class="d-flex flex-wrap">
             {% if fileManager.tree %}
             <div class="mt-3 col-auto {{ app.request.cookies.get('tree_visible') == "null" or app.request.cookies.get('tree_visible') == "false" ? 'd-none' : '' }}" id="tree_div">
                 {% block tree %}
@@ -129,7 +129,7 @@
                     {% block display %}
                         <div class="col">
                             <div class="float-end">
-                                <input type="search" class="form-control"
+                                <input type="search" class="form-control mb-2"
                                        name="search" id="search" placeholder="{{ 'search.placeholder'|trans }}"
                                        aria-describedby="search">
                             </div>
