@@ -13,10 +13,12 @@
         <th>
             {% block select_all %}
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="select-all"
-                           title="{{ 'select-all'|trans }}">
-                </div>
+                {% if is_granted('ROLE_ADMINISTRATIF') %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="select-all"
+                               title="{{ 'select-all'|trans }}">
+                    </div>
+                {% endif %}
             {% endblock %}
         </th>
         <th></th>
