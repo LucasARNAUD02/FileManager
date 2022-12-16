@@ -195,12 +195,15 @@ $(function () {
         })
         // checkbox
         .on('click', '#form-multiple-delete :checkbox', function () {
+
             var $jsDeleteMultipleModal = $('#js-delete-multiple-modal');
-            if ($("input[type=checkbox][class=form-check-input]").is(':checked')) {
+
+            if ($('#form-multiple-delete table > tbody').find('input[type=checkbox]:checked').length > 0) {
                 $jsDeleteMultipleModal.removeClass('link-disabled');
             } else {
                 $jsDeleteMultipleModal.addClass('link-disabled');
             }
+
         });
 
     // preselected
