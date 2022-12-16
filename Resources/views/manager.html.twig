@@ -90,6 +90,13 @@
                                 </span>
                                 </a>
                             </li>
+                            <li class="dropdown-item mb-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#addFolder">
+                                    <span class="material-symbols-sharp">create_new_folder</span>
+                                    <span class="bar-action">{{ 'button.add.folder'|trans }}</span>
+                                </a>
+                            </li>
                             {% if fileManager.parent %}
                                 <li class="dropdown-item mb-2">
                                     <a class="js-delete-modal"
