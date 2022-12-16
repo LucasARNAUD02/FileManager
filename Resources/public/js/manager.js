@@ -3,9 +3,11 @@ $(function () {
     $('#arbo').click(function(){
 
         if(!$('#tree_div').is(':visible')){
+            $('#arbo-text').text("Masquer");
             $('#tree_div').removeClass('d-none').hide().show(200);
             $.cookie('tree_visible', true)
         } else {
+            $('#arbo-text').text("Afficher");
             $('#tree_div').hide(200);
             $.cookie('tree_visible', false)
         }

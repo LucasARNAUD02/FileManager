@@ -329,7 +329,7 @@ class ManagerController extends AbstractController
             ])->add('extension', HiddenType::class)
             ->add('send', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-sm btn-primary',
+                    'class' => 'btn btn-sm btn-success',
                 ],
                 'label' => 'button.rename.action',
             ])

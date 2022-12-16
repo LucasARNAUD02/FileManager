@@ -57,7 +57,7 @@
                             <span class="material-symbols-sharp">
                                 account_tree
                             </span>
-                            Arborescence
+                            <span id="arbo-text">{{ app.request.cookies.get('tree_visible') == "null" or app.request.cookies.get('tree_visible') == "false" ? 'Afficher' : 'Masquer' }}</span>
                         </a>
                         {% if fileManager.parent %}
                             <a class="btn btn-sm btn-info mb-2"
@@ -70,6 +70,7 @@
                         <button type="button" title="{{ 'button.refresh'|trans }}" class="mb-2 btn btn-sm btn-light"
                                 onClick="window.location.reload()">
                             <span class="material-symbols-sharp">sync</span>
+                            Actualiser
                         </button>
 
                         <button id="btnGroupActions" type="button" class="mb-2 btn btn-sm btn-secondary dropdown-toggle"
@@ -87,13 +88,6 @@
                                        name="files[]" multiple=""
                                        accept="{{ fileManager.configuration.accept is defined ? fileManager.configuration.accept : (fileManager.type ? accept(fileManager.type)) }}">
                                 </span>
-                                </a>
-                            </li>
-                            <li class="dropdown-item mb-2">
-                                <a href="javascript:void(0);" data-bs-toggle="modal"
-                                   data-bs-target="#addFolder">
-                                    <span class="material-symbols-sharp">create_new_folder</span>
-                                    <span class="bar-action">{{ 'button.add.folder'|trans }}</span>
                                 </a>
                             </li>
                             {% if fileManager.parent %}
