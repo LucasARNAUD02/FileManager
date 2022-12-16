@@ -24,7 +24,7 @@ button:
   parent: "Parent"
   save: "Enregistrer"
   add:
-    files: "Nouveaux fichiers"
+    files: "Ajouter des fichiers"
     folder: "Nouveau dossier"
   delete:
     current: "Supprimer le dossier courant"
