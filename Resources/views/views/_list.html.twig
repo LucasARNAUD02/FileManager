@@ -23,13 +23,13 @@
         <th>
             {{ order(fileManager, 'name') }}
         </th>
-        <th class="hidden-xs">
+        <th class="d-none d-sm-block">
             {{ order(fileManager, 'date') }}
         </th>
-        <th class="hidden-xs">
+        <th class="d-none d-sm-block">
             <a class="false-link" href="javascript:void(0);">{{ 'table.size'|trans }}</a>
         </th>
-        <th class="hidden-xs">
+        <th class="d-none d-sm-block">
             <a class="false-link" href="javascript:void(0);">{{ 'table.dimension'|trans }}</a>
         </th>
         <th class="text-right">
@@ -62,17 +62,17 @@
                     {{ (fileEntity.preview.folder is defined ? fileEntity.preview.folder|raw : file.fileName) }}
                 {% endblock %}
             </td>
-            <td class="hidden-xs">
+            <td class="d-none d-sm-block">
                 {% block file_date %}
                     <small>{{ file.mTime|date('d/m/Y H:i') }}</small>
                 {% endblock %}
             </td>
-            <td class="hidden-xs">
+            <td class="d-none d-sm-block">
                 {% block file_size %}
                     <small>{{ fileEntity.HTMLSize }}</small>
                 {% endblock %}
             </td>
-            <td class="hidden-xs">
+            <td class="d-none d-sm-block">
                 {% block file_dimension %}
                     <small>{{ fileEntity.HTMLDimension }}</small>
                 {% endblock %}
