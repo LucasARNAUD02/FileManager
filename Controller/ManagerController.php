@@ -54,6 +54,8 @@ class ManagerController extends AbstractController
      */
     public function indexAction(Request $request, FileTypeService $fileTypeService): JsonResponse|Response
     {
+
+
         $queryParameters = $request->query->all();
         $isJson = $request->get('json');
         if ($isJson) {
@@ -193,6 +195,7 @@ class ManagerController extends AbstractController
         }
         $parameters['form'] = $form->createView();
         $parameters['formRename'] = $formRename->createView();
+        $parameters['displayActions'] = $this->isGranted('ROLE_ADMINISTRATIF');
 
         return $this->render('@FileManager/manager.html.twig', $parameters);
     }

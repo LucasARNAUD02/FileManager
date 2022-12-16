@@ -73,6 +73,7 @@
                         Actualiser
                     </button>
 
+                    {% if is_granted('ROLE_ADMINISTRATIF') %}
                     <button id="btnGroupActions" type="button" class="mb-2 btn btn-sm btn-secondary dropdown-toggle"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Actions
@@ -123,7 +124,7 @@
                             </a>
                         </li>
                     </div>
-
+                    {% endif %}
                     {% endblock %}
                 </div>
                 {% block display %}
