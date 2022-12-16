@@ -78,6 +78,13 @@
                             Actions
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupActions">
+                            <li class="dropdown-item mb-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#addFolder">
+                                    <span class="material-symbols-sharp">create_new_folder</span>
+                                    <span class="bar-action">{{ 'button.add.folder'|trans }}</span>
+                                </a>
+                            </li>
                             <li class="dropdown-item">
                                 <a href="javascript:void(0);">
                                 <span class="fileinput-button">
@@ -88,13 +95,6 @@
                                        name="files[]" multiple=""
                                        accept="{{ fileManager.configuration.accept is defined ? fileManager.configuration.accept : (fileManager.type ? accept(fileManager.type)) }}">
                                 </span>
-                                </a>
-                            </li>
-                            <li class="dropdown-item mb-2">
-                                <a href="javascript:void(0);" data-bs-toggle="modal"
-                                   data-bs-target="#addFolder">
-                                    <span class="material-symbols-sharp">create_new_folder</span>
-                                    <span class="bar-action">{{ 'button.add.folder'|trans }}</span>
                                 </a>
                             </li>
                             {% if fileManager.parent %}
