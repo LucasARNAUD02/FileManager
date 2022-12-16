@@ -74,20 +74,20 @@
                     </button>
 
                     {% if is_granted('ROLE_ADMINISTRATIF') %}
-                    <button id="btnGroupActions" type="button" class="mb-2 btn btn-sm btn-secondary dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Actions
-                    </button>
-                    <div class="dropdown-menu pe-2" aria-labelledby="btnGroupActions">
-                        <li class="dropdown-item mb-2">
-                            <a href="javascript:void(0);" data-bs-toggle="modal"
-                               data-bs-target="#addFolder">
-                                <span class="material-symbols-sharp">create_new_folder</span>
-                                <span class="bar-action">{{ 'button.add.folder'|trans }}</span>
-                            </a>
-                        </li>
-                        <li class="dropdown-item">
-                            <a href="javascript:void(0);">
+                        <button id="btnGroupActions" type="button" class="mb-2 btn btn-sm btn-secondary dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Actions
+                        </button>
+                        <div class="dropdown-menu pe-2" aria-labelledby="btnGroupActions">
+                            <li class="dropdown-item mb-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#addFolder">
+                                    <span class="material-symbols-sharp">create_new_folder</span>
+                                    <span class="bar-action">{{ 'button.add.folder'|trans }}</span>
+                                </a>
+                            </li>
+                            <li class="dropdown-item">
+                                <a href="javascript:void(0);">
                                 <span class="fileinput-button">
                                 <span class="material-symbols-sharp">note_add</span>
                                 <span class="bar-action">{{ 'button.add.files'|trans }}</span>
@@ -96,34 +96,34 @@
                                            name="files[]" multiple=""
                                            accept="{{ fileManager.configuration.accept is defined ? fileManager.configuration.accept : (fileManager.type ? accept(fileManager.type)) }}">
                                 </span>
-                            </a>
-                        </li>
-                        {% if fileManager.parent %}
-                            <li class="dropdown-item mb-2">
-                                <a class="js-delete-modal"
-                                   data-trigger="click"
-                                   data-container="body"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#js-confirm-delete"
-                                   data-html="true" href="javascript:void(0);"
-                                   data-href='{{ path('file_manager_delete', fileManager.queryParameters) }}'>
-                                    <span class="material-symbols-sharp">delete</span>
-                                    <span class="bar-action">{{ 'button.delete.current'|trans }}</span>
                                 </a>
                             </li>
-                        {% endif %}
-                        <li class="dropdown-item mb-2">
-                            <a id="js-delete-multiple-modal" class="link-disabled" data-trigger="click"
-                               data-container="body"
-                               data-bs-toggle="modal"
-                               data-bs-target="#js-confirm-delete" href="javascript:void(0);"
-                               data-placement="center"
-                               data-html="true">
-                                <span class="material-symbols-sharp">check_box</span>
-                                <span class="bar-action">{{ 'button.delete.selected'|trans }}</span>
-                            </a>
-                        </li>
-                    </div>
+                            {% if fileManager.parent %}
+                                <li class="dropdown-item mb-2">
+                                    <a class="js-delete-modal"
+                                       data-trigger="click"
+                                       data-container="body"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#js-confirm-delete"
+                                       data-html="true" href="javascript:void(0);"
+                                       data-href='{{ path('file_manager_delete', fileManager.queryParameters) }}'>
+                                        <span class="material-symbols-sharp">delete</span>
+                                        <span class="bar-action">{{ 'button.delete.current'|trans }}</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li class="dropdown-item mb-2">
+                                <a id="js-delete-multiple-modal" class="link-disabled" data-trigger="click"
+                                   data-container="body"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#js-confirm-delete" href="javascript:void(0);"
+                                   data-placement="center"
+                                   data-html="true">
+                                    <span class="material-symbols-sharp">check_box</span>
+                                    <span class="bar-action">{{ 'button.delete.selected'|trans }}</span>
+                                </a>
+                            </li>
+                        </div>
                     {% endif %}
                     {% endblock %}
                 </div>
