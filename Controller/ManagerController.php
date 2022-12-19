@@ -33,6 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @author Arthur Gribet <a.gribet@gmail.com>
@@ -345,31 +346,37 @@ class ManagerController extends AbstractController
     public function renameFileAction(Request $request, string $fileName): RedirectResponse
     {
         $queryParameters = $request->query->all();
-        $formRename = $this->createRenameForm();
-        /* @var Form $formRename */
-        $formRename->handleRequest($request);
-        if ($formRename->isSubmitted() && $formRename->isValid()) {
-            $data = $formRename->getData();
-            $extension = $data['extension'] ? '.' . $data['extension'] : '';
-            $newFileName = $data['name'] . $extension;
-            if ($newFileName !== $fileName && isset($data['name'])) {
-                $fileManager = $this->newFileManager($queryParameters);
-                $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$newFileName;
-                $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$fileName);
-                if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
-                    $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
-                } else {
-                    $fs = new Filesystem();
-                    try {
-                        $fs->rename($oldFilePath, $newFilePath);
-                        $this->addFlash('success', $this->translator->trans('file.renamed.success'));
-                        //File has been renamed successfully
-                    } catch (IOException $exception) {
-                        $this->addFlash('error', $this->translator->trans('file.renamed.danger'));
+
+        if(!$this->isGranted('ROLE_ADMINISTRATIF')){
+            $this->addFlash('error', "Vous n'avez pas l'autorisation de renommer un fichier.");
+        } else {
+
+            $formRename = $this->createRenameForm();
+            /* @var Form $formRename */
+            $formRename->handleRequest($request);
+            if ($formRename->isSubmitted() && $formRename->isValid()) {
+                $data = $formRename->getData();
+                $extension = $data['extension'] ? '.' . $data['extension'] : '';
+                $newFileName = $data['name'] . $extension;
+                if ($newFileName !== $fileName && isset($data['name'])) {
+                    $fileManager = $this->newFileManager($queryParameters);
+                    $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$newFileName;
+                    $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$fileName);
+                    if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
+                        $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
+                    } else {
+                        $fs = new Filesystem();
+                        try {
+                            $fs->rename($oldFilePath, $newFilePath);
+                            $this->addFlash('success', $this->translator->trans('file.renamed.success'));
+                            //File has been renamed successfully
+                        } catch (IOException $exception) {
+                            $this->addFlash('error', $this->translator->trans('file.renamed.danger'));
+                        }
                     }
+                } else {
+                    $this->addFlash('warning', $this->translator->trans('file.renamed.nochanged'));
                 }
-            } else {
-                $this->addFlash('warning', $this->translator->trans('file.renamed.nochanged'));
             }
         }
 
@@ -378,6 +385,7 @@ class ManagerController extends AbstractController
 
     /**
      * @Route("/upload/", name="file_manager_upload")
+     * @IsGranted("ROLE_ADMINISTRATIF")
      */
     public function uploadFileAction(Request $request): JsonResponse|Response
     {
@@ -436,47 +444,52 @@ class ManagerController extends AbstractController
         $form = $this->createDeleteForm();
         $form->handleRequest($request);
         $queryParameters = $request->query->all();
-        if ($form->isSubmitted() && $form->isValid()) {
-            // remove file
-            $fileManager = $this->newFileManager($queryParameters);
-            $fs = new Filesystem();
-            if (isset($queryParameters['delete'])) {
-                $is_delete = false;
-                foreach ($queryParameters['delete'] as $fileName) {
-                    $filePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
-                    if (!str_starts_with($filePath, $fileManager->getCurrentPath())) {
-                        $this->addFlash('error', $this->translator->trans('file.deleted.danger'));
-                    } else {
-                        $this->dispatch(FileManagerEvents::PRE_DELETE_FILE);
-                        try {
-                            $fs->remove($filePath);
-                            $is_delete = true;
-                        } catch (IOException $exception) {
-                            $this->addFlash('error', $this->translator->trans('file.deleted.unauthorized'));
+
+        if(!$this->isGranted('ROLE_ADMINISTRATIF')){
+            $this->addFlash('error', "Vous n'avez pas l'autorisation de renommer un fichier.");
+        } else {
+            if ($form->isSubmitted() && $form->isValid()) {
+                // remove file
+                $fileManager = $this->newFileManager($queryParameters);
+                $fs = new Filesystem();
+                if (isset($queryParameters['delete'])) {
+                    $is_delete = false;
+                    foreach ($queryParameters['delete'] as $fileName) {
+                        $filePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
+                        if (!str_starts_with($filePath, $fileManager->getCurrentPath())) {
+                            $this->addFlash('error', $this->translator->trans('file.deleted.danger'));
+                        } else {
+                            $this->dispatch(FileManagerEvents::PRE_DELETE_FILE);
+                            try {
+                                $fs->remove($filePath);
+                                $is_delete = true;
+                            } catch (IOException $exception) {
+                                $this->addFlash('error', $this->translator->trans('file.deleted.unauthorized'));
+                            }
+                            $this->dispatch(FileManagerEvents::POST_DELETE_FILE);
                         }
-                        $this->dispatch(FileManagerEvents::POST_DELETE_FILE);
                     }
-                }
-                if ($is_delete) {
-                    $this->addFlash('success', $this->translator->trans('file.deleted.success'));
-                }
-                unset($queryParameters['delete']);
-            } else {
-                $this->dispatch(FileManagerEvents::PRE_DELETE_FOLDER);
-                try {
-                    $fs->remove($fileManager->getCurrentPath());
-                    $this->addFlash('success', $this->translator->trans('folder.deleted.success'));
-                } catch (IOException $exception) {
-                    $this->addFlash('error', $this->translator->trans('folder.deleted.unauthorized'));
-                }
+                    if ($is_delete) {
+                        $this->addFlash('success', $this->translator->trans('file.deleted.success'));
+                    }
+                    unset($queryParameters['delete']);
+                } else {
+                    $this->dispatch(FileManagerEvents::PRE_DELETE_FOLDER);
+                    try {
+                        $fs->remove($fileManager->getCurrentPath());
+                        $this->addFlash('success', $this->translator->trans('folder.deleted.success'));
+                    } catch (IOException $exception) {
+                        $this->addFlash('error', $this->translator->trans('folder.deleted.unauthorized'));
+                    }
 
-                $this->dispatch(FileManagerEvents::POST_DELETE_FOLDER);
-                $queryParameters['route'] = \dirname($fileManager->getCurrentRoute());
-                if ($queryParameters['route'] == "\\" || $queryParameters['route'] === "/") {
-                    unset($queryParameters['route']);
-                }
+                    $this->dispatch(FileManagerEvents::POST_DELETE_FOLDER);
+                    $queryParameters['route'] = \dirname($fileManager->getCurrentRoute());
+                    if ($queryParameters['route'] == "\\" || $queryParameters['route'] === "/") {
+                        unset($queryParameters['route']);
+                    }
 
-                return $this->redirectToRoute('file_manager', $queryParameters);
+                    return $this->redirectToRoute('file_manager', $queryParameters);
+                }
             }
         }
 

@@ -1,22 +1,45 @@
 $(function () {
 
-    $('#arbo').click(function(){
+    let treeDiv = $('#tree_div');
+    let arboText = $('#arbo-text');
 
-        if(!$('#tree_div').is(':visible')){
-            $('#arbo-text').text("Masquer");
-            $('#tree_div').removeClass('d-none').hide().show(200);
+    $('#arbo').click(function () {
+
+        if (!treeDiv.is(':visible')) {
+            arboText.text("Masquer");
+            treeDiv.removeClass('d-none').hide().show(200);
             $.cookie('tree_visible', true)
         } else {
-            $('#arbo-text').text("Afficher");
-            $('#tree_div').hide(200);
+            arboText.text("Afficher");
+            treeDiv.hide(200);
             $.cookie('tree_visible', false)
         }
 
     });
 
-    $.cookie('last_route', urlLastRoute, {path: '/'});
+    // trigger click preview quand on clique sur l'image ou le pdf
+    $(document).on('click', 'img.lazy, .pdf > td > i', function () {
+        $(this).closest('tr').find('button.js-open-modal').first().click();
+    });
 
-    // enlever les form group dans les formulaires car ca pete les modal
+    $(window).resize(function () {
+
+        let treeVisible = treeDiv.is(':visible');
+        let windowWidth = $(window).width();
+
+        if (windowWidth <= 1186 && treeVisible) {
+
+            arboText.text("Afficher");
+            treeDiv.hide(200);
+
+        } else if (!treeVisible && windowWidth > 1186) {
+
+            arboText.text("Masquer");
+            treeDiv.removeClass('d-none').hide().show(200);
+        }
+    });
+
+    $.cookie('last_route', urlLastRoute, {path: '/'});
 
     $('form[name=rename_f], form[name=rename], form[name=delete_f]').find('div[class=form-group]').removeAttr('class');
 
