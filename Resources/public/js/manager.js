@@ -122,7 +122,7 @@ $(function () {
                 `
                  <object type=""
                             data="${href}"
-                            width="750"
+                            width="100%"
                             height="600">
                     </object>
                 `
