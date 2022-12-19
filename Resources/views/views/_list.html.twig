@@ -103,6 +103,7 @@
                         </a>
 
                     {% endif %}
+                    {% if is_granted('ROLE_ADMINISTRATIF') %}
                     <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
                         <button type="button"
                                 class="btn btn-sm btn-outline-success mb-2 js-rename-modal"
@@ -131,6 +132,7 @@
 
                         </button>
                     </span>
+                    {% endif %}
                 {% endblock %}
             </td>
         </tr>
