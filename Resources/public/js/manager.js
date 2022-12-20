@@ -32,10 +32,11 @@ $(function () {
             arboText.text("Afficher");
             treeDiv.hide(200);
 
-        } else if (!treeVisible && windowWidth > 1186) {
+        } else if (!treeVisible && windowWidth > 1186 && $.cookie('tree_visible') !== "false") {
 
             arboText.text("Masquer");
             treeDiv.removeClass('d-none').hide().show(200);
+
         }
     });
 
