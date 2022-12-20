@@ -66,7 +66,7 @@ $(function () {
                 break;
             case 'preview-image':
                 var $previewModalButton = opt.$trigger.find(".js-open-modal");
-                previewFile($previewModalButton)
+                previewFile($previewModalButton);
                 $displayImageModal.modal("show");
                 break;
 
@@ -135,13 +135,16 @@ $(function () {
 
         let target = $previewModalButton.data('bs-target');
 
+        let modalBody = $(target).find('.modal-body');
+
         if (target === "#js-display-image") {
 
-            $(target).find('img').attr('src', href);
+            let img = $(target).find('img').first();
+            img.attr('src', href);
 
         } else {
 
-            $(target).find('.modal-body').html(
+            modalBody.html(
                 `
                  <object type=""
                             data="${href}"
@@ -186,7 +189,9 @@ $(function () {
     $(document)
         // checkbox select all
         .on('click', '#select-all', function () {
-            var checkboxes = $('#form-multiple-delete').find(':checkbox')
+
+            var checkboxes = $('#form-multiple-delete').find(':checkbox').not(':disabled')
+
             if ($(this).is(':checked')) {
                 checkboxes.prop('checked', true);
             } else {
@@ -221,7 +226,7 @@ $(function () {
 
             var $jsDeleteMultipleModal = $('#js-delete-multiple-modal');
 
-            if ($('#form-multiple-delete table > tbody').find('input[type=checkbox]:checked').length > 0) {
+            if ($('#form-multiple-delete table > tbody').find('input[type=checkbox]:checked').not(':disabled').length > 0) {
                 $jsDeleteMultipleModal.removeClass('link-disabled');
             } else {
                 $jsDeleteMultipleModal.addClass('link-disabled');
@@ -324,18 +329,49 @@ $(function () {
     });
 
     function lazy() {
-        $('.lazy').Lazy({});
+        $('.lazy').Lazy({
+            effect: 'fadeIn',
+            effectTime: 125,
+        });
     }
 
     lazy();
 
     $('#search').on("input", function () {
 
-        var value = removeAccent($(this).val().toLowerCase().trim());
+        let value = removeAccent($(this).val().toLowerCase().trim());
 
-        $('#form-multiple-delete .file-wrapper').filter(function () {
-            $(this).toggle(removeAccent($(this).text().toLowerCase()).indexOf(value) > -1);
+        $('.searchable').filter(function () {
+
+            let tr = $(this).closest('tr');
+            tr.toggle(removeAccent($(this).text().toLowerCase()).indexOf(value) > -1);
         });
+
+        // aucun résultat
+        if ($('.file-wrapper:visible').length === 0) {
+
+            $('#select-all').prop('disabled', true);
+
+            if ($('#tr-no-result').length === 0) {
+
+                $('#form-multiple-delete tbody').append(`
+                        <tr id="tr-no-result">
+                            <td class="text-center text-muted" colspan="7">Aucun résultat.. 👻</td>
+                        </tr>`
+                );
+
+                $('#tr-no-result').closest('table').removeClass('table-striped');
+
+            }
+
+        } else {
+
+            $('#tr-no-result').closest('table').addClass('table-striped');
+            $('#tr-no-result').remove();
+            $('#select-all').prop('disabled', false);
+        }
+
     });
+
 
 });

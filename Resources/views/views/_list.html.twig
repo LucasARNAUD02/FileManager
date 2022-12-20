@@ -59,7 +59,7 @@
                     {{ fileEntity.preview ? fileEntity.preview.html|raw }}
                 {% endblock %}
             </td>
-            <td data-value="{{ file.fileName }}" {{ fileEntity.attribut|raw }}>
+            <td data-value="{{ file.fileName }}" {{ fileEntity.attribut|raw }} class="searchable">
                 {% block file_name %}
                     {{ (fileEntity.preview.folder is defined ? fileEntity.preview.folder|raw : file.fileName) }}
                 {% endblock %}
@@ -104,7 +104,7 @@
 
                     {% endif %}
                     {% if is_granted('ROLE_ADMINISTRATIF') %}
-                    <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
+                        <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
                         <button type="button"
                                 class="btn btn-sm btn-outline-success mb-2 js-rename-modal"
                                 data-trigger="click"
@@ -119,25 +119,25 @@
                         </button>
                         </span>
 
-                    <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
-                        <button type="button"
-                                class="btn btn-sm btn-outline-danger mb-2 js-delete-modal"
-                                data-trigger="click"
-                                data-container="body"
-                                data-bs-toggle="modal"
-                                data-bs-target="#js-confirm-delete"
-                                data-html="true"
-                                data-href='{{ path('file_manager_delete', fileManager.queryParameters|merge({'delete[]':file.fileName})) }}'>
-                             <span class="material-symbols-sharp">delete</span>
+                        <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger mb-2 js-delete-modal"
+                                    data-trigger="click"
+                                    data-container="body"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#js-confirm-delete"
+                                    data-html="true"
+                                    data-href='{{ path('file_manager_delete', fileManager.queryParameters|merge({'delete[]':file.fileName})) }}'>
+                                 <span class="material-symbols-sharp">delete</span>
 
-                        </button>
-                    </span>
+                            </button>
+                        </span>
                     {% endif %}
                 {% endblock %}
             </td>
         </tr>
     {% else %}
-        <tr>
+        <tr id="tr-no-result">
             <td class="text-center text-muted" colspan="7">C'est vide par ici.. 👻</td>
         </tr>
     {% endfor %}
