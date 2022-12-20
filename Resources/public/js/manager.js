@@ -68,56 +68,45 @@ $(function () {
             case 'preview-image':
                 var $previewModalButton = opt.$trigger.find(".js-open-modal");
                 previewFile($previewModalButton);
-                $displayImageModal.modal("show");
                 break;
             case 'preview-pdf':
                 var $previewModalButton = opt.$trigger.find(".js-open-modal");
                 previewFile($previewModalButton)
-                $displayPdfModal.modal("show");
                 break;
         }
     };
 
+    // context menu options selon si administratif ou pas
+
     $.contextMenu({
         selector: '.file',
         callback: callback,
-        items: {
-            "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
-            "edit": {name: renameMessage, icon: "far fa-edit"},
-            "download": {name: downloadMessage, icon: "fas fa-download"},
-        }
+        items: getContextMenuOptions('.file')
     });
 
     $.contextMenu({
         selector: '.pdf',
         callback: callback,
-        items: {
-            "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
-            "edit": {name: renameMessage, icon: "far fa-edit"},
-            "download": {name: downloadMessage, icon: "fas fa-download"},
-            "preview-pdf": {name: previewMessage, icon: "fas fa-eye"},
-        }
+        items: getContextMenuOptions('.pdf')
     });
 
     $.contextMenu({
         selector: '.img',
         callback: callback,
-        items: {
-            "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
-            "edit": {name: renameMessage, icon: "far fa-edit"},
-            "download": {name: downloadMessage, icon: "fas fa-download"},
-            "preview-image": {name: previewMessage, icon: "fas fa-eye"},
-        }
+        items: getContextMenuOptions('.img')
     });
 
-    $.contextMenu({
-        selector: '.dir',
-        callback: callback,
-        items: {
-            "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
-            "edit": {name: renameMessage, icon: "far fa-edit"},
-        }
-    });
+    if (isAdministratif) {
+
+        $.contextMenu({
+            selector: '.dir',
+            callback: callback,
+            items: {
+                "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
+                "edit": {name: renameMessage, icon: "far fa-edit"},
+            }
+        });
+    }
 
     function renameFile($renameModalButton) {
         $('#rename_f_name').val($renameModalButton.data('name'));
@@ -133,14 +122,19 @@ $(function () {
 
         let href = addParameterToURL($previewModalButton.data('href'), 'time=' + new Date().getTime());
 
-        let target = $previewModalButton.data('bs-target');
+        let target = $previewModalButton.data('target');
 
         let modalBody = $(target).find('.modal-body');
 
         if (target === "#js-display-image") {
 
-            let img = $(target).find('img').first();
-            img.attr('src', href).hide().fadeIn(1000);
+            modalBody.html(`
+                <img src="${href}" id="preview_img" class="img-fluid img-thumbnail">`);
+
+            $('#preview_img').on('load', function () {
+                let modal = new bootstrap.Modal($(target));
+                modal.show();
+            });
 
         } else {
 
@@ -153,7 +147,11 @@ $(function () {
                     </object>
                 `
             );
+
+            let modal = new bootstrap.Modal($(target));
+            modal.show();
         }
+
     }
 
     function addParameterToURL(_url, param) {
@@ -372,6 +370,72 @@ $(function () {
         }
 
     });
+
+    function getContextMenuOptions(selector) {
+
+        let options;
+
+        switch (selector) {
+
+            case '.file':
+
+                options = {
+                    "download": {name: downloadMessage, icon: "fas fa-download"},
+                };
+
+                if (isAdministratif) {
+
+                    let newOptions = {
+                        "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
+                        "edit": {name: renameMessage, icon: "far fa-edit"},
+                    };
+
+                    $.extend(true, options, newOptions);
+                }
+
+                break;
+
+            case '.pdf':
+
+                options = {
+                    "download": {name: downloadMessage, icon: "fas fa-download"},
+                    "preview-pdf": {name: previewMessage, icon: "fas fa-eye"},
+                }
+
+                if (isAdministratif) {
+
+                    let newOptions = {
+                        "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
+                        "edit": {name: renameMessage, icon: "far fa-edit"},
+                    };
+
+                    $.extend(true, options, newOptions);
+                }
+
+                break;
+
+            case '.img':
+
+                options = {
+                    "download": {name: downloadMessage, icon: "fas fa-download"},
+                    "preview-image": {name: previewMessage, icon: "fas fa-eye"},
+                }
+
+                if (isAdministratif) {
+
+                    let newOptions = {
+                        "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
+                        "edit": {name: renameMessage, icon: "far fa-edit"},
+                    };
+
+                    $.extend(true, options, newOptions);
+                }
+
+                break;
+        }
+
+        return options;
+    }
 
 
 });
