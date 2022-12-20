@@ -69,7 +69,6 @@ $(function () {
                 previewFile($previewModalButton);
                 $displayImageModal.modal("show");
                 break;
-
             case 'preview-pdf':
                 var $previewModalButton = opt.$trigger.find(".js-open-modal");
                 previewFile($previewModalButton)
@@ -131,7 +130,7 @@ $(function () {
 
     function previewFile($previewModalButton) {
 
-        var href = addParameterToURL($previewModalButton.data('href'), 'time=' + new Date().getTime());
+        let href = addParameterToURL($previewModalButton.data('href'), 'time=' + new Date().getTime());
 
         let target = $previewModalButton.data('bs-target');
 
@@ -140,7 +139,7 @@ $(function () {
         if (target === "#js-display-image") {
 
             let img = $(target).find('img').first();
-            img.attr('src', href);
+            img.attr('src', href).hide().fadeIn(1000);
 
         } else {
 
