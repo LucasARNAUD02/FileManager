@@ -184,6 +184,8 @@
         let urlLastRoute = "{{ path('file_manager', fileManager.queryParameters) }}";
         var urldelete = "{{ path('file_manager_delete', fileManager.queryParameters )|e('js') }}";
 
+        let isAdministratif = {{ is_granted('ROLE_ADMINISTRATIF') ? 'true' : 'false' }};
+
         var deleteMessage = "{{ 'title.delete'|trans }}";
         var renameMessage = "{{ 'title.rename.file'|trans }}";
         var downloadMessage = "{{ 'title.download'|trans }}";
@@ -191,11 +193,11 @@
         var noResultMessage = "{{ 'title.search.file'|trans }}";
 
         {% for message in app.flashes('success') %}
-        displayToast("success", `{{ message }}`);
+            displayToast("success", `{{ message }}`);
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-        displayToast("error", `{{ message }}`);
+            displayToast("error", `{{ message }}`);
         {% endfor %}
 
     </script>
@@ -206,3 +208,4 @@
 
 </body>
 </html>
+s
