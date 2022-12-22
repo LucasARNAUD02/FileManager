@@ -13,9 +13,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/icofont.css') }}"/>
         <link rel="stylesheet" href="{{ asset('assets/css/toast.css') }}"/>
 
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-              integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-              crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ asset('bundles/filemanager/libs/fontawesome-free-5.15.4-web/css/all.css') }}">
         <link rel="stylesheet"
               href="{{ asset('bundles/filemanager/libs/jstree/dist/themes/default/style.min.css') }}">
         <link rel="stylesheet"
@@ -156,11 +154,7 @@
     <script src="{{ asset('assets/js/Toasty/toasty-config.js') }}"></script>
     <script src='{{ asset('assets/js/Toasty/notification.js') }}'></script>
     <script src="{{ asset('bundles/filemanager/libs/jquery/jquery.min.js') }}"></script>
-    <script
-            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-            integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
-            crossorigin="anonymous"
-    ></script>
+    <script src="{{ asset('bundles/filemanager/js/popper-2.11.6.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/jstree/dist/jstree.min.js') }}"></script>
     <script src='{{ asset('assets/js/jquery-cookie.js') }}'></script>
@@ -176,10 +170,8 @@
 
     <script>
 
-        var treedata = {{ treeData|raw }};
-        var tree = {{ fileManager.tree ? 'true' : 'false' }};
-        var moduleName = '{{ fileManager.module ? fileManager.module : 0 }}';
-        var successMessage = 'a été téléchargé avec succès';
+        const treedata = {{ treeData|raw }};
+        const tree = {{ fileManager.tree ? 'true' : 'false' }};
         var url = "{{ path('file_manager', fileManager.queryParameters|merge({'json':true}))|e('js') }}";
         let urlLastRoute = "{{ path('file_manager', fileManager.queryParameters) }}";
         var urldelete = "{{ path('file_manager_delete', fileManager.queryParameters )|e('js') }}";
@@ -190,14 +182,13 @@
         var renameMessage = "{{ 'title.rename.file'|trans }}";
         var downloadMessage = "{{ 'title.download'|trans }}";
         var previewMessage = "{{ 'title.preview.file'|trans }}";
-        var noResultMessage = "{{ 'title.search.file'|trans }}";
 
         {% for message in app.flashes('success') %}
-            displayToast("success", `{{ message }}`);
+        displayToast("success", `{{ message }}`);
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-            displayToast("error", `{{ message }}`);
+        displayToast("error", `{{ message }}`);
         {% endfor %}
 
     </script>

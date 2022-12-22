@@ -45,7 +45,7 @@
 
         {% set file = fileEntity.file %}
 
-        <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : file.type == "file" ? 'file' : 'dir' }}">
+        <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : fileEntity.isVideo() ? 'video' : file.type == "file" ? 'file' : 'dir' }}">
             <td>
                 {% block file_checkbox %}
                     <div class="form-check">
@@ -88,7 +88,7 @@
                                         class="btn btn-sm btn-outline-primary mb-2 js-open-modal"
                                         data-trigger="click"
                                         data-container="body"
-                                        data-target="#{{ fileEntity.isPdf ? 'js-display-pdf' : 'js-display-image' }}"
+                                        data-target="#{{ fileEntity.isPdf ? 'js-display-pdf' : fileEntity.isImage ? 'js-display-image' : 'js-display-video' }}"
                                         data-href='{{ fileEntity.preview.path }}'>
                                     <span class="material-symbols-sharp">visibility</span>
                                 </button>

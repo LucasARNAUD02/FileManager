@@ -1,25 +1,41 @@
 $(function () {
 
-    let treeDiv = $('#tree_div');
-    let arboText = $('#arbo-text');
+    const treeDiv = $('#tree_div');
+    const arboText = $('#arbo-text');
+    const selectAll = $('#select-all');
+    const arbo = $('#arbo');
+    const renameModal = $('#js-confirm-rename');
+    const deleteModal = $('#js-confirm-delete');
+    const $tree = $('#tree');
+    const formMultipleDelete = $('#form-multiple-delete');
+    const jsDeleteMultipleModal = $('#js-delete-multiple-modal');
+    const fileUpload = $('#fileupload');
+    const search = $('#search');
 
-    $('#arbo').click(function () {
+    $.cookie('last_route', urlLastRoute, {path: '/'});
+
+    $("form").filter('[name=rename_f], [name=rename], [name=delete_f]').find('.form-group').removeClass();
+
+    arbo.click(function () {
 
         if (!treeDiv.is(':visible')) {
-            arboText.text("Masquer");
-            treeDiv.removeClass('d-none').hide().show(200);
-            $.cookie('tree_visible', true)
-        } else {
-            arboText.text("Afficher");
-            treeDiv.hide(200);
-            $.cookie('tree_visible', false)
-        }
 
+            treeDiv.removeClass('d-none').hide().show(200, function () {
+                $.cookie('tree_visible', true);
+                arboText.text("Masquer");
+            });
+
+        } else {
+
+            treeDiv.hide(200, function () {
+                $.cookie('tree_visible', false);
+                arboText.text("Afficher");
+            });
+        }
     });
 
-    // trigger click preview quand on clique sur l'image ou le pdf
-    $(document).on('click', 'img.lazy, .pdf > td > i', function () {
-        $(this).closest('tr').find('button.js-open-modal').first().click();
+    $(document).on('click', '.lazy, .pdf i, .video i', function () {
+        $(this).closest('.file-wrapper').find('.js-open-modal').click();
     });
 
     $(window).resize(function () {
@@ -27,130 +43,126 @@ $(function () {
         let treeVisible = treeDiv.is(':visible');
         let windowWidth = $(window).width();
 
-        if (windowWidth <= 1186 && treeVisible) {
+        if (treeVisible && windowWidth <= 1186) {
 
-            arboText.text("Afficher");
-            treeDiv.hide(200);
+            treeDiv.hide(200, function () {
+                arboText.text("Afficher");
+            });
 
         } else if (!treeVisible && windowWidth > 1186 && $.cookie('tree_visible') !== "false") {
 
-            arboText.text("Masquer");
-            treeDiv.removeClass('d-none').hide().show(200);
+            treeDiv.removeClass('d-none').hide().show(200, function () {
+                arboText.text("Masquer");
+            });
 
         }
     });
 
-    $.cookie('last_route', urlLastRoute, {path: '/'});
+    let callback = function (key, opt) {
 
-    $('form[name=rename_f], form[name=rename], form[name=delete_f]').find('div[class=form-group]').removeAttr('class');
+        const trigger = opt.$trigger;
 
-    var $renameModal = $('#js-confirm-rename');
-    var $deleteModal = $('#js-confirm-delete');
-    var $displayImageModal = $('#js-display-image');
-    var $displayPdfModal = $('#js-display-pdf');
-
-    var callback = function (key, opt) {
         switch (key) {
             case 'edit':
-                var $renameModalButton = opt.$trigger.find(".js-rename-modal")
-                renameFile($renameModalButton)
-                $renameModal.modal("show");
+                let renameModalButton = trigger.find(".js-rename-modal")
+                renameFile(renameModalButton)
+                renameModal.modal("show");
                 break;
             case 'delete':
-                var $deleteModalButton = opt.$trigger.find(".js-delete-modal")
-                deleteFile($deleteModalButton)
-                $deleteModal.modal("show");
+                let deleteModalButton = trigger.find(".js-delete-modal")
+                deleteFile(deleteModalButton)
+                deleteModal.modal("show");
                 break;
             case 'download':
-                var $downloadButton = opt.$trigger.find(".js-download")
-                downloadFile($downloadButton)
+                trigger.find(".js-download")[0].click();
                 break;
-            case 'preview-image':
-                var $previewModalButton = opt.$trigger.find(".js-open-modal");
-                previewFile($previewModalButton);
-                break;
-            case 'preview-pdf':
-                var $previewModalButton = opt.$trigger.find(".js-open-modal");
-                previewFile($previewModalButton)
+            case 'preview':
+                let previewModalButton = trigger.find(".js-open-modal");
+                previewFile(previewModalButton);
                 break;
         }
     };
 
-    // context menu options selon si administratif ou pas
-
     $.contextMenu({
-        selector: '.file',
-        callback: callback,
-        items: getContextMenuOptions('.file')
+        selector: '.file', callback: callback, items: getContextMenuOptions('file')
     });
 
     $.contextMenu({
-        selector: '.pdf',
-        callback: callback,
-        items: getContextMenuOptions('.pdf')
-    });
-
-    $.contextMenu({
-        selector: '.img',
-        callback: callback,
-        items: getContextMenuOptions('.img')
+        selector: '.pdf, .img, .video', callback: callback, items: getContextMenuOptions('preview')
     });
 
     if (isAdministratif) {
 
         $.contextMenu({
-            selector: '.dir',
-            callback: callback,
-            items: {
-                "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
+            selector: '.dir', callback: callback, items: {
                 "edit": {name: renameMessage, icon: "far fa-edit"},
+                "delete": {name: deleteMessage, icon: "far fa-trash-alt"}
             }
         });
     }
 
-    function renameFile($renameModalButton) {
-        $('#rename_f_name').val($renameModalButton.data('name'));
-        $('#rename_f_extension').val($renameModalButton.data('extension'));
-        $renameModal.find('form').attr('action', $renameModalButton.data('href'))
+    function renameFile(renameModalButton) {
+        $('#rename_f_name').val(renameModalButton.data('name'));
+        $('#rename_f_extension').val(renameModalButton.data('extension'));
+        renameModal.find('form').attr('action', renameModalButton.data('href'));
     }
 
-    function deleteFile($deleteModalButton) {
-        $('#js-confirm-delete').find('form').attr('action', $deleteModalButton.data('href'));
+    function deleteFile(deleteModalButton) {
+        deleteModal.find('form').attr('action', deleteModalButton.data('href'));
     }
 
-    function previewFile($previewModalButton) {
+    function previewFile(previewModalButton) {
 
-        let href = addParameterToURL($previewModalButton.data('href'), 'time=' + new Date().getTime());
+        const href = addParameterToURL(previewModalButton.data('href'), 'time=' + new Date().getTime());
+        const target = previewModalButton.data('target');
+        const modal = new bootstrap.Modal($(target));
+        const modalBody = $(target).find('.modal-body');
 
-        let target = $previewModalButton.data('target');
+        switch (target) {
 
-        let modalBody = $(target).find('.modal-body');
+            case "#js-display-image":
 
-        if (target === "#js-display-image") {
+                modalBody.html(`<img src="${href}" id="preview_img" class="img-fluid img-thumbnail">`);
 
-            modalBody.html(`
-                <img src="${href}" id="preview_img" class="img-fluid img-thumbnail">`);
+                modalBody.find('img').on('load', function () {
+                    modal.show();
+                });
 
-            $('#preview_img').on('load', function () {
-                let modal = new bootstrap.Modal($(target));
-                modal.show();
-            });
+                break;
 
-        } else {
+            case "#js-display-pdf":
 
-            modalBody.html(
-                `
+                modalBody.html(`
                  <object type=""
                             data="${href}"
                             width="100%"
                             height="600">
                     </object>
-                `
-            );
+                `);
 
-            let modal = new bootstrap.Modal($(target));
-            modal.show();
+                modal.show();
+                break;
+
+            case "#js-display-video":
+
+                modalBody.html(`
+                 <video width="100%" height="600" controls="controls">
+                  <source src="${href}"/>                  
+                    <object data="${href}" width="100%" height="600">
+                        <embed src="${href}" width="100%" height="600">
+                            <p class="text-muted">Votre navigateur ne supporte pas la lecture de vidéos.</p>
+                        </embed>
+                    </object>
+                </video> 
+                `);
+
+                modal.show();
+                break;
         }
+
+        $(target).on('hidden.bs.modal', function () {
+            modalBody.empty();
+        });
 
     }
 
@@ -159,16 +171,11 @@ $(function () {
         return _url;
     }
 
-    function downloadFile($downloadButton) {
-        $downloadButton[0].click();
-    }
-
     function initTree(treedata) {
 
-        $('#tree').jstree({
+        $tree.jstree({
             'core': {
-                'data': treedata,
-                "check_callback": true
+                'data': treedata, "check_callback": true
             }
         }).bind("changed.jstree", function (e, data) {
             if (data.node) {
@@ -177,68 +184,60 @@ $(function () {
         });
     }
 
-    if (tree === true) {
+    if (tree) {
 
         // sticky kit
         $("#tree-block").stick_in_parent();
 
         initTree(treedata);
     }
+
     $(document)
-        // checkbox select all
+
         .on('click', '#select-all', function () {
 
-            var checkboxes = $('#form-multiple-delete').find(':checkbox').not(':disabled')
+            let checkboxes = formMultipleDelete.find(':checkbox:enabled');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        })
 
-            if ($(this).is(':checked')) {
-                checkboxes.prop('checked', true);
-            } else {
-                checkboxes.prop('checked', false);
-            }
-        })
-        // delete modal buttons
         .on('click', '.js-delete-modal', function () {
-                deleteFile($(this));
-            }
-        )
-        // preview modal buttons
+            deleteFile($(this));
+        })
+
         .on('click', '.js-open-modal', function () {
-                previewFile($(this));
-            }
-        )
-        // rename modal buttons
+            previewFile($(this));
+        })
+
         .on('click', '.js-rename-modal', function () {
-                renameFile($(this));
-            }
-        )
-        // multiple delete modal button
+            renameFile($(this));
+        })
+
         .on('click', '#js-delete-multiple-modal', function () {
-            var $multipleDelete = $('#form-multiple-delete').serialize();
-            if ($multipleDelete) {
-                var href = urldelete + '&' + $multipleDelete;
-                $('#js-confirm-delete').find('form').attr('action', href);
+
+            let multipleDelete = formMultipleDelete.serialize();
+
+            if (multipleDelete) {
+                deleteModal.find('form').attr('action', urldelete + '&' + multipleDelete);
             }
         })
-        // checkbox
+
         .on('click', '#form-multiple-delete :checkbox', function () {
 
-            var $jsDeleteMultipleModal = $('#js-delete-multiple-modal');
-
-            if ($('#form-multiple-delete table > tbody').find('input[type=checkbox]:checked').not(':disabled').length > 0) {
-                $jsDeleteMultipleModal.removeClass('link-disabled');
+            if ($('#form-multiple-delete tbody :checkbox:checked:enabled').length > 0) {
+                jsDeleteMultipleModal.removeClass('link-disabled');
             } else {
-                $jsDeleteMultipleModal.addClass('link-disabled');
+                jsDeleteMultipleModal.addClass('link-disabled');
             }
 
         });
 
-    // preselected
-    $renameModal.on('shown.bs.modal', function () {
+    renameModal.on('shown.bs.modal', function () {
         $('#form_name').select().mouseup(function () {
             $('#form_name').unbind("mouseup");
             return false;
         });
     });
+
     $('#addFolder').on('shown.bs.modal', function () {
         $('#rename_name').select().mouseup(function () {
             $('#rename_name').unbind("mouseup");
@@ -246,46 +245,47 @@ $(function () {
         });
     });
 
-    // file upload
-    $('#fileupload').fileupload({
+    fileUpload.fileupload({
 
         dataType: 'json',
         processQueue: false,
-        dropZone: $('#dropzone')
+        dropZone: $('#dropzone'),
+        pasteZone: $('#dropzone'),
 
     }).on('fileuploaddone', function (e, data) {
 
-        $.each(data.result.files, function (index, file) {
+        const addedFiles = data.result.files;
+
+        $.each(addedFiles, function (index, file) {
 
             const fileName = file.name;
 
             if (file.url) {
-                displayToast("success", fileName + ' ' + successMessage, 3000);
-                // Ajax update view
+
+                displayToast("success", `Le fichier ${fileName} a été ajouté.`, 3000);
+
                 $.ajax({
-                    dataType: "json",
-                    url: url,
-                    type: 'GET'
+                    dataType: "json", url: url, type: 'GET'
                 }).done(function (data) {
-                    // update file list
-                    $('#form-multiple-delete').html(data.data);
+
+                    formMultipleDelete.html(data.data);
 
                     lazy();
 
-                    if (tree === true) {
-                        $('#tree').data('jstree', false).empty();
+                    if (tree) {
+                        $tree.data('jstree', false).empty();
                         initTree(data.treeData);
                     }
 
-                    $('#select-all').prop('checked', false);
-                    $('#js-delete-multiple-modal').addClass('link-disabled');
+                    selectAll.prop('checked', false);
+                    jsDeleteMultipleModal.addClass('link-disabled');
 
-                }).fail(function (jqXHR, textStatus, errorThrown) {
+                }).fail(function () {
                     displayToast("error", "Une erreur est survenue, essayez de recharger la page (CTRL + SHIFT + R).", 3000);
                 });
 
             } else if (file.error) {
-                displayToast("error", `${fileName} ${file.error}`);
+                displayToast("error", `Une erreur est survenue lors de l'ajout du fichier suivant : ${fileName}.`, 3000);
             }
         });
 
@@ -295,7 +295,7 @@ $(function () {
 
             let message = `Le fichier ${file.name} n'a pas pu être ajouté.`;
 
-            if (file.size > 8000000) {
+            if (file.size > 8388608) {
                 message = `Le fichier ${file.name} est trop volumineux pour être ajouté, sa taille ne doit pas dépasser 8 mo.`;
             }
 
@@ -307,7 +307,8 @@ $(function () {
         if (e.isDefaultPrevented()) {
             return false;
         }
-        var progress = Math.floor((data.loaded / data.total) * 100);
+
+        const progress = Math.floor((data.loaded / data.total) * 100);
 
         $('.progress-bar')
             .removeClass("notransition")
@@ -328,114 +329,72 @@ $(function () {
 
     function lazy() {
         $('.lazy').Lazy({
-            effect: 'fadeIn',
-            effectTime: 125,
+            effect: 'fadeIn', effectTime: 125,
         });
     }
 
     lazy();
 
-    $('#search').on("input", function () {
+    search.on("input", function (event) {
 
-        let value = removeAccent($(this).val().toLowerCase().trim());
+        const value = removeAccent(event.target.value.toLowerCase().trim());
+        const trNoResult = $('#tr-no-result');
 
         $('.searchable').filter(function () {
-
-            let tr = $(this).closest('tr');
-            tr.toggle(removeAccent($(this).text().toLowerCase()).indexOf(value) > -1);
+            $(this).closest('tr').toggle(removeAccent($(this).text().toLowerCase()).indexOf(value) > -1);
         });
 
-        // aucun résultat
         if ($('.file-wrapper:visible').length === 0) {
 
-            $('#select-all').prop('disabled', true);
+            selectAll.prop('disabled', true);
 
-            if ($('#tr-no-result').length === 0) {
+            if (trNoResult.length === 0) {
 
                 $('#form-multiple-delete tbody').append(`
                         <tr id="tr-no-result">
                             <td class="text-center text-muted" colspan="7">Aucun résultat.. 👻</td>
-                        </tr>`
-                );
+                        </tr>`);
 
-                $('#tr-no-result').closest('table').removeClass('table-striped');
-
+                $('#tr-no-result').closest('.table').toggleClass('table-striped');
             }
 
         } else {
 
-            $('#tr-no-result').closest('table').addClass('table-striped');
-            $('#tr-no-result').remove();
-            $('#select-all').prop('disabled', false);
+            trNoResult.closest('table').toggleClass('table-striped');
+            trNoResult.remove();
+            selectAll.prop('disabled', false);
         }
 
     });
 
-    function getContextMenuOptions(selector) {
+    function getContextMenuOptions(type) {
 
         let options;
 
-        switch (selector) {
+        if (isAdministratif) {
+            options = {
+                "edit": {name: renameMessage, icon: "far fa-edit"},
+                "delete": {name: deleteMessage, icon: "far fa-trash-alt"}
+            };
+        }
 
-            case '.file':
-
+        switch (type) {
+            case 'file':
                 options = {
                     "download": {name: downloadMessage, icon: "fas fa-download"},
+                    ...options
                 };
-
-                if (isAdministratif) {
-
-                    let newOptions = {
-                        "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
-                        "edit": {name: renameMessage, icon: "far fa-edit"},
-                    };
-
-                    $.extend(true, options, newOptions);
-                }
-
                 break;
-
-            case '.pdf':
-
+            case 'preview':
                 options = {
+                    "preview": {name: previewMessage, icon: "fas fa-eye"},
                     "download": {name: downloadMessage, icon: "fas fa-download"},
-                    "preview-pdf": {name: previewMessage, icon: "fas fa-eye"},
-                }
-
-                if (isAdministratif) {
-
-                    let newOptions = {
-                        "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
-                        "edit": {name: renameMessage, icon: "far fa-edit"},
-                    };
-
-                    $.extend(true, options, newOptions);
-                }
-
-                break;
-
-            case '.img':
-
-                options = {
-                    "download": {name: downloadMessage, icon: "fas fa-download"},
-                    "preview-image": {name: previewMessage, icon: "fas fa-eye"},
-                }
-
-                if (isAdministratif) {
-
-                    let newOptions = {
-                        "delete": {name: deleteMessage, icon: "far fa-trash-alt"},
-                        "edit": {name: renameMessage, icon: "far fa-edit"},
-                    };
-
-                    $.extend(true, options, newOptions);
-                }
-
+                    ...options
+                };
                 break;
         }
 
         return options;
     }
-
 
 });
