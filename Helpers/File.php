@@ -82,7 +82,7 @@ class File
     }
 
     public function isVideo() : bool{
-        return preg_match('/(mp4|)$/i', $this->file->getExtension());
+        return preg_match('/(mp4|mov|avi|mkv)$/i', $this->file->getExtension());
     }
 
     public function getFile(): SplFileInfo
