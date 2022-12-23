@@ -81,6 +81,10 @@ class File
         return preg_match('/(pdf)$/i', $this->file->getExtension());
     }
 
+    public function isVideo() : bool{
+        return preg_match('/(mp4|)$/i', $this->file->getExtension());
+    }
+
     public function getFile(): SplFileInfo
     {
         return $this->file;
@@ -103,6 +107,6 @@ class File
 
     public function isPreviewPossible(): bool|int
     {
-        return $this->isImage() || $this->isPdf();
+        return $this->isImage() || $this->isPdf() || $this->isVideo();
     }
 }
