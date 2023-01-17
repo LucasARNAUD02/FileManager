@@ -1665,3 +1665,27 @@ body.outlook p {
         min-width: 0;
     }
 }
+
+.tbody-bordered{
+    border-left: 1px solid #edf2f9;
+    border-right: 1px solid #edf2f9;
+}
+
+
+/* Icons */
+
+.icofont-ui-folder{
+    color: #f4bf81;
+}
+
+.icofont-file-excel{
+    color: #1c5e3d;
+}
+
+.icofont-file-pdf{
+    color: #bd2e27;
+}
+
+.icofont-file-word{
+    color: #23487d;
+}

@@ -4,10 +4,12 @@ namespace Lucas\FileManager\Service;
 
 use Lucas\FileManager\Helpers\FileManager;
 use SplFileInfo;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
-class FileTypeService {
+class FileTypeService
+{
     public const IMAGE_SIZE = [
         FileManager::VIEW_LIST => '22',
         FileManager::VIEW_THUMBNAIL => '100',
@@ -16,10 +18,12 @@ class FileTypeService {
     /**
      * FileTypeService constructor.
      */
-    public function __construct(private RouterInterface $router, private Environment $twig) {
+    public function __construct(private RouterInterface $router, private Environment $twig, private KernelInterface $kernel)
+    {
     }
 
-    public function preview(FileManager $fileManager, SplFileInfo $file) {
+    public function preview(FileManager $fileManager, SplFileInfo $file)
+    {
         if ($fileManager->getImagePath()) {
             $filePath = $fileManager->getImagePath() . $file->getFilename();
         } else {
@@ -38,20 +42,23 @@ class FileTypeService {
         if ('dir' === $type) {
             $href = $this->router->generate(
                 'file_manager', array_merge(
-                $fileManager->getQueryParameters(),
-                    ['route' => $fileManager->getRoute().'/'.rawurlencode($file->getFilename())]
-            )
+                    $fileManager->getQueryParameters(),
+                    ['route' => $fileManager->getRoute() . '/' . rawurlencode($file->getFilename())]
+                )
             );
+
+            $path = $this->router->getContext()->getBaseUrl() . '/bundles/filemanager/img/dossier.png';
 
             return [
                 'path' => $filePath,
-                'html' => '<i class="icofont-ui-folder"></i>',
-                'folder' => '<a  href="'.$href.'" title="Ouvrir le dossier">'.$file->getFilename().'</a>',
+                'html' => '<img width="30" height="30" src="' . $path . '">',
+                'folder' => '<a  href="' . $href . '" title="Ouvrir le dossier">' . $file->getFilename() . '</a>',
             ];
         }
     }
 
-    public function accept($type): bool|string {
+    public function accept($type): bool|string
+    {
         switch ($type) {
             case 'image':
                 $accept = 'image/*';
@@ -66,28 +73,83 @@ class FileTypeService {
         return $accept;
     }
 
-    public function fileIcon(string $filePath,?string $extension = null, ?int $size = 75, ?bool $lazy = false, ?string $twigExtension = null, ?bool $cachebreaker = null): array {
+    public function fileIcon(string $filePath, ?string $extension = null, ?int $size = 75, ?bool $lazy = false, ?string $twigExtension = null, ?bool $cachebreaker = null): array
+    {
         $imageTemplate = null;
 
         if (null === $extension) {
             $filePathTmp = strtok($filePath, '?');
             $extension = pathinfo($filePathTmp, PATHINFO_EXTENSION);
         }
+        $fileName = 'file.png';
         switch (true) {
-            case $this->isYoutubeVideo($filePath):
-            case preg_match('/(mp4|ogg|webm|avi|wmv|mov)$/i', $extension):
-                $class = 'icofont-file-video';
+            case preg_match('/(mp4)$/i', $extension):
+                $fileName = 'mp4.png';
                 break;
-            case preg_match('/(mp3|wav)$/i', $extension):
-                $class = 'icofont-file-audio';
+            case preg_match('/(ogg)$/i', $extension):
+                $fileName = 'ogg.png';
                 break;
-            case preg_match('/(gif|png|jpe?g|svg)$/i', $extension):
+            case preg_match('/(webm)$/i', $extension):
+                $fileName = 'webm.png';
+                break;
+            case preg_match('/(avi)$/i', $extension):
+                $fileName = 'avi.png';
+                break;
+            case preg_match('/(mov)$/i', $extension):
+                $fileName = 'mov.png';
+                break;
+            case preg_match('/(mp3)$/i', $extension):
+                $fileName = 'mp3.png';
+                break;
+            case preg_match('/(wav)$/i', $extension):
+                $fileName = 'wav.png';
+                break;
+            case preg_match('/(exe|msi)$/i', $extension):
+                $fileName = 'exe.png';
+                break;
+            case preg_match('/(ai)$/i', $extension):
+                $fileName = 'ai.png';
+                break;
+            case preg_match('/(an)$/i', $extension):
+                $fileName = 'an.png';
+                break;
+            case preg_match('/(prproj)$/i', $extension):
+                $fileName = 'pr.png';
+                break;
+            case preg_match('/(psd)$/i', $extension):
+                $fileName = 'ps.png';
+                break;
+            case preg_match('/(xd)$/i', $extension):
+                $fileName = 'xd.png';
+                break;
+            case preg_match('/(lr)$/i', $extension):
+                $fileName = 'lr.png';
+                break;
+            case preg_match('/(id)$/i', $extension):
+                $fileName = 'id.png';
+                break;
+            case preg_match('/(ttf)$/i', $extension):
+                $fileName = 'ttf.png';
+                break;
+            case preg_match('/(otf)$/i', $extension):
+                $fileName = 'otf.png';
+                break;
+            case preg_match('/(eot)$/i', $extension):
+                $fileName = 'eot.png';
+                break;
+            case preg_match('/(svg)$/i', $extension):
+                $fileName = 'svg.png';
+                break;
+            case preg_match('/(html)$/i', $extension):
+                $fileName = 'html.png';
+                break;
+            case preg_match('/(gif|png|jpe?g|webp|jfif)$/i', $extension):
 
                 $fileName = $filePath;
                 if ($cachebreaker) {
                     $query = parse_url($filePath, PHP_URL_QUERY);
-                    $time = 'time='.time();
-                    $fileName = $query ? $filePath.'&'.$time : $filePath.'?'.$time;
+                    $time = 'time=' . time();
+                    $fileName = $query ? $filePath . '&' . $time : $filePath . '?' . $time;
                 }
 
                 if ($twigExtension) {
@@ -110,45 +172,34 @@ class FileTypeService {
                     'image' => true,
                 ];
             case preg_match('/(pdf)$/i', $extension):
-                $class = 'icofont-file-pdf';
+                $fileName = 'pdf.png';
                 break;
             case preg_match('/(docx?)$/i', $extension):
-                $class = 'icofont-file-word';
+                $fileName = 'doc.png';
                 break;
             case preg_match('/(xlsx?|csv)$/i', $extension):
-                $class = 'icofont-file-excel';
+                $fileName = 'xls.png';
                 break;
             case preg_match('/(pptx?)$/i', $extension):
-                $class = 'icofont-file-powerpoint';
+                $fileName = 'ppt.png';
                 break;
-            case preg_match('/(zip|rar|gz)$/i', $extension):
-                $class = 'icofont-file-zip';
+            case preg_match('/(zip)$/i', $extension):
+                $fileName = 'zip.png';
                 break;
-            case filter_var($filePath, FILTER_VALIDATE_URL):
-                $class = 'icofont-web';
+            case preg_match('/(rar)$/i', $extension):
+                $fileName = 'rar.png';
                 break;
-            default:
-                $class = 'icofont-file-alt';
+            case preg_match('/(gz)$/i', $extension):
+                $fileName = 'gz.png';
+                break;
         }
 
+
+        $path = $this->router->getContext()->getBaseUrl() . '/bundles/filemanager/img/' . $fileName;
         return [
             'path' => $filePath,
-            'html' => "<i class='{$class}'></i>",
+            'html' => '<img width="30" height="30" src="' . $path . '">',
         ];
     }
 
-    public function isYoutubeVideo($url): bool|int {
-        $rx = '~
-              ^(?:https?://)?                            
-               (?:www[.])?                               
-               (?:youtube[.]com/watch[?]v=|youtu[.]be/)  
-               ([^&]{11})                                
-                ~x';
-
-        return preg_match($rx, $url, $matches);
-    }
-
-    public function isPdf($extension) : bool|int {
-        return preg_match('/(pdf)$/i', $extension);
-    }
 }
