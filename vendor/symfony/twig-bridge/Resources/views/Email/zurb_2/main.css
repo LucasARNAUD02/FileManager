@@ -1665,8 +1665,3 @@ body.outlook p {
         min-width: 0;
     }
 }
-
-.tbody-bordered{
-    border-left: 1px solid #edf2f9!important;
-    border-right: 1px solid #edf2f9!important;
-}

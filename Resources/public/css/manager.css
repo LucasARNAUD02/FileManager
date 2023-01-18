@@ -197,3 +197,8 @@ span.badge.bg-secondary {
         flex-wrap: wrap !important;
     }
 }
+
+.tbody-bordered{
+    border-left: 1px solid #edf2f9!important;
+    border-right: 1px solid #edf2f9!important;
+}
