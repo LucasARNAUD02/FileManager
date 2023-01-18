@@ -51,7 +51,7 @@ class FileTypeService
 
             return [
                 'path' => $filePath,
-                'html' => '<img width="30" height="30" src="' . $path . '">',
+                'html' => '<img width="35" height="35" src="' . $path . '">',
                 'folder' => '<a  href="' . $href . '" title="Ouvrir le dossier">' . $file->getFilename() . '</a>',
             ];
         }
@@ -104,8 +104,11 @@ class FileTypeService
             case preg_match('/(wav)$/i', $extension):
                 $fileName = 'wav.png';
                 break;
-            case preg_match('/(exe|msi)$/i', $extension):
+            case preg_match('/(exe)$/i', $extension):
                 $fileName = 'exe.png';
+                break;
+            case preg_match('/(msi)$/i', $extension):
+                $fileName = 'msi.png';
                 break;
             case preg_match('/(ai)$/i', $extension):
                 $fileName = 'ai.png';
@@ -142,6 +145,9 @@ class FileTypeService
                 break;
             case preg_match('/(html)$/i', $extension):
                 $fileName = 'html.png';
+                break;
+            case preg_match('/(msg|oft)$/i', $extension):
+                $fileName = 'email.png';
                 break;
             case preg_match('/(gif|png|jpe?g|webp|jfif)$/i', $extension):
 
@@ -198,7 +204,7 @@ class FileTypeService
         $path = $this->router->getContext()->getBaseUrl() . '/bundles/filemanager/img/' . $fileName;
         return [
             'path' => $filePath,
-            'html' => '<img width="30" height="30" src="' . $path . '">',
+            'html' => '<img width="35" height="35" src="' . $path . '">',
         ];
     }
 
