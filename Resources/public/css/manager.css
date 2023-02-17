@@ -202,3 +202,7 @@ span.badge.bg-secondary {
     border-left: 1px solid #edf2f9!important;
     border-right: 1px solid #edf2f9!important;
 }
+
+#table-file-manager{
+    border-bottom: 1px solid #edf2f9;
+}
