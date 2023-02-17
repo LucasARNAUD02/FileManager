@@ -43,10 +43,11 @@
         <div class="mt-3 col-auto {{ app.request.cookies.get('tree_visible') == "null" or app.request.cookies.get('tree_visible') == "false" ? 'd-none' : '' }}"
              id="tree_div">
             {% block tree %}
-                <div id="tree"></div>
+                <div id="tree" class="card"></div>
             {% endblock %}
         </div>
-        <div class="px-3 mt-3 flex-grow-1 no-tree-blk">
+        <div class="card flex-grow-1"></div>
+        <div class="px-3 mt-3 no-tree-blk">
 
             <div class="row">
                 {% block actions %}
