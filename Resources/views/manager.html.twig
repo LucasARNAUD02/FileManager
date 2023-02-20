@@ -66,7 +66,7 @@
                         </span> Retour</a>
                         {% endif %}
                         <button type="button" title="{{ 'button.refresh'|trans }}" class="mb-2 btn btn-sm btn-light"
-                                onClick="window.location.reload()">
+                                onClick="window.location.reload()" id="btn-reload">
                             <span class="material-symbols-sharp">sync</span>
                             Actualiser
                         </button>
@@ -186,13 +186,12 @@
         var previewMessage = "{{ 'title.preview.file'|trans }}";
 
         {% for message in app.flashes('success') %}
-        displayToast("success", `{{ message }}`);
+        displayToast("success", `{{ message }}`, duration = 4000, options = {transition: "pinItUp"});
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-        displayToast("error", `{{ message }}`);
+        displayToast("error", `{{ message }}`, duration = 4000, options = {transition: "pinItUp"});
         {% endfor %}
-
     </script>
 
     <script src="{{ asset('bundles/filemanager/js/manager.js') }}"></script>

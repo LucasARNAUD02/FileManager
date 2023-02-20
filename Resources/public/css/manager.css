@@ -159,6 +159,8 @@ button i {
     border: 2px solid #6e84a3;
     background-color: white;
     background-size: 100%;
+    width: 1.2rem;
+    height: 1.2rem;
 }
 
 tr.file-wrapper i[class*=icofont] {
@@ -205,4 +207,8 @@ span.badge.bg-secondary {
 
 #table-file-manager{
     border-bottom: 1px solid #edf2f9;
+}
+
+.cloud-tr-clicked{
+    background-color: #beebffa3;
 }

@@ -262,7 +262,7 @@ $(function () {
 
             if (file.url) {
 
-                displayToast("success", `Le fichier ${fileName} a été ajouté.`, 3000);
+                displayToast("success", `Le fichier ${fileName} a été ajouté.`, 3000, {transition: "pinItUp"});
 
                 $.ajax({
                     dataType: "json", url: url, type: 'GET'
@@ -281,11 +281,11 @@ $(function () {
                     jsDeleteMultipleModal.addClass('link-disabled');
 
                 }).fail(function () {
-                    displayToast("error", "Une erreur est survenue, essayez de recharger la page (CTRL + SHIFT + R).", 3000);
+                    displayToast("error", "Une erreur est survenue, essayez de recharger la page (CTRL + SHIFT + R).", 3000, {transition: "pinItUp"});
                 });
 
             } else if (file.error) {
-                displayToast("error", `Une erreur est survenue lors de l'ajout du fichier suivant : ${fileName}.`, 3000);
+                displayToast("error", `Une erreur est survenue lors de l'ajout du fichier suivant : ${fileName}.`, 3000, {transition: "pinItUp"});
             }
         });
 
@@ -299,7 +299,7 @@ $(function () {
                 message = `Le fichier ${file.name} est trop volumineux pour être ajouté, sa taille ne doit pas dépasser 8 mo.`;
             }
 
-            displayToast("error", message, 3000);
+            displayToast("error", message, 3000, {transition: "pinItUp"});
         });
 
     }).on('fileuploadprogressall', function (e, data) {
