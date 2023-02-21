@@ -162,7 +162,7 @@ class ManagerController extends AbstractController
             ])
             ->add('send', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-sm btn-primary',
+                    'class' => 'btn btn-sm btn-success',
                 ],
                 'label' => $this->translator->trans('button.save'),
             ])

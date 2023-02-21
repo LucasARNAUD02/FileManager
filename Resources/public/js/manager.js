@@ -114,57 +114,57 @@ $(function () {
     function previewFile(previewModalButton) {
 
         const href = addParameterToURL(previewModalButton.data('href'), 'time=' + new Date().getTime());
-        const target = previewModalButton.data('target');
+        const target = previewModalButton.data('bs-target');
         const modal = new bootstrap.Modal($(target));
-        const modalBody = $(target).find('.modal-body');
+        const modalPdfBody = $(target).find('.pdf-body');
+        const modalVideoBody = $(target).find('.video-body');
+        const modalImgBody = $(target).find('.img-body');
+        const loader = `<div class="spinner-border text-white mt-5 p-5" role="status"><span class="visually-hidden">Chargement...</span></div>`;
 
         switch (target) {
-
             case "#js-display-image":
-
-                modalBody.html(`<img src="${href}" id="preview_img" class="img-fluid img-thumbnail">`);
-
-                modalBody.find('img').on('load', function () {
-                    modal.show();
+                const img = $('<img>', {
+                    'src': href,
+                    'id': 'preview_img',
+                    'class': 'img-fluid'
                 });
-
+                modalImgBody.html(img);
+                modalImgBody.append(loader);
+                modal.show();
+                img.on('load', function () {
+                    modalImgBody.find('.spinner-border').remove();
+                });
                 break;
 
             case "#js-display-pdf":
-
-                modalBody.html(`
-                 <object type=""
-                            data="${href}"
-                            width="100%"
-                            height="600">
-                    </object>
-                `);
-
+                modalPdfBody.html(`<object type="" data="${href}" width="100%" height="600"></object>`);
+                modalPdfBody.find('object').parent().append(loader);
                 modal.show();
+                modalPdfBody.find('object').on('load', function () {
+                    modalPdfBody.find('.spinner-border').remove();
+                });
                 break;
 
             case "#js-display-video":
-
-                modalBody.html(`
-                 <video width="100%" height="600" controls="controls">
-                  <source src="${href}"/>                  
-                    <object data="${href}" width="100%" height="600">
-                        <embed src="${href}" width="100%" height="600">
+                const video = $(`
+                <video width="100%" controls="controls">
+                    <source src="${href}"/>
+                    <object data="${href}" width="100%">
+                        <embed src="${href}" width="100%">
                             <p class="text-muted">Votre navigateur ne supporte pas la lecture de vidéos.</p>
                         </embed>
                     </object>
-                </video> 
-                `);
-
+                </video>`);
+                modalVideoBody.html(video);
                 modal.show();
                 break;
         }
 
-        $(target).on('hidden.bs.modal', function () {
-            modalBody.empty();
+        $(modal).on('hidden.bs.modal', function () {
+            $(modal).find('.pdf-body, .img-body, .video-body').empty();
         });
-
     }
+
 
     function addParameterToURL(_url, param) {
         _url += (_url.split('?')[1] ? '&' : '?') + param;

@@ -3,17 +3,21 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header py-3">
-                    <h3 class="modal-title">{{ 'title.delete'|trans }}</h3>
+                    <h3 class="modal-title">{{ 'confirm.delete'|trans }}</h3>
                 </div>
-                <div class="modal-body">
-                    {{ 'confirm.delete'|trans }}
-                </div>
-                <div class="modal-footer p-2">
-                    <button type="button" class="btn btn-sm btn-secondary" title="{{ 'button.close'|trans }}"
-                            data-bs-dismiss="modal"> {{ 'button.close'|trans }}</button>
-                    {{ form_start(formDelete) }}
-                    {{ form_widget(formDelete) }}
-                    {{ form_end(formDelete) }}
+                <div class="modal-body mx-auto p-2">
+                    <div class="row align-items-center m-3">
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-sm btn-secondary mb-2" title="Non, annuler !"
+                                    data-bs-dismiss="modal">NON, ANNULER !
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            {{ form_start(formDelete) }}
+                            {{ form_widget(formDelete, { 'attr': {'class':  'mb-2'} }) }}
+                            {{ form_end(formDelete) }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -29,11 +33,11 @@
                     <h3 class="modal-title">{{ 'title.rename.file'|trans }}</h3>
                 </div>
                 <div class="modal-body">
-                    {{ form_row(formRename.name) }}
+                    {{ form_row(formRename.name, { 'attr': {'placeholder':  'Mon incroyable nom de fichier'} }) }}
                 </div>
                 <div class="modal-footer p-2">
                     <button type="button" class="btn btn-sm btn-secondary"
-                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
+                            data-bs-dismiss="modal">ANNULER
                     </button>
                     {{ form_row(formRename.send) }}
                 </div>
@@ -52,11 +56,11 @@
                     <h3 class="modal-title">{{ 'title.add.folder'|trans }}</h3>
                 </div>
                 <div class="modal-body">
-                    {{ form_row(form.name) }}
+                    {{ form_row(form.name, { 'attr': {'placeholder':  'Mon incroyable nom de dossier'} }) }}
                 </div>
                 <div class="modal-footer p-2">
                     <button type="button" class="btn btn-sm btn-secondary"
-                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
+                            data-bs-dismiss="modal">ANNULER
                     </button>
                     {{ form_row(form.send) }}
                 </div>
@@ -68,18 +72,17 @@
 
 {% block preview_modal %}
     <div class="modal fade" id="js-display-image" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <div class="d-flex justify-content-center">
-                        <i id="loader-spotmight" class="spinner-border font-size-lg"></i>
-                    </div>
-                </div>
-                <div class="modal-footer p-2">
-                    <button type="button" class="btn btn-sm btn-secondary" title="{{ 'button.close'|trans }}"
-                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-transparent">
+                <div class="text-center my-3">
+                    <button type="button" class="btn rounded-circle p-3 btn-light" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <span class="material-symbols-sharp material-md-alt">
+                            close
+                        </span>
                     </button>
                 </div>
+                <div class="img-body text-center"></div>
             </div>
         </div>
     </div>
@@ -88,14 +91,16 @@
 {% block preview_modal_pdf %}
     <div class="modal fade" id="js-display-pdf" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                </div>
-                <div class="modal-footer p-2">
-                    <button type="button" class="btn btn-sm btn-secondary"
-                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
+            <div class="modal-content bg-transparent">
+                <div class="text-center my-3">
+                    <button type="button" class="btn rounded-circle p-3 btn-light" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <span class="material-symbols-sharp material-md-alt">
+                            close
+                        </span>
                     </button>
                 </div>
+                <div class="pdf-body text-center"></div>
             </div>
         </div>
     </div>
@@ -104,14 +109,16 @@
 {% block preview_modal_video %}
     <div class="modal fade" id="js-display-video" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                </div>
-                <div class="modal-footer p-2">
-                    <button type="button" class="btn btn-sm btn-secondary"
-                            data-bs-dismiss="modal">{{ 'button.close'|trans }}
+            <div class="modal-content bg-transparent">
+                <div class="text-center my-3">
+                    <button type="button" class="btn rounded-circle p-3 btn-light" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <span class="material-symbols-sharp material-md-alt">
+                            close
+                        </span>
                     </button>
                 </div>
+                <div class="video-body text-center"></div>
             </div>
         </div>
     </div>

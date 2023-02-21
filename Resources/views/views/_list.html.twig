@@ -88,7 +88,8 @@
                                         class="btn btn-sm btn-outline-primary mb-2 js-open-modal"
                                         data-trigger="click"
                                         data-container="body"
-                                        data-target="#{{ fileEntity.isPdf ? 'js-display-pdf' : fileEntity.isImage ? 'js-display-image' : 'js-display-video' }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#{{ fileEntity.isPdf ? 'js-display-pdf' : fileEntity.isImage ? 'js-display-image' : 'js-display-video' }}"
                                         data-href='{{ fileEntity.preview.path }}'>
                                     <span class="material-symbols-sharp">visibility</span>
                                 </button>

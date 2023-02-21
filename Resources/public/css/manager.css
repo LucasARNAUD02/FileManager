@@ -212,3 +212,20 @@ span.badge.bg-secondary {
 .cloud-tr-clicked{
     background-color: #beebffa3;
 }
+
+.img-body {
+    max-width: 520px;
+    margin: auto;
+}
+
+.context-menu-list{
+    font-family: Raleway-Bold!important;
+    background: #ffffffe8!important;
+    border: 1px solid #bebebe!important;
+    border-radius: 8px!important;
+    -webkit-box-shadow: 0 2px 5px rgb(0 0 0 / 28%)!important;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 28%)!important;
+}
+.context-menu-item.context-menu-hover{
+    background-color: var(--bs-info)!important;
+}

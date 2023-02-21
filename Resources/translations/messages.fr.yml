@@ -2,14 +2,14 @@ file:
   add:
     success: "a été téléchargé avec succès."
   renamed:
-    success: "Le fichier a été renommé avec succès."
-    danger: "Le fichier existe déjà ou vous n'êtes pas autorisé à renommer ce fichier."
-    unauthorized: "Les fichiers n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
+    success: "L'élément a été renommé avec succès."
+    danger: "L'élément existe déjà ou vous n'êtes pas autorisé à le renommer."
+    unauthorized: "Les éléments n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
     nochanged: "Aucun changement détecté."
   deleted:
-    success: "Les fichiers ont été supprimés avec succès."
-    danger: "Les fichiers n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
-    unauthorized: "Les fichiers n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
+    success: "Les éléments ont été supprimés avec succès."
+    danger: "Les éléments n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
+    unauthorized: "Les éléments n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
 folder:
   add:
     danger: "Une erreur s'est produite lors de la création du dossier : %message%"
@@ -22,24 +22,24 @@ button:
   close: "Fermer"
   refresh: "Rafraîchir"
   parent: "Parent"
-  save: "Enregistrer"
+  save: "VALIDER"
   add:
     files: "Ajouter des fichiers"
     folder: "Nouveau dossier"
   delete:
     current: "Supprimer le dossier courant"
     selected: "Supprimer les éléments sélectionnés"
-    action: "Supprimer"
+    action: "SUPPRIMER"
   rename:
-    action: "Renommer"
+    action: "VALIDER"
   tree: "Arborescence"
 title:
   add:
-    folder: "Nouveau dossier"
+    folder: "Créer un nouveau dossier"
   rename:
-    file: "Renommage"
-  delete: "Suppression"
-  download: "Téléchargement"
+    file: "Saisissez le nouveau nom"
+  delete: "Supprimer"
+  download: "Télécharger"
   preview:
     file: "Ouvrir"
   search:
@@ -53,7 +53,7 @@ table:
   dimension: "Dimension"
   actions: "Actions"
 confirm:
-  delete:  "Êtes-vous sûr de vouloir supprimer ?"
+  delete:  "Êtes-vous sûr de vouloir supprimer ? Cette action est irréversible."
 size:
   mb: "Mo"
   kb: "ko"
