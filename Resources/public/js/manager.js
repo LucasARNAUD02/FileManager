@@ -160,8 +160,10 @@ $(function () {
                 break;
         }
 
-        $(modal).on('hidden.bs.modal', function () {
-            $(modal).find('.pdf-body, .img-body, .video-body').empty();
+        $('.btn-close-modal').on('click', function (e) {
+            modalVideoBody.add(modalPdfBody).add(modalImgBody).empty();
+            $(".modal-backdrop").remove()
+            document.body.style.overflow = 'auto';
         });
     }
 
