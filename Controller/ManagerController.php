@@ -244,7 +244,7 @@ class ManagerController extends AbstractController
                 $filesNumber = $this->retrieveFilesNumber($directory->getPathname(), $fileManager->getRegex());
                 $directoriesNumber = $this->retrieveDirectoriesNumber($directory->getPathname());
                 $total = $filesNumber + $directoriesNumber;
-                $fileSpan = $total > 0 ? " <span class='badge bg-secondary'>$total</span>" : '';
+                $fileSpan = $total > 0 ? " <span class='badge'>$total</span>" : '';
             }
 
             if ($fileName === '' && isset($fileManager->getConfiguration()['root_name'])) {

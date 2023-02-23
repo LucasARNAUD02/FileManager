@@ -3,7 +3,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header py-3">
-                    <h3 class="modal-title">{{ 'confirm.delete'|trans }}</h3>
+                    <h3 class="modal-title">Confirmez-vous la suppression ? Cette action est irréversible.</h3>
                 </div>
                 <div class="modal-body mx-auto p-2">
                     <div class="row align-items-center m-3">
@@ -30,7 +30,7 @@
             <div class="modal-content">
                 {{ form_start(formRename) }}
                 <div class="modal-header py-3">
-                    <h3 class="modal-title">{{ 'title.rename.file'|trans }}</h3>
+                    <h3 class="modal-title">Saisissez le nouveau nom</h3>
                 </div>
                 <div class="modal-body">
                     {{ form_row(formRename.name, { 'attr': {'placeholder':  'Mon incroyable nom de fichier'} }) }}
@@ -53,7 +53,7 @@
             <div class="modal-content">
                 {{ form_start(form) }}
                 <div class="modal-header py-3">
-                    <h3 class="modal-title">{{ 'title.add.folder'|trans }}</h3>
+                    <h3 class="modal-title">Créer un nouveau dossier</h3>
                 </div>
                 <div class="modal-body">
                     {{ form_row(form.name, { 'attr': {'placeholder':  'Mon incroyable nom de dossier'} }) }}

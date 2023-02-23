@@ -40,7 +40,7 @@
             <div class="d-flex justify-content-center">
                 {% block list_action %}
                     <div class="pe-2">
-                        <span data-toggle="tooltip" title="{{ 'title.delete'|trans }}">
+                        <span data-toggle="tooltip" title="Supprimer">
                         <button type="button"
                                 class="btn btn-sm btn-danger js-delete-modal"
                                 data-trigger="click"
@@ -55,7 +55,7 @@
                     </span>
                     </div>
                     <div class="pe-2">
-                        <span data-toggle="tooltip" title="{{ 'title.rename.file'|trans }}">
+                        <span data-toggle="tooltip" title="Renommer">
                     <button type="button"
                             class="btn btn-sm btn-success js-rename-modal"
                             data-trigger="click"
@@ -73,7 +73,7 @@
                     </div>
                     {% if file.type == "file" %}
                         <div class="pe-2">
-                            <a data-placement="left" title="{{ 'title.download'|trans }}"
+                            <a data-placement="left" title="Télécharger"
                                class="btn btn-sm btn-info js-download"
                                href="{{ path('file_manager_file', fileManager.queryParameters|merge({'fileName':file.fileName})) }}"
                                download>
@@ -82,7 +82,7 @@
                         </div>
                         {% if fileEntity.isImage() %}
                             <div class="pe-2">
-                                <span data-toggle="tooltip" title="{{ 'title.preview.file'|trans }}">
+                                <span data-toggle="tooltip" title="Prévisualiser">
                                 <button type="button"
                                         class="btn btn-sm btn-primary js-open-modal"
                                         data-trigger="click"

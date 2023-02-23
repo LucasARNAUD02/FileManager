@@ -206,11 +206,11 @@ span.badge.bg-secondary {
 }
 
 #table-file-manager{
-    border-bottom: 1px solid #edf2f9;
+    border: 1px solid #edf2f9;
 }
 
 .cloud-tr-clicked{
-    background-color: #beebffa3;
+    background-color: #f2f4f6;
 }
 
 .img-body {

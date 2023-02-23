@@ -95,8 +95,8 @@ $(function () {
 
         $.contextMenu({
             selector: '.dir', callback: callback, items: {
-                "edit": {name: renameMessage, icon: "far fa-edit"},
-                "delete": {name: deleteMessage, icon: "far fa-trash-alt"}
+                "edit": {name: 'Renommer', icon: "far fa-edit"},
+                "delete": {name: 'Supprimer', icon: "far fa-trash-alt"}
             }
         });
     }
@@ -138,7 +138,7 @@ $(function () {
 
             case "#js-display-pdf":
                 modalPdfBody.html(`<object type="" data="${href}" width="100%" height="600"></object>`);
-                modalPdfBody.find('object').parent().append(loader);
+                modalPdfBody.find('object').parent().prepend(loader);
                 modal.show();
                 modalPdfBody.find('object').on('load', function () {
                     modalPdfBody.find('.spinner-border').remove();
@@ -177,7 +177,9 @@ $(function () {
 
         $tree.jstree({
             'core': {
-                'data': treedata, "check_callback": true
+                'data': treedata,
+                "check_callback": true,
+                "themes" : { "name" : "simple-cb", },
             }
         }).bind("changed.jstree", function (e, data) {
             if (data.node) {
@@ -375,22 +377,22 @@ $(function () {
 
         if (isAdministratif) {
             options = {
-                "edit": {name: renameMessage, icon: "far fa-edit"},
-                "delete": {name: deleteMessage, icon: "far fa-trash-alt"}
+                "edit": {name: 'Renommer', icon: 'far fa-edit'},
+                "delete": {name: 'Supprimer', icon: "far fa-trash-alt"}
             };
         }
 
         switch (type) {
             case 'file':
                 options = {
-                    "download": {name: downloadMessage, icon: "fas fa-download"},
+                    "download": {name: 'Télécharger', icon: "fas fa-download"},
                     ...options
                 };
                 break;
             case 'preview':
                 options = {
-                    "preview": {name: previewMessage, icon: "fas fa-eye"},
-                    "download": {name: downloadMessage, icon: "fas fa-download"},
+                    "preview": {name: 'Prévisualiser', icon: "fas fa-eye"},
+                    "download": {name: 'Télécharger', icon: "fas fa-download"},
                     ...options
                 };
                 break;
