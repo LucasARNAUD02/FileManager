@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicons/favicon-120x120.png') }}" type="image/x-icon">
     {% block stylesheets %}
 
         <link rel="stylesheet" href="{{ asset('assets/css/theme.bundle.css') }}">
@@ -151,7 +152,6 @@
         </div>
         {% include '@FileManager/views/_modals.html.twig' %}
     </div>
-{#    <span style="display: none; font-family: Rale"></span>#}
 {% endblock %}
 {% block javascripts %}
     <script src='{{ asset('assets/js/utils.js') }}'></script>
@@ -159,6 +159,7 @@
     <script src="{{ asset('assets/js/Toasty/toasty-config.js') }}"></script>
     <script src='{{ asset('assets/js/Toasty/notification.js') }}'></script>
     <script src="{{ asset('bundles/filemanager/libs/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/libs/popper-js-2.11.6/popper.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/jstree/dist/jstree.min.js') }}"></script>
     <script src='{{ asset('assets/js/jquery-cookie.js') }}'></script>

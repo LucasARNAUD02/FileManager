@@ -140,16 +140,16 @@ class FileTypeService
             case preg_match('/(eot)$/i', $extension):
                 $fileName = 'eot.png';
                 break;
-            case preg_match('/(svg)$/i', $extension):
-                $fileName = 'svg.png';
-                break;
             case preg_match('/(html)$/i', $extension):
                 $fileName = 'html.png';
                 break;
             case preg_match('/(msg|oft)$/i', $extension):
                 $fileName = 'email.png';
                 break;
-            case preg_match('/(gif|png|jpe?g|webp|jfif)$/i', $extension):
+            case preg_match('/(msg|oft)$/i', $extension):
+                $fileName = 'dmg.png';
+                break;
+            case preg_match('/(gif|png|jpe?g|webp|jfif|svg)$/i', $extension):
 
                 $fileName = $filePath;
                 if ($cachebreaker) {
