@@ -1,0 +1,4 @@
+<a class="{{ not islist ? ('btn btn-sm btn-default'~(active ? ' active'))  }}" href="{{ href }}">
+    {{ ('table.'~type)|trans }}
+    <span class="material-symbols-sharp {{ islist ? 'pull-right'}}">{{ icon }}</span>
+</a>

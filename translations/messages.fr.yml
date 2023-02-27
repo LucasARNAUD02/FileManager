@@ -1,0 +1,83 @@
+file:
+  add:
+    success: "a été téléchargé avec succès."
+  renamed:
+    success: "L'élément a été renommé avec succès."
+    danger: "L'élément existe déjà ou vous n'êtes pas autorisé à le renommer."
+    unauthorized: "Les éléments n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
+    nochanged: "Aucun changement détecté."
+  deleted:
+    success: "Les éléments ont été supprimés avec succès."
+    danger: "Les éléments n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
+    unauthorized: "Les éléments n'existent plus ou vous n'êtes pas autorisé à accéder à cette page."
+folder:
+  add:
+    danger: "Une erreur s'est produite lors de la création du dossier : %message%"
+    success: "Le dossier a été créé avec succès."
+  deleted:
+    success: "Le dossier a été supprimé avec succès."
+    unauthorized: "Le dossier n'existe plus ou vous n'êtes pas autorisé à accéder à cette page."
+button:
+  cancel: "Annuler"
+  close: "Fermer"
+  refresh: "Rafraîchir"
+  parent: "Parent"
+  save: "VALIDER"
+  add:
+    files: "Ajouter des fichiers"
+    folder: "Nouveau dossier"
+  delete:
+    current: "Supprimer le dossier courant"
+    selected: "Supprimer les éléments sélectionnés"
+    action: "SUPPRIMER"
+  rename:
+    action: "VALIDER"
+  tree: "Arborescence"
+title:
+  add:
+    folder: "Créer un nouveau dossier"
+  rename:
+    file: "Saisissez le nouveau nom"
+  delete: "Supprimer"
+  download: "Télécharger"
+  preview:
+    file: "Ouvrir"
+  search:
+    file: "Aucun résultat, essayez d'effectuer une autre recherche."
+input:
+    default: "Dossier sans titre"
+table:
+  name: "Nom"
+  date: "Date"
+  size: "Taille"
+  dimension: "Dimension"
+  actions: "Actions"
+confirm:
+  delete:  "Êtes-vous sûr de vouloir supprimer ? Cette action est irréversible."
+size:
+  mb: "Mo"
+  kb: "ko"
+select-all: "Tout sélectionner"
+upload:
+  exception_move_uploaded_file: "Permission refusée."
+search:
+  placeholder: "Recherche"
+
+'The uploaded file exceeds the upload_max_filesize directive in php.ini': "La taille maximum des fichiers (upload_max_filesize) a été atteinte."
+'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form': "La taille maximum de fichier (MAX_FILE_SIZE) a été atteinte."
+'The uploaded file was only partially uploaded': "Le fichier n'a été que partiellement téléversé."
+'No file was uploaded': "Aucun fichier n'a été téléversé."
+'Missing a temporary folder': "Il manque le dossier temporaire."
+'Failed to write file to disk': "Impossible d'enregistrer le ficher."
+'A PHP extension stopped the file upload': "une extension PHP bloque le téléversement."
+'The uploaded file exceeds the post_max_size directive in php.ini': "Le téléversement de fichier dépasse la taille autorisée par le serveur."
+'File is too big': "Le fichier est trop gros."
+'File is too small': "Le fichier est trop petit."
+'Filetype not allowed': "Ce type de fichier n'est pas autorisé."
+'Maximum number of files exceeded': "Le nombre maximum de fichier a été atteint."
+'Image exceeds maximum width': "L'image est trop large (largeur)."
+'Image requires a minimum width': "L'image est trop petite (largeur)."
+'Image exceeds maximum height': "L'image est trop grande (hauteur)."
+'Image requires a minimum height': "L'image a une hauteur trop petite (hauteur)."
+'File upload aborted': "Le téléversement a été annulé."
+'Failed to resize image': "Une erreur est survenue lors du redimensionnement de l'image."

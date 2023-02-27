@@ -82,7 +82,11 @@ class File
     }
 
     public function isVideo() : bool{
-        return preg_match('/(mp4|mov|avi|mkv)$/i', $this->file->getExtension());
+        return preg_match('/(mp4|m4v|mov|qt|avi|flv|wmv|asf|mpeg|mpg|vob|mkv|asf|rm|rmvb|vob|ts|dat)$/i', $this->file->getExtension());
+    }
+
+    public function isAudio() : bool{
+        return preg_match('/(flac|ape|m4a|alac|wma|ogg|aac|wav|mp3)$/i', $this->file->getExtension());
     }
 
     public function getFile(): SplFileInfo
@@ -107,6 +111,6 @@ class File
 
     public function isPreviewPossible(): bool|int
     {
-        return $this->isImage() || $this->isPdf() || $this->isVideo();
+        return $this->isImage() || $this->isPdf() || $this->isVideo() || $this->isAudio();
     }
 }

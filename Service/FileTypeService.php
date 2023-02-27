@@ -52,7 +52,7 @@ class FileTypeService
             return [
                 'path' => $filePath,
                 'html' => '<img width="35" height="35" src="' . $path . '">',
-                'folder' => '<a  href="' . $href . '" title="Ouvrir le dossier">' . $file->getFilename() . '</a>',
+                'folder' => '<a  href="' . $href . '" title="Ouvrir le dossier" class="link-folder">' . $file->getFilename() . '</a>',
             ];
         }
     }
@@ -145,9 +145,6 @@ class FileTypeService
                 break;
             case preg_match('/(msg|oft)$/i', $extension):
                 $fileName = 'email.png';
-                break;
-            case preg_match('/(msg|oft)$/i', $extension):
-                $fileName = 'dmg.png';
                 break;
             case preg_match('/(gif|png|jpe?g|webp|jfif|svg)$/i', $extension):
 
