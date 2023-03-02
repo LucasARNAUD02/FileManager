@@ -11,16 +11,17 @@
         </colgroup>
         <thead class="thead-default">
         <tr>
-            {% if is_granted('ROLE_ADMINISTRATIF') %}
-                <th class="d-none d-sm-table-cell">
-                    {% block select_all %}
+            <th class="d-none d-sm-table-cell">
+                {% block select_all %}
+
+                    {% if is_granted('ROLE_ADMINISTRATIF') %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="select-all"
                                    title="{{ 'select-all'|trans }}">
                         </div>
-                    {% endblock %}
-                </th>
-            {% endif %}
+                    {% endif %}
+                {% endblock %}
+            </th>
             <th></th>
             <th>
                 {{ order(fileManager, 'name') }}
@@ -46,8 +47,9 @@
             {% set file = fileEntity.file %}
 
             <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : fileEntity.isVideo() ? 'video' : fileEntity.isAudio() ? 'audio' : file.type == "file" ? 'file' : 'dir' }}">
-                {% if is_granted('ROLE_ADMINISTRATIF') %}
-                    <td class="d-none d-sm-table-cell">
+
+                <td class="d-none d-sm-table-cell">
+                    {% if is_granted('ROLE_ADMINISTRATIF') %}
                         {% block file_checkbox %}
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="delete[]"
@@ -55,8 +57,9 @@
                                        title="{{ file.fileName }}">
                             </div>
                         {% endblock %}
-                    </td>
-                {% endif %}
+                    {% endif %}
+                </td>
+
                 <td class="text-center">
                     {% block file_preview %}
                         {{ fileEntity.preview ? fileEntity.preview.html|raw }}
