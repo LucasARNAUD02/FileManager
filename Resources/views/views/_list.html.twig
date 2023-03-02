@@ -11,17 +11,16 @@
         </colgroup>
         <thead class="thead-default">
         <tr>
-            <th>
-                {% block select_all %}
-
-                    {% if is_granted('ROLE_ADMINISTRATIF') %}
+            {% if is_granted('ROLE_ADMINISTRATIF') %}
+                <th class="d-none d-sm-table-cell">
+                    {% block select_all %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="select-all"
                                    title="{{ 'select-all'|trans }}">
                         </div>
-                    {% endif %}
-                {% endblock %}
-            </th>
+                    {% endblock %}
+                </th>
+            {% endif %}
             <th></th>
             <th>
                 {{ order(fileManager, 'name') }}
@@ -47,14 +46,17 @@
             {% set file = fileEntity.file %}
 
             <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : fileEntity.isVideo() ? 'video' : fileEntity.isAudio() ? 'audio' : file.type == "file" ? 'file' : 'dir' }}">
-                <td>
-                    {% block file_checkbox %}
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="delete[]" value="{{ file.fileName }}"
-                                   title="{{ file.fileName }}">
-                        </div>
-                    {% endblock %}
-                </td>
+                {% if is_granted('ROLE_ADMINISTRATIF') %}
+                    <td class="d-none d-sm-table-cell">
+                        {% block file_checkbox %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="delete[]"
+                                       value="{{ file.fileName }}"
+                                       title="{{ file.fileName }}">
+                            </div>
+                        {% endblock %}
+                    </td>
+                {% endif %}
                 <td class="text-center">
                     {% block file_preview %}
                         {{ fileEntity.preview ? fileEntity.preview.html|raw }}
