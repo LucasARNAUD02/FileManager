@@ -65,7 +65,7 @@
                         {{ fileEntity.preview ? fileEntity.preview.html|raw }}
                     {% endblock %}
                 </td>
-                <td data-value="{{ file.fileName }}" {{ fileEntity.attribut|raw }} class="searchable">
+                <td data-value="{{ file.fileName }}" {{ fileEntity.attribut|raw }} class="searchable text-break">
                     {% block file_name %}
                         {{ (fileEntity.preview.folder is defined ? fileEntity.preview.folder|raw : file.fileName) }}
                     {% endblock %}
