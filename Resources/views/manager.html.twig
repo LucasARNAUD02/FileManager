@@ -46,7 +46,7 @@
         <div class="pe-2 col-auto {{ app.request.cookies.get('tree_visible') == "null" or app.request.cookies.get('tree_visible') == "false" ? 'd-none' : '' }}"
              id="tree_div">
             {% block tree %}
-                <div id="tree" class="card"></div>
+                <div id="tree" class="card d-none d-sm-block"></div>
             {% endblock %}
         </div>
         <div class="card flex-grow-1 mb-0">
@@ -54,7 +54,7 @@
                 <div class="row">
                     {% block actions %}
                     <div class="col-lg-auto">
-                        <a class="btn btn-sm btn-light mb-2" href="javascript:void(0)" id="arbo">
+                        <a class="btn btn-sm btn-light mb-2 d-none d-sm-inline-block" href="javascript:void(0)" id="arbo">
                             <span class="material-symbols-sharp">
                                 account_tree
                             </span>

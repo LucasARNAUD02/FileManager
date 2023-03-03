@@ -277,9 +277,3 @@ span.badge.bg-secondary {
     font-weight: 600;
     font-style: normal
 }
-
-img.lazy {
-    background-image: url('https://www.humminbird.com/sites/all/themes/humminbird_theme/assets/img/image-placeholder.gif');
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-}

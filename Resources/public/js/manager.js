@@ -38,25 +38,25 @@ $(function () {
         $(this).closest('.file-wrapper').find('.js-open-modal').click();
     });
 
-    $(window).resize(function () {
-
-        let treeVisible = treeDiv.is(':visible');
-        let windowWidth = $(window).width();
-
-        if (treeVisible && windowWidth <= 1186) {
-
-            treeDiv.hide(200, function () {
-                arboText.text("Afficher");
-            });
-
-        } else if (!treeVisible && windowWidth > 1186 && $.cookie('tree_visible') !== "false") {
-
-            treeDiv.removeClass('d-none').hide().show(200, function () {
-                arboText.text("Masquer");
-            });
-
-        }
-    });
+    // $(window).resize(function () {
+    //
+    //     let treeVisible = treeDiv.is(':visible');
+    //     let windowWidth = $(window).width();
+    //
+    //     if (treeVisible && windowWidth <= 1186) {
+    //
+    //         treeDiv.hide(200, function () {
+    //             arboText.text("Afficher");
+    //         });
+    //
+    //     } else if (!treeVisible && windowWidth > 1186 && $.cookie('tree_visible') !== "false") {
+    //
+    //         treeDiv.removeClass('d-none').hide().show(200, function () {
+    //             arboText.text("Masquer");
+    //         });
+    //
+    //     }
+    // });
 
     let callback = function (key, opt) {
 
