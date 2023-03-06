@@ -2,6 +2,8 @@
 
 namespace Lucas\FileManager\Controller;
 
+use App\Entity\DocumentRecent;
+use Doctrine\ORM\EntityManagerInterface;
 use Lucas\FileManager\Event\FileManagerEvents;
 use Lucas\FileManager\Helpers\File;
 use Lucas\FileManager\Helpers\FileManager;
@@ -46,7 +48,14 @@ class ManagerController extends AbstractController
     /**
      * ManagerController constructor.
      */
-    public function __construct(private FilemanagerService $fileManagerService, private EventDispatcherInterface $dispatcher, private TranslatorInterface $translator, private RouterInterface $router, private FormFactoryInterface $formFactory)
+    public function __construct(
+        private FilemanagerService $fileManagerService,
+        private EventDispatcherInterface $dispatcher,
+        private TranslatorInterface $translator,
+        private RouterInterface $router,
+        private FormFactoryInterface $formFactory,
+        private EntityManagerInterface $em
+    )
     {
     }
 
@@ -412,12 +421,29 @@ class ManagerController extends AbstractController
         $response = $uploadHandler->get_response();
 
         foreach ($response['files'] as $file) {
+
             if (isset($file->error)) {
+
                 $file->error = $this->translator->trans($file->error);
+
             } else if (!$fileManager->getImagePath()) {
+
                 $file->url = $this->generateUrl('file_manager_file', array_merge($fileManager->getQueryParameters(), ['fileName' => $file->url]));
+
+                $documentRecent = (new DocumentRecent())
+                    ->setDate(new \DateTime())
+                    ->setUser($this->getUser())
+                    ->setPath($fileManager->getQueryParameter('route'))
+                    ->setFileName($file->name)
+                    ->setExt(pathinfo($file->name, PATHINFO_EXTENSION));
+
+                $this->em->persist($documentRecent);
+
             }
         }
+
+        $this->em->flush();
+
         $this->dispatch(FileManagerEvents::POST_UPDATE, ['response' => &$response]);
 
         return new JsonResponse($response);
