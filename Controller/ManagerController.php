@@ -3,6 +3,7 @@
 namespace Lucas\FileManager\Controller;
 
 use App\Entity\DocumentRecent;
+use App\Entity\HistoriqueCloud;
 use Doctrine\ORM\EntityManagerInterface;
 use Lucas\FileManager\Event\FileManagerEvents;
 use Lucas\FileManager\Helpers\File;
@@ -49,12 +50,12 @@ class ManagerController extends AbstractController
      * ManagerController constructor.
      */
     public function __construct(
-        private FilemanagerService $fileManagerService,
+        private FilemanagerService       $fileManagerService,
         private EventDispatcherInterface $dispatcher,
-        private TranslatorInterface $translator,
-        private RouterInterface $router,
-        private FormFactoryInterface $formFactory,
-        private EntityManagerInterface $em
+        private TranslatorInterface      $translator,
+        private RouterInterface          $router,
+        private FormFactoryInterface     $formFactory,
+        private EntityManagerInterface   $em
     )
     {
     }
@@ -195,7 +196,23 @@ class ManagerController extends AbstractController
             $directory = $directorytmp;
 
             try {
+
                 $fs->mkdir($directory);
+
+                $historiqueCloud = new HistoriqueCloud();
+
+                $historiquePath = explode("\cloud", $directory)[1];
+
+                $historiqueCloud
+                    ->setType("Dossier")
+                    ->setAction("Ajout")
+                    ->setDate(new \DateTime())
+                    ->setUser($this->getUser())
+                    ->setPath($historiquePath);
+
+                $this->em->persist($historiqueCloud);
+                $this->em->flush();
+
                 $this->addFlash('success', $this->translator->trans('folder.add.success'));
             } catch (IOExceptionInterface $e) {
                 $this->addFlash('error', $this->translator->trans('folder.add.danger', ['%message%' => $data['name']]));
@@ -356,7 +373,7 @@ class ManagerController extends AbstractController
     {
         $queryParameters = $request->query->all();
 
-        if(!$this->isGranted('ROLE_ADMINISTRATIF')){
+        if (!$this->isGranted('ROLE_ADMINISTRATIF')) {
             $this->addFlash('error', "Vous n'avez pas l'autorisation de renommer un fichier.");
         } else {
 
@@ -369,8 +386,8 @@ class ManagerController extends AbstractController
                 $newFileName = $data['name'] . $extension;
                 if ($newFileName !== $fileName && isset($data['name'])) {
                     $fileManager = $this->newFileManager($queryParameters);
-                    $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$newFileName;
-                    $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR .$fileName);
+                    $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $newFileName;
+                    $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
                     if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
                         $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
                     } else {
@@ -399,6 +416,8 @@ class ManagerController extends AbstractController
     public function uploadFileAction(Request $request): JsonResponse|Response
     {
         $fileManager = $this->newFileManager($request->query->all());
+
+        dd("sgsgsg");
 
         $options = [
             'upload_dir' => $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR,
@@ -439,6 +458,17 @@ class ManagerController extends AbstractController
 
                 $this->em->persist($documentRecent);
 
+                $historiqueCloud = new HistoriqueCloud();
+
+                $historiqueCloud
+                    ->setDate(new \DateTime())
+                    ->setUser($this->getUser())
+                    ->setPath($fileManager->getQueryParameter('route'))
+                    ->setFileName($file->name)
+                    ->setAction("Ajout")
+                    ->setType("Fichier");
+
+                $this->em->persist($historiqueCloud);
             }
         }
 
@@ -471,38 +501,93 @@ class ManagerController extends AbstractController
         $form->handleRequest($request);
         $queryParameters = $request->query->all();
 
-        if(!$this->isGranted('ROLE_ADMINISTRATIF')){
+        if (!$this->isGranted('ROLE_ADMINISTRATIF')) {
             $this->addFlash('error', "Vous n'avez pas l'autorisation de renommer un fichier.");
         } else {
             if ($form->isSubmitted() && $form->isValid()) {
                 // remove file
                 $fileManager = $this->newFileManager($queryParameters);
+
                 $fs = new Filesystem();
                 if (isset($queryParameters['delete'])) {
                     $is_delete = false;
                     foreach ($queryParameters['delete'] as $fileName) {
+
                         $filePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
+
                         if (!str_starts_with($filePath, $fileManager->getCurrentPath())) {
                             $this->addFlash('error', $this->translator->trans('file.deleted.danger'));
                         } else {
                             $this->dispatch(FileManagerEvents::PRE_DELETE_FILE);
                             try {
+
+                                if (is_dir($filePath)) {
+                                    $type = "Dossier";
+                                } else {
+                                    $type = "Fichier";
+                                }
+
                                 $fs->remove($filePath);
                                 $is_delete = true;
+
+                                $historiqueCloud = new HistoriqueCloud();
+
+                                $path = null;
+                                $finenameHistorique = null;
+
+                                if($type === "Dossier"){
+
+                                    $path = $filePath;
+                                    $finenameHistorique = $fileName;
+
+                                } elseif(!empty(urldecode($fileManager->getQueryParameter('route')))){
+                                    $path = urldecode($fileManager->getQueryParameter('route'));
+                                }
+
+                                $historiqueCloud
+                                    ->setDate(new \DateTime())
+                                    ->setUser($this->getUser())
+                                    ->setAction('Suppression')
+                                    ->setType($type)
+                                    ->setPath(explode("\cloud", $path)[1])
+                                    ->setFileName($fileName);
+
+                                $this->em->persist($historiqueCloud);
+
                             } catch (IOException $exception) {
                                 $this->addFlash('error', $this->translator->trans('file.deleted.unauthorized'));
                             }
                             $this->dispatch(FileManagerEvents::POST_DELETE_FILE);
                         }
                     }
+
+                    $this->em->flush();
+
                     if ($is_delete) {
                         $this->addFlash('success', $this->translator->trans('file.deleted.success'));
                     }
+
                     unset($queryParameters['delete']);
+
                 } else {
                     $this->dispatch(FileManagerEvents::PRE_DELETE_FOLDER);
                     try {
+
                         $fs->remove($fileManager->getCurrentPath());
+
+                        // suppression du dossier courant
+
+                        $historiqueCloud = (new HistoriqueCloud())
+                            ->setDate(new \DateTime())
+                            ->setUser($this->getUser())
+                            ->setAction('Suppression')
+                            ->setType('Dossier')
+                            ->setPath($fileManager->getCurrentRoute());
+
+                        $this->em->persist($historiqueCloud);
+
+                        $this->em->flush();
+
                         $this->addFlash('success', $this->translator->trans('folder.deleted.success'));
                     } catch (IOException $exception) {
                         $this->addFlash('error', $this->translator->trans('folder.deleted.unauthorized'));
@@ -521,5 +606,4 @@ class ManagerController extends AbstractController
 
         return $this->redirectToRoute('file_manager', $queryParameters);
     }
-
 }
