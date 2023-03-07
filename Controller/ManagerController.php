@@ -201,14 +201,11 @@ class ManagerController extends AbstractController
 
                 $historiqueCloud = new HistoriqueCloud();
 
-                $historiquePath = explode("\cloud", $directory)[1];
-
                 $historiqueCloud
-                    ->setType("Dossier")
                     ->setAction("Ajout")
                     ->setDate(new \DateTime())
                     ->setUser($this->getUser())
-                    ->setPath($historiquePath);
+                    ->setPath(explode("\cloud", $directory)[1]);
 
                 $this->em->persist($historiqueCloud);
                 $this->em->flush();
@@ -417,8 +414,6 @@ class ManagerController extends AbstractController
     {
         $fileManager = $this->newFileManager($request->query->all());
 
-        dd("sgsgsg");
-
         $options = [
             'upload_dir' => $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR,
             'upload_url' => implode('/', array_map('rawurlencode', explode('/', $fileManager->getImagePath()))),
@@ -452,7 +447,7 @@ class ManagerController extends AbstractController
                 $documentRecent = (new DocumentRecent())
                     ->setDate(new \DateTime())
                     ->setUser($this->getUser())
-                    ->setPath($fileManager->getQueryParameter('route'))
+                    ->setPath(urldecode($fileManager->getQueryParameter('route')))
                     ->setFileName($file->name)
                     ->setExt(pathinfo($file->name, PATHINFO_EXTENSION));
 
@@ -463,10 +458,8 @@ class ManagerController extends AbstractController
                 $historiqueCloud
                     ->setDate(new \DateTime())
                     ->setUser($this->getUser())
-                    ->setPath($fileManager->getQueryParameter('route'))
-                    ->setFileName($file->name)
-                    ->setAction("Ajout")
-                    ->setType("Fichier");
+                    ->setPath(urldecode($fileManager->getQueryParameter('route')) . "/" . $file->name)
+                    ->setAction("Ajout");
 
                 $this->em->persist($historiqueCloud);
             }
@@ -521,36 +514,16 @@ class ManagerController extends AbstractController
                             $this->dispatch(FileManagerEvents::PRE_DELETE_FILE);
                             try {
 
-                                if (is_dir($filePath)) {
-                                    $type = "Dossier";
-                                } else {
-                                    $type = "Fichier";
-                                }
-
                                 $fs->remove($filePath);
                                 $is_delete = true;
 
                                 $historiqueCloud = new HistoriqueCloud();
 
-                                $path = null;
-                                $finenameHistorique = null;
-
-                                if($type === "Dossier"){
-
-                                    $path = $filePath;
-                                    $finenameHistorique = $fileName;
-
-                                } elseif(!empty(urldecode($fileManager->getQueryParameter('route')))){
-                                    $path = urldecode($fileManager->getQueryParameter('route'));
-                                }
-
                                 $historiqueCloud
                                     ->setDate(new \DateTime())
                                     ->setUser($this->getUser())
                                     ->setAction('Suppression')
-                                    ->setType($type)
-                                    ->setPath(explode("\cloud", $path)[1])
-                                    ->setFileName($fileName);
+                                    ->setPath(explode("\cloud", $filePath)[1]);
 
                                 $this->em->persist($historiqueCloud);
 
@@ -573,6 +546,8 @@ class ManagerController extends AbstractController
                     $this->dispatch(FileManagerEvents::PRE_DELETE_FOLDER);
                     try {
 
+                        $path = $fileManager->getCurrentPath();
+
                         $fs->remove($fileManager->getCurrentPath());
 
                         // suppression du dossier courant
@@ -581,8 +556,7 @@ class ManagerController extends AbstractController
                             ->setDate(new \DateTime())
                             ->setUser($this->getUser())
                             ->setAction('Suppression')
-                            ->setType('Dossier')
-                            ->setPath($fileManager->getCurrentRoute());
+                            ->setPath(explode("\cloud", $path)[1]);
 
                         $this->em->persist($historiqueCloud);
 
