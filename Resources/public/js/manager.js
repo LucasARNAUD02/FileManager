@@ -276,13 +276,12 @@ $(function () {
 
             if (file.url) {
 
-                displayToast("success", `Le fichier ${fileName} a été ajouté.`, 3000, {transition: "pinItUp"});
-
                 $.ajax({
                     dataType: "json", url: url, type: 'GET'
                 }).done(function (data) {
 
                     formMultipleDelete.html(data.data);
+                    window.parent.postMessage({ type: 'fileUpload', data: 'Nouveaux fichiers ajoutés.' }, '*');
 
                     lazy();
 
@@ -293,6 +292,8 @@ $(function () {
 
                     selectAll.prop('checked', false);
                     jsDeleteMultipleModal.addClass('link-disabled');
+
+                    displayToast("success", `Le fichier ${fileName} a été ajouté.`, 3000, {transition: "pinItUp"});
 
                 }).fail(function () {
                     displayToast("error", "Une erreur est survenue, essayez de recharger la page (CTRL + SHIFT + R).", 3000, {transition: "pinItUp"});
@@ -328,6 +329,7 @@ $(function () {
             .removeClass("notransition")
             .attr('aria-valuenow', progress)
             .css('width', progress + '%');
+
 
     }).on('fileuploadstop', function (e) {
 
