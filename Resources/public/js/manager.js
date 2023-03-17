@@ -11,6 +11,46 @@ $(function () {
     const jsDeleteMultipleModal = $('#js-delete-multiple-modal');
     const fileUpload = $('#fileupload');
     const search = $('#search');
+    const regexFichiers = /[^a-zA-Z0-9À-ÖØ-öø-ÿ _()-]/g;
+
+    let validField = true;
+    let invalidInput;
+
+    $('#rename_f_name, #rename_name').on('keyup', function(e){
+
+        let val = $(this).val();
+        let regexVal = val.replace(regexFichiers, '');
+
+        if(val !== regexVal){
+
+            if(e.keyCode !== 8){
+                if($('#regex_error').length === 0){
+                    $(this).after(`<p class="text-danger mt-2 mb-0" id="regex_error">Le champ ne peut contenir que des lettres, des chiffres, des espaces ou les caractères suivants : "()_-"</p>`);
+                }
+                $(this).addClass("is-invalid");
+                $(this).removeClass("is-valid");
+                shakeInputAnimation(this.closest('.modal'));
+            }
+
+            invalidInput = this;
+
+            validField = false;
+
+        } else {
+            validField = true;
+            $(this).removeClass("is-invalid");
+            $(this).addClass("is-valid");
+            $('#regex_error').remove();
+        }
+
+        $(this).closest('form').submit(function(e){
+
+            if(!validField){
+                shakeInputAnimation(invalidInput.closest('.modal'));
+                e.preventDefault();
+            }
+        });
+    });
 
     $.cookie('last_route', urlLastRoute, {path: '/'});
 
@@ -38,25 +78,19 @@ $(function () {
         $(this).closest('.file-wrapper').find('.js-open-modal').click();
     });
 
-    // $(window).resize(function () {
-    //
-    //     let treeVisible = treeDiv.is(':visible');
-    //     let windowWidth = $(window).width();
-    //
-    //     if (treeVisible && windowWidth <= 1186) {
-    //
-    //         treeDiv.hide(200, function () {
-    //             arboText.text("Afficher");
-    //         });
-    //
-    //     } else if (!treeVisible && windowWidth > 1186 && $.cookie('tree_visible') !== "false") {
-    //
-    //         treeDiv.removeClass('d-none').hide().show(200, function () {
-    //             arboText.text("Masquer");
-    //         });
-    //
-    //     }
-    // });
+    function shakeInputAnimation(element){
+        element.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-10px)' },
+            { transform: 'translateX(10px)' },
+            { transform: 'translateX(-10px)' },
+            { transform: 'translateX(10px)' },
+            { transform: 'translateX(0)' }
+        ], {
+            duration: 500,
+            easing: 'ease'
+        });
+    }
 
     let callback = function (key, opt) {
 
@@ -266,6 +300,8 @@ $(function () {
         dropZone: $('#dropzone'),
         pasteZone: $('#dropzone'),
 
+    }).on('fileuploadadd', function (e, data) {
+        data.files[0].uploadName = data.files[0].name.replace(regexFichiers, '');
     }).on('fileuploaddone', function (e, data) {
 
         const addedFiles = data.result.files;
