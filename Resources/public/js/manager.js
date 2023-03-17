@@ -301,7 +301,15 @@ $(function () {
         pasteZone: $('#dropzone'),
 
     }).on('fileuploadadd', function (e, data) {
-        data.files[0].uploadName = data.files[0].name.replace(regexFichiers, '');
+
+        let fileName = data.files[0].name.split('\\').pop();
+        let fileExtension = fileName.split('.').pop();
+        let fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+
+        let newFilename = fileNameWithoutExtension.replace(regexFichiers, '');
+
+        data.files[0].uploadName = newFilename + '.' + fileExtension;
+
     }).on('fileuploaddone', function (e, data) {
 
         const addedFiles = data.result.files;
