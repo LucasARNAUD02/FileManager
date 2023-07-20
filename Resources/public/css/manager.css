@@ -28,7 +28,8 @@ body {
 }
 
 .table > :not(caption) > * > * {
-    padding: 0.5rem;
+    /*padding: 0.5rem;*/
+    padding: 4px;
 }
 
 .select {
@@ -200,16 +201,16 @@ span.badge.bg-secondary {
     }
 }
 
-.tbody-bordered{
-    border-left: 1px solid #edf2f9!important;
-    border-right: 1px solid #edf2f9!important;
+.tbody-bordered {
+    border-left: 1px solid #edf2f9 !important;
+    border-right: 1px solid #edf2f9 !important;
 }
 
-#table-file-manager{
+#table-file-manager {
     border: 1px solid #edf2f9;
 }
 
-.cloud-tr-clicked{
+.cloud-tr-clicked {
     background-color: #f2f4f6;
 }
 
@@ -218,17 +219,25 @@ span.badge.bg-secondary {
     margin: auto;
 }
 
-.context-menu-list{
-    font-family: Raleway-Bold!important;
-    background: #ffffffe8!important;
-    border: 1px solid #bebebe!important;
-    border-radius: 8px!important;
-    -webkit-box-shadow: 0 2px 5px rgb(0 0 0 / 28%)!important;
-    box-shadow: 0 2px 5px rgb(0 0 0 / 28%)!important;
+.context-menu-list {
+    font-family: Raleway-Bold !important;
+    background: #ffffffe8 !important;
+    border: 1px solid #bebebe !important;
+    border-radius: 8px !important;
+    -webkit-box-shadow: 0 2px 5px rgb(0 0 0 / 28%) !important;
+    box-shadow: 0 2px 5px rgb(0 0 0 / 28%) !important;
 }
-.context-menu-item.context-menu-hover{
-    background-color: var(--bs-info)!important;
+
+.context-menu-item.context-menu-hover {
+    background-color: var(--bs-info) !important;
 }
+
+
+.btn-cloud-action {
+    padding-right: 2px;
+    padding-left: 2px;
+}
+
 
 @font-face {
     font-family: Raleway-Regular;
