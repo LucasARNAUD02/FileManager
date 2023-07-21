@@ -2,7 +2,7 @@
 
 namespace Lucas\FileManager\Controller;
 
-use App\Entity\DocumentRecent;
+use App\Entity\Cloud\DocumentRecent;
 use App\Entity\Cloud\HistoriqueCloud;
 use Doctrine\ORM\EntityManagerInterface;
 use Lucas\FileManager\Event\FileManagerEvents;
