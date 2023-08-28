@@ -109,9 +109,8 @@
                                download="{{ file.basename() }}">
                                 <span class="material-symbols-sharp">cloud_download</span>
                             </a>
-
                         {% endif %}
-                        {% if is_granted('ROLE_ADMINISTRATIF') %}
+                        {% if permissionsUser().permissionGererCloudCommun %}
                             <span data-toggle="tooltip" title="Renommer">
                         <a class="text-success mb-2 btn-cloud-action js-rename-modal" href="javascript:void(0);"
                            data-trigger="click"
@@ -126,7 +125,6 @@
                             <span class="material-symbols-sharp">edit</span>
                         </a>
                         </span>
-
                             <span data-toggle="tooltip" title="Supprimer">
                             <a class="text-danger mb-2 btn-cloud-action js-delete-modal" href="javascript:void(0);"
                                data-trigger="click"

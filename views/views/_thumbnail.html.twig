@@ -3,7 +3,8 @@
         <div class="col-md-12 select-all">
 
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="select-all" title="{{ 'select-all'|trans }}">
+                <input class="form-check-input" type="checkbox" value="" id="select-all"
+                       title="{{ 'select-all'|trans }}">
                 <label class="form-check-label" for="select-all">
                     {{ 'select-all'|trans }}
                 </label>
@@ -18,7 +19,8 @@
         <div class="file-wrapper text-center thumbnail {{ fileEntity.isImage() ? 'img' : file.type }}">
             {% block file_checkbox %}
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="delete[]" value="{{ file.fileName }}" title="{{ file.fileName }}">
+                    <input class="form-check-input" type="checkbox" name="delete[]" value="{{ file.fileName }}"
+                           title="{{ file.fileName }}">
                 </div>
             {% endblock %}
             {% block file_preview %}
@@ -37,9 +39,11 @@
                 {% endblock %}
                 <br>
             </p>
+
             <div class="d-flex justify-content-center">
                 {% block list_action %}
-                    <div class="pe-2">
+                    {% if permissionsUser().permissionGererCloudCommun %}
+                        <div class="pe-2">
                         <span data-toggle="tooltip" title="Supprimer">
                         <button type="button"
                                 class="btn btn-sm btn-danger js-delete-modal"
@@ -53,8 +57,8 @@
                            <span class="material-symbols-sharp">delete</span>
                         </button>
                     </span>
-                    </div>
-                    <div class="pe-2">
+                        </div>
+                        <div class="pe-2">
                         <span data-toggle="tooltip" title="Renommer">
                     <button type="button"
                             class="btn btn-sm btn-success js-rename-modal"
@@ -70,7 +74,8 @@
                    <span class="material-symbols-sharp">edit</span>
                     </button>
                 </span>
-                    </div>
+                        </div>
+                    {% endif %}
                     {% if file.type == "file" %}
                         <div class="pe-2">
                             <a data-placement="left" title="Télécharger"

@@ -2,8 +2,10 @@
 
 namespace Lucas\FileManager\Controller;
 
+use App\Constants\PermissionsIds;
 use App\Entity\Cloud\DocumentRecent;
 use App\Entity\Cloud\HistoriqueCloud;
+use App\Service\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Lucas\FileManager\Event\FileManagerEvents;
 use Lucas\FileManager\Helpers\File;
@@ -55,7 +57,8 @@ class ManagerController extends AbstractController
         private TranslatorInterface      $translator,
         private RouterInterface          $router,
         private FormFactoryInterface     $formFactory,
-        private EntityManagerInterface   $em
+        private EntityManagerInterface   $em,
+        private PermissionChecker        $permissionChecker
     )
     {
     }
@@ -65,8 +68,6 @@ class ManagerController extends AbstractController
      */
     public function indexAction(Request $request, FileTypeService $fileTypeService): JsonResponse|Response
     {
-
-
         $queryParameters = $request->query->all();
         $isJson = $request->get('json');
         if ($isJson) {
@@ -184,6 +185,9 @@ class ManagerController extends AbstractController
         $formRename = $this->createRenameForm();
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+
             $data = $form->getData();
             $fs = new Filesystem();
             $directory = $directorytmp = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $data['name'];
@@ -219,7 +223,6 @@ class ManagerController extends AbstractController
         }
         $parameters['form'] = $form->createView();
         $parameters['formRename'] = $formRename->createView();
-        $parameters['displayActions'] = $this->isGranted('ROLE_ADMINISTRATIF');
 
         return $this->render('@FileManager/manager.html.twig', $parameters);
     }
@@ -368,38 +371,35 @@ class ManagerController extends AbstractController
      */
     public function renameFileAction(Request $request, string $fileName): RedirectResponse
     {
+        $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+
         $queryParameters = $request->query->all();
 
-        if (!$this->isGranted('ROLE_ADMINISTRATIF')) {
-            $this->addFlash('error', "Vous n'avez pas l'autorisation de renommer un fichier.");
-        } else {
-
-            $formRename = $this->createRenameForm();
-            /* @var Form $formRename */
-            $formRename->handleRequest($request);
-            if ($formRename->isSubmitted() && $formRename->isValid()) {
-                $data = $formRename->getData();
-                $extension = $data['extension'] ? '.' . $data['extension'] : '';
-                $newFileName = $data['name'] . $extension;
-                if ($newFileName !== $fileName && isset($data['name'])) {
-                    $fileManager = $this->newFileManager($queryParameters);
-                    $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $newFileName;
-                    $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
-                    if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
-                        $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
-                    } else {
-                        $fs = new Filesystem();
-                        try {
-                            $fs->rename($oldFilePath, $newFilePath);
-                            $this->addFlash('success', $this->translator->trans('file.renamed.success'));
-                            //File has been renamed successfully
-                        } catch (IOException $exception) {
-                            $this->addFlash('error', $this->translator->trans('file.renamed.danger'));
-                        }
-                    }
+        $formRename = $this->createRenameForm();
+        /* @var Form $formRename */
+        $formRename->handleRequest($request);
+        if ($formRename->isSubmitted() && $formRename->isValid()) {
+            $data = $formRename->getData();
+            $extension = $data['extension'] ? '.' . $data['extension'] : '';
+            $newFileName = $data['name'] . $extension;
+            if ($newFileName !== $fileName && isset($data['name'])) {
+                $fileManager = $this->newFileManager($queryParameters);
+                $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $newFileName;
+                $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
+                if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
+                    $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
                 } else {
-                    $this->addFlash('warning', $this->translator->trans('file.renamed.nochanged'));
+                    $fs = new Filesystem();
+                    try {
+                        $fs->rename($oldFilePath, $newFilePath);
+                        $this->addFlash('success', $this->translator->trans('file.renamed.success'));
+                        //File has been renamed successfully
+                    } catch (IOException $exception) {
+                        $this->addFlash('error', $this->translator->trans('file.renamed.danger'));
+                    }
                 }
+            } else {
+                $this->addFlash('warning', $this->translator->trans('file.renamed.nochanged'));
             }
         }
 
@@ -408,10 +408,11 @@ class ManagerController extends AbstractController
 
     /**
      * @Route("/upload/", name="file_manager_upload")
-     * @IsGranted("ROLE_ADMINISTRATIF")
      */
     public function uploadFileAction(Request $request): JsonResponse|Response
     {
+        $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+
         $fileManager = $this->newFileManager($request->query->all());
 
         $options = [
@@ -490,91 +491,89 @@ class ManagerController extends AbstractController
      */
     public function deleteAction(Request $request): RedirectResponse
     {
+        $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+
         $form = $this->createDeleteForm();
         $form->handleRequest($request);
         $queryParameters = $request->query->all();
 
-        if (!$this->isGranted('ROLE_ADMINISTRATIF')) {
-            $this->addFlash('error', "Vous n'avez pas l'autorisation de renommer un fichier.");
-        } else {
-            if ($form->isSubmitted() && $form->isValid()) {
-                // remove file
-                $fileManager = $this->newFileManager($queryParameters);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // remove file
+            $fileManager = $this->newFileManager($queryParameters);
 
-                $fs = new Filesystem();
-                if (isset($queryParameters['delete'])) {
-                    $is_delete = false;
-                    foreach ($queryParameters['delete'] as $fileName) {
+            $fs = new Filesystem();
+            if (isset($queryParameters['delete'])) {
+                $is_delete = false;
+                foreach ($queryParameters['delete'] as $fileName) {
 
-                        $filePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
+                    $filePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
 
-                        if (!str_starts_with($filePath, $fileManager->getCurrentPath())) {
-                            $this->addFlash('error', $this->translator->trans('file.deleted.danger'));
-                        } else {
-                            $this->dispatch(FileManagerEvents::PRE_DELETE_FILE);
-                            try {
+                    if (!str_starts_with($filePath, $fileManager->getCurrentPath())) {
+                        $this->addFlash('error', $this->translator->trans('file.deleted.danger'));
+                    } else {
+                        $this->dispatch(FileManagerEvents::PRE_DELETE_FILE);
+                        try {
 
-                                $fs->remove($filePath);
-                                $is_delete = true;
+                            $fs->remove($filePath);
+                            $is_delete = true;
 
-                                $historiqueCloud = new HistoriqueCloud();
+                            $historiqueCloud = new HistoriqueCloud();
 
-                                $historiqueCloud
-                                    ->setDate(new \DateTime())
-                                    ->setUser($this->getUser())
-                                    ->setAction('Suppression')
-                                    ->setPath(explode("\cloud", $filePath)[1]);
+                            $historiqueCloud
+                                ->setDate(new \DateTime())
+                                ->setUser($this->getUser())
+                                ->setAction('Suppression')
+                                ->setPath(explode("\cloud", $filePath)[1]);
 
-                                $this->em->persist($historiqueCloud);
+                            $this->em->persist($historiqueCloud);
 
-                            } catch (IOException $exception) {
-                                $this->addFlash('error', $this->translator->trans('file.deleted.unauthorized'));
-                            }
-                            $this->dispatch(FileManagerEvents::POST_DELETE_FILE);
+                        } catch (IOException $exception) {
+                            $this->addFlash('error', $this->translator->trans('file.deleted.unauthorized'));
                         }
+                        $this->dispatch(FileManagerEvents::POST_DELETE_FILE);
                     }
+                }
+
+                $this->em->flush();
+
+                if ($is_delete) {
+                    $this->addFlash('success', $this->translator->trans('file.deleted.success'));
+                }
+
+                unset($queryParameters['delete']);
+
+            } else {
+                $this->dispatch(FileManagerEvents::PRE_DELETE_FOLDER);
+                try {
+
+                    $path = $fileManager->getCurrentPath();
+
+                    $fs->remove($fileManager->getCurrentPath());
+
+                    // suppression du dossier courant
+
+                    $historiqueCloud = (new HistoriqueCloud())
+                        ->setDate(new \DateTime())
+                        ->setUser($this->getUser())
+                        ->setAction('Suppression')
+                        ->setPath(explode("\cloud", $path)[1]);
+
+                    $this->em->persist($historiqueCloud);
 
                     $this->em->flush();
 
-                    if ($is_delete) {
-                        $this->addFlash('success', $this->translator->trans('file.deleted.success'));
-                    }
-
-                    unset($queryParameters['delete']);
-
-                } else {
-                    $this->dispatch(FileManagerEvents::PRE_DELETE_FOLDER);
-                    try {
-
-                        $path = $fileManager->getCurrentPath();
-
-                        $fs->remove($fileManager->getCurrentPath());
-
-                        // suppression du dossier courant
-
-                        $historiqueCloud = (new HistoriqueCloud())
-                            ->setDate(new \DateTime())
-                            ->setUser($this->getUser())
-                            ->setAction('Suppression')
-                            ->setPath(explode("\cloud", $path)[1]);
-
-                        $this->em->persist($historiqueCloud);
-
-                        $this->em->flush();
-
-                        $this->addFlash('success', $this->translator->trans('folder.deleted.success'));
-                    } catch (IOException $exception) {
-                        $this->addFlash('error', $this->translator->trans('folder.deleted.unauthorized'));
-                    }
-
-                    $this->dispatch(FileManagerEvents::POST_DELETE_FOLDER);
-                    $queryParameters['route'] = \dirname($fileManager->getCurrentRoute());
-                    if ($queryParameters['route'] == "\\" || $queryParameters['route'] === "/") {
-                        unset($queryParameters['route']);
-                    }
-
-                    return $this->redirectToRoute('file_manager', $queryParameters);
+                    $this->addFlash('success', $this->translator->trans('folder.deleted.success'));
+                } catch (IOException $exception) {
+                    $this->addFlash('error', $this->translator->trans('folder.deleted.unauthorized'));
                 }
+
+                $this->dispatch(FileManagerEvents::POST_DELETE_FOLDER);
+                $queryParameters['route'] = \dirname($fileManager->getCurrentRoute());
+                if ($queryParameters['route'] == "\\" || $queryParameters['route'] === "/") {
+                    unset($queryParameters['route']);
+                }
+
+                return $this->redirectToRoute('file_manager', $queryParameters);
             }
         }
 

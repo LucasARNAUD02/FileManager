@@ -55,7 +55,8 @@
                 <div class="row">
                     {% block actions %}
                     <div class="col-lg-auto">
-                        <a class="btn btn-sm btn-light mb-2 d-none d-sm-inline-block" href="javascript:void(0)" id="arbo">
+                        <a class="btn btn-sm btn-light mb-2 d-none d-sm-inline-block" href="javascript:void(0)"
+                           id="arbo">
                             <span class="material-symbols-sharp">
                                 account_tree
                             </span>
@@ -75,7 +76,7 @@
                             Actualiser
                         </button>
 
-                        {% if is_granted('ROLE_ADMINISTRATIF') %}
+                        {% if permissionsUser().permissionGererCloudCommun %}
                             <button id="btnGroupActions" type="button"
                                     class="mb-2 btn btn-sm btn-secondary dropdown-toggle"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -171,7 +172,8 @@
     <script src="{{ asset('bundles/filemanager/libs/sticky-kit/jquery.sticky-kit.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/jQuery-contextMenu/dist/jquery.contextMenu.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/filemanager/libs/jquery-lazy/jquery.lazy.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('bundles/filemanager/libs/jquery-lazy/jquery.lazy.min.js') }}"></script>
 
     <script>
 
@@ -181,7 +183,7 @@
         let urlLastRoute = "{{ path('file_manager', fileManager.queryParameters) }}";
         var urldelete = "{{ path('file_manager_delete', fileManager.queryParameters )|e('js') }}";
 
-        let isAdministratif = {{ is_granted('ROLE_ADMINISTRATIF') ? 'true' : 'false' }};
+        const permissionGererCloudCommun = {{ permissionsUser().permissionGererCloudCommun }};
 
         {% for message in app.flashes('success') %}
         displayToast("success", `{{ message }}`, duration = 4000, options = {transition: "pinItUp"});

@@ -23,5 +23,4 @@ services:
     Lucas\FileManager\Service\FilemanagerService:
         arguments: ['%file_manager%', '@service_container']
 
-
     Twig\Extension\StringLoaderExtension: ~

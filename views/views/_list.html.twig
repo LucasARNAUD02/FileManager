@@ -103,7 +103,7 @@
                         </a>
 
                     {% endif %}
-                    {% if is_granted('ROLE_ADMINISTRATIF') %}
+                    {% if permissionsUser().permissionGererCloudCommun %}
                         <span data-toggle="tooltip" title="Renommer">
                         <button type="button"
                                 class="btn btn-sm btn-outline-success mb-2 btn-cloud-action js-rename-modal"

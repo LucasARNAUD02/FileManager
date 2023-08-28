@@ -125,7 +125,7 @@ $(function () {
         selector: '.pdf, .img, .video, .audio', callback: callback, items: getContextMenuOptions('preview')
     });
 
-    if (isAdministratif) {
+    if (permissionGererCloudCommun) {
 
         $.contextMenu({
             selector: '.dir', callback: callback, items: {
@@ -435,7 +435,7 @@ $(function () {
 
         let options;
 
-        if (isAdministratif) {
+        if (permissionGererCloudCommun) {
             options = {
                 "edit": {name: 'Renommer', icon: 'far fa-edit'},
                 "delete": {name: 'Supprimer', icon: "far fa-trash-alt"}
