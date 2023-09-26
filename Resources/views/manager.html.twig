@@ -178,7 +178,7 @@
     <script>
 
         const treedata = {{ treeData|raw }};
-        const tree = {{ fileManager.tree ? 'true' : 'false' }};
+        const tree = {{ fileManager.tree|json_encode }};
         var url = "{{ path('file_manager', fileManager.queryParameters|merge({'json':true}))|e('js') }}";
         let urlLastRoute = "{{ path('file_manager', fileManager.queryParameters) }}";
         var urldelete = "{{ path('file_manager_delete', fileManager.queryParameters )|e('js') }}";
