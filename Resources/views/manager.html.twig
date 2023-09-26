@@ -183,14 +183,14 @@
         let urlLastRoute = "{{ path('file_manager', fileManager.queryParameters) }}";
         var urldelete = "{{ path('file_manager_delete', fileManager.queryParameters )|e('js') }}";
 
-        const permissionGererCloudCommun = {{ permissionsUser().permissionGererCloudCommun }};
+        const permissionGererCloudCommun = {{ permissionsUser().permissionGererCloudCommun|json_encode }};
 
         {% for message in app.flashes('success') %}
-        displayToast("success", `{{ message }}`, duration = 4000, options = {transition: "pinItUp"});
+            displayToast("success", `{{ message }}`, duration = 4000, options = {transition: "pinItUp"});
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-        displayToast("error", `{{ message }}`, duration = 4000, options = {transition: "pinItUp"});
+            displayToast("error", `{{ message }}`, duration = 4000, options = {transition: "pinItUp"});
         {% endfor %}
     </script>
 
