@@ -497,11 +497,17 @@ class ManagerController extends AbstractController
     /**
      * @Route("/file/{fileName}", name="file_manager_file")
      */
-    public function binaryFileResponseAction(Request $request, string $fileName): BinaryFileResponse
+    public function binaryFileResponseAction(Request $request, string $fileName): BinaryFileResponse|RedirectResponse
     {
         $fileManager = $this->newFileManager($request->query->all());
 
         $file = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . urldecode($fileName);
+
+        if(!is_readable($file)){
+            $this->addFlash("error", "Le fichier n'existe pas, il a été renommé ou supprimé.");
+            return $this->redirectToRoute('file_manager', $fileManager->getQueryParameters());
+        }
+
         $this->dispatch(FileManagerEvents::FILE_ACCESS, ['path' => $file]);
 
         return new BinaryFileResponse($file);
