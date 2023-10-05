@@ -5,6 +5,7 @@ namespace Lucas\FileManager\Controller;
 use App\Constants\PermissionsIds;
 use App\Entity\Cloud\DocumentRecent;
 use App\Entity\Cloud\HistoriqueCloud;
+use App\Repository\Cloud\DocumentRecentRepository;
 use App\Service\PermissionChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Lucas\FileManager\Event\FileManagerEvents;
@@ -58,7 +59,8 @@ class ManagerController extends AbstractController
         private RouterInterface          $router,
         private FormFactoryInterface     $formFactory,
         private EntityManagerInterface   $em,
-        private PermissionChecker        $permissionChecker
+        private PermissionChecker        $permissionChecker,
+        private readonly DocumentRecentRepository $documentRecentRepository
     )
     {
     }
@@ -376,20 +378,39 @@ class ManagerController extends AbstractController
         $queryParameters = $request->query->all();
 
         $formRename = $this->createRenameForm();
+
         /* @var Form $formRename */
         $formRename->handleRequest($request);
+
         if ($formRename->isSubmitted() && $formRename->isValid()) {
+
             $data = $formRename->getData();
             $extension = $data['extension'] ? '.' . $data['extension'] : '';
             $newFileName = $data['name'] . $extension;
+
             if ($newFileName !== $fileName && isset($data['name'])) {
+
                 $fileManager = $this->newFileManager($queryParameters);
                 $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $newFileName;
                 $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
+
+                // on renomme le document récent si on change le nom du document original
+
+                $path = $queryParameters["route"];
+
+                $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
+
+                if($documentRecent !== null){
+                    $documentRecent->setFileName($newFileName);
+                    $this->em->flush();
+                }
+
                 if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
                     $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
                 } else {
+
                     $fs = new Filesystem();
+
                     try {
                         $fs->rename($oldFilePath, $newFilePath);
                         $this->addFlash('success', $this->translator->trans('file.renamed.success'));
