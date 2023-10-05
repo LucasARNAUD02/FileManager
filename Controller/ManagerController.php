@@ -396,7 +396,7 @@ class ManagerController extends AbstractController
 
                 // on renomme le document récent si on change le nom du document original
 
-                $path = $queryParameters["route"];
+                $path = $queryParameters["route"] ?? "";
 
                 $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
 
