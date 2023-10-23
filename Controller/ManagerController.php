@@ -388,45 +388,55 @@ class ManagerController extends AbstractController
         /* @var Form $formRename */
         $formRename->handleRequest($request);
 
-        if ($formRename->isSubmitted() && $formRename->isValid()) {
+        if ($formRename->isSubmitted()) {
 
-            $data = $formRename->getData();
-            $extension = $data['extension'] ? '.' . $data['extension'] : '';
-            $newFileName = $data['name'] . $extension;
+            if($formRename->isValid()){
 
-            if ($newFileName !== $fileName && isset($data['name'])) {
+                $data = $formRename->getData();
+                $extension = $data['extension'] ? '.' . $data['extension'] : '';
+                $newFileName = $data['name'] . $extension;
 
-                $fileManager = $this->newFileManager($queryParameters);
-                $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $newFileName;
-                $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
+                if ($newFileName !== $fileName && isset($data['name'])) {
 
-                // on renomme le document récent si on change le nom du document original
+                    $fileManager = $this->newFileManager($queryParameters);
+                    $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $newFileName;
+                    $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
 
-                $path = $queryParameters["route"] ?? "";
+                    // on renomme le document récent si on change le nom du document original
 
-                $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
+                    $path = $queryParameters["route"] ?? "";
 
-                if ($documentRecent !== null) {
-                    $documentRecent->setFileName($newFileName);
-                    $this->em->flush();
-                }
+                    $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
 
-                if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
-                    $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
-                } else {
-
-                    $fs = new Filesystem();
-
-                    try {
-                        $fs->rename($oldFilePath, $newFilePath);
-                        $this->addFlash('success', $this->translator->trans('file.renamed.success'));
-                        //File has been renamed successfully
-                    } catch (IOException $exception) {
-                        $this->addFlash('error', $this->translator->trans('file.renamed.danger'));
+                    if ($documentRecent !== null) {
+                        $documentRecent->setFileName($newFileName);
+                        $this->em->flush();
                     }
+
+                    if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
+                        $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
+                    } else {
+
+                        $fs = new Filesystem();
+
+                        try {
+                            $fs->rename($oldFilePath, $newFilePath);
+                            $this->addFlash('success', $this->translator->trans('file.renamed.success'));
+                            //File has been renamed successfully
+                        } catch (IOException $exception) {
+                            $this->addFlash('error', $this->translator->trans('file.renamed.danger'));
+                        }
+                    }
+                } else {
+                    $this->addFlash('warning', $this->translator->trans('file.renamed.nochanged'));
                 }
             } else {
-                $this->addFlash('warning', $this->translator->trans('file.renamed.nochanged'));
+
+                $errors = $formRename->getErrors(true);
+
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
             }
         }
 
