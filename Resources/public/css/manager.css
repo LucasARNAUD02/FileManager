@@ -164,14 +164,6 @@ button i {
     height: 1.2rem;
 }
 
-tr.file-wrapper i[class*=icofont] {
-    font-size: 18px;
-}
-
-div.file-wrapper i[class*=icofont] {
-    font-size: 60px;
-}
-
 input[id=search] {
     max-height: 30px;
 }

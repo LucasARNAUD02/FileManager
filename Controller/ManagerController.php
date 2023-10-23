@@ -355,13 +355,16 @@ class ManagerController extends AbstractController
     {
         return $this->formFactory->createNamedBuilder('rename_f')
             ->add('name', TextType::class, [
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'class' => 'form-control'
+                ],
                 'constraints' => [
                     new NotBlank(),
                     new Length(null, 1, 40)
                 ],
                 'label' => false,
-            ])->add('extension', HiddenType::class)
+            ])
+            ->add('extension', HiddenType::class)
             ->add('send', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-sm btn-success',
