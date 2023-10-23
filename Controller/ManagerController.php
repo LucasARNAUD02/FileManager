@@ -37,6 +37,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -53,13 +54,13 @@ class ManagerController extends AbstractController
      * ManagerController constructor.
      */
     public function __construct(
-        private FilemanagerService       $fileManagerService,
-        private EventDispatcherInterface $dispatcher,
-        private TranslatorInterface      $translator,
-        private RouterInterface          $router,
-        private FormFactoryInterface     $formFactory,
-        private EntityManagerInterface   $em,
-        private PermissionChecker        $permissionChecker,
+        private FilemanagerService                $fileManagerService,
+        private EventDispatcherInterface          $dispatcher,
+        private TranslatorInterface               $translator,
+        private RouterInterface                   $router,
+        private FormFactoryInterface              $formFactory,
+        private EntityManagerInterface            $em,
+        private PermissionChecker                 $permissionChecker,
         private readonly DocumentRecentRepository $documentRecentRepository
     )
     {
@@ -165,10 +166,11 @@ class ManagerController extends AbstractController
         }
         $parameters['treeData'] = json_encode($directoriesArbo, JSON_THROW_ON_ERROR);
 
-        $form = $this->formFactory->createNamedBuilder('rename', FormType::class)
+        $form = $this->formFactory->createNamedBuilder('rename')
             ->add('name', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
+                    new Length(null, 1, 40)
                 ],
                 'label' => false,
                 'data' => $this->translator->trans('input.default'),
@@ -356,6 +358,7 @@ class ManagerController extends AbstractController
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
                     new NotBlank(),
+                    new Length(null, 1, 40)
                 ],
                 'label' => false,
             ])->add('extension', HiddenType::class)
@@ -400,7 +403,7 @@ class ManagerController extends AbstractController
 
                 $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
 
-                if($documentRecent !== null){
+                if ($documentRecent !== null) {
                     $documentRecent->setFileName($newFileName);
                     $this->em->flush();
                 }
@@ -503,7 +506,7 @@ class ManagerController extends AbstractController
 
         $file = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . urldecode($fileName);
 
-        if(!is_readable($file)){
+        if (!is_readable($file)) {
             $this->addFlash("error", "Le fichier n'existe pas, il a été renommé ou supprimé.");
             return $this->redirectToRoute('file_manager', $fileManager->getQueryParameters());
         }
