@@ -188,43 +188,57 @@ class ManagerController extends AbstractController
         /** @var Form $formRename */
         $formRename = $this->createRenameForm();
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
 
-            $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+            if($form->isValid()){
 
-            $data = $form->getData();
-            $fs = new Filesystem();
-            $directory = $directorytmp = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $data['name'];
-            $i = 1;
+                $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
 
-            while ($fs->exists($directorytmp)) {
-                $directorytmp = "{$directory} ({$i})";
-                ++$i;
-            }
-            $directory = $directorytmp;
+                $data = $form->getData();
+                $fs = new Filesystem();
+                $directory = $directorytmp = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $data['name'];
+                $i = 1;
 
-            try {
+                while ($fs->exists($directorytmp)) {
+                    $directorytmp = "{$directory} ({$i})";
+                    ++$i;
+                }
+                $directory = $directorytmp;
 
-                $fs->mkdir($directory);
+                try {
 
-                $historiqueCloud = new HistoriqueCloud();
+                    $fs->mkdir($directory);
 
-                $historiqueCloud
-                    ->setAction("Ajout")
-                    ->setDate(new \DateTime())
-                    ->setUser($this->getUser())
-                    ->setPath(explode("\librairie", $directory)[1]);
+                    $historiqueCloud = new HistoriqueCloud();
 
-                $this->em->persist($historiqueCloud);
-                $this->em->flush();
+                    $historiqueCloud
+                        ->setAction("Ajout")
+                        ->setDate(new \DateTime())
+                        ->setUser($this->getUser())
+                        ->setPath(explode("\librairie", $directory)[1]);
 
-                $this->addFlash('success', $this->translator->trans('folder.add.success'));
-            } catch (IOExceptionInterface $e) {
-                $this->addFlash('error', $this->translator->trans('folder.add.danger', ['%message%' => $data['name']]));
+                    $this->em->persist($historiqueCloud);
+                    $this->em->flush();
+
+                    $this->addFlash('success', $this->translator->trans('folder.add.success'));
+                } catch (IOExceptionInterface $e) {
+                    $this->addFlash('error', $this->translator->trans('folder.add.danger', ['%message%' => $data['name']]));
+                }
+
+            } else {
+
+                $errors = $form->getErrors(true);
+
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
             }
 
             return $this->redirectToRoute('file_manager', $fileManager->getQueryParameters());
         }
+
+        // fin submit
+
         $parameters['form'] = $form->createView();
         $parameters['formRename'] = $formRename->createView();
 
