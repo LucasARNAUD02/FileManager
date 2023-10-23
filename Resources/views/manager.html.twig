@@ -128,6 +128,10 @@
                                 </li>
                             </div>
                         {% endif %}
+                        <button type="button" title="Ouvrir dans un nouvel onglet" class="mb-2 btn btn-sm btn-light"
+                                onclick="window.open('{{ path('file_manager', fileManager.queryParameters) }}', '_blank')" id="btn-reload">
+                            <span class="material-symbols-sharp">open_in_new</span>
+                        </button>
                         {% endblock %}
                     </div>
                     {% block display %}
