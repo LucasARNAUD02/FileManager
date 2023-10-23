@@ -29,7 +29,7 @@ class FileTypeService
         } else {
             $filePath = $this->router->generate(
                 'file_manager_file',
-                array_merge($fileManager->getQueryParameters(), ['fileName' => $file->getFilename()])
+                array_merge($fileManager->getQueryParameters(), ['fileName' => urlencode($file->getFilename())])
             );
         }
         $extension = $file->getExtension();

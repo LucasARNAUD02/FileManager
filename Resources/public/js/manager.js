@@ -11,7 +11,7 @@ $(function () {
     const jsDeleteMultipleModal = $('#js-delete-multiple-modal');
     const fileUpload = $('#fileupload');
     const search = $('#search');
-    const regexFichiers = /[^a-zA-Z0-9À-ÖØ-öø-ÿ _()-]/g;
+    const regexFichiers = /[\/:*?"<>|]/;
 
     let validField = true;
     let invalidInput;
@@ -19,13 +19,12 @@ $(function () {
     $('#rename_f_name, #rename_name').on('keyup', function(e){
 
         let val = $(this).val();
-        let regexVal = val.replace(regexFichiers, '');
 
-        if(val !== regexVal){
+        if(regexFichiers.test(val)){
 
             if(e.keyCode !== 8){
                 if($('#regex_error').length === 0){
-                    $(this).after(`<p class="text-danger mt-2 mb-0" id="regex_error">Le champ ne peut contenir que des lettres, des chiffres, des espaces ou les caractères suivants : "()_-"</p>`);
+                    $(this).after(`<p class="text-danger mt-2 mb-0" id="regex_error">Les caractères suivants et les espaces sont interdits : /\:*?"<>|</p>`);
                 }
                 $(this).addClass("is-invalid");
                 $(this).removeClass("is-valid");

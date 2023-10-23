@@ -14,7 +14,7 @@
             <th class="d-none d-sm-table-cell">
                 {% block select_all %}
 
-                    {% if is_granted('ROLE_ADMINISTRATIF') %}
+                    {% if permissionsUser().permissionGererCloudCommun %}
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="select-all"
                                    title="{{ 'select-all'|trans }}">
@@ -35,7 +35,7 @@
             <th class="d-none d-sm-table-cell">
                 <a class="false-link" href="javascript:void(0);">{{ 'table.dimension'|trans }}</a>
             </th>
-            <th class="text-right">
+            <th class="text-center">
                 <a class="false-link" href="javascript:void(0);">{{ 'table.actions'|trans }}</a>
             </th>
         </tr>
@@ -49,7 +49,7 @@
             <tr class="file-wrapper {{ fileEntity.isImage() ? 'img' : fileEntity.isPdf() ? 'pdf' : fileEntity.isVideo() ? 'video' : fileEntity.isAudio() ? 'audio' : file.type == "file" ? 'file' : 'dir' }}">
 
                 <td class="d-none d-sm-table-cell">
-                    {% if is_granted('ROLE_ADMINISTRATIF') %}
+                    {% if permissionsUser().permissionGererCloudCommun %}
                         {% block file_checkbox %}
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="delete[]"
