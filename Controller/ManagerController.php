@@ -211,7 +211,7 @@ class ManagerController extends AbstractController
                     ->setAction("Ajout")
                     ->setDate(new \DateTime())
                     ->setUser($this->getUser())
-                    ->setPath(explode("\cloud", $directory)[1]);
+                    ->setPath(explode("\librairie", $directory)[1]);
 
                 $this->em->persist($historiqueCloud);
                 $this->em->flush();
@@ -550,7 +550,7 @@ class ManagerController extends AbstractController
                                 ->setDate(new \DateTime())
                                 ->setUser($this->getUser())
                                 ->setAction('Suppression')
-                                ->setPath(explode("\cloud", $filePath)[1]);
+                                ->setPath(explode("\librairie", $filePath)[1]);
 
                             $this->em->persist($historiqueCloud);
 
@@ -583,7 +583,7 @@ class ManagerController extends AbstractController
                         ->setDate(new \DateTime())
                         ->setUser($this->getUser())
                         ->setAction('Suppression')
-                        ->setPath(explode("\cloud", $path)[1]);
+                        ->setPath(explode("\librairie", $path)[1]);
 
                     $this->em->persist($historiqueCloud);
 
