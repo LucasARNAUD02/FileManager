@@ -24,7 +24,7 @@ $(function () {
 
             if(e.keyCode !== 8){
                 if($('#regex_error').length === 0){
-                    $(this).after(`<p class="text-danger mt-2 mb-0" id="regex_error">Les caractères suivants et les espaces sont interdits : /\:*?"<>|</p>`);
+                    $(this).after(`<p class="text-danger mt-2 mb-0" id="regex_error">Les caractères suivants sont interdits : /\:*?"<>|</p>`);
                 }
                 $(this).addClass("is-invalid");
                 $(this).removeClass("is-valid");

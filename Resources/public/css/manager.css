@@ -278,3 +278,7 @@ span.badge.bg-secondary {
     font-weight: 600;
     font-style: normal
 }
+
+#tree_div{
+    min-width: 250px;
+}

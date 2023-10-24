@@ -442,7 +442,7 @@ class ManagerController extends AbstractController
                         }
                     }
                 } else {
-                    $this->addFlash('warning', $this->translator->trans('file.renamed.nochanged'));
+                    $this->addFlash('info', $this->translator->trans('file.renamed.nochanged'));
                 }
             } else {
 
