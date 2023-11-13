@@ -119,8 +119,12 @@
                            data-bs-target="#js-confirm-rename"
                            data-html="true"
                            type="button"
-                           data-name='{{ file.basename('.'~file.extension) }}'
-                           data-extension='{{ file.extension }}'
+                          {% if file.type == "file" %}
+                              data-name='{{ file.basename('.'~file.extension) }}'
+                              data-extension='{{ file.extension }}'
+                          {% else %}
+                              data-name='{{ file.filename }}'
+                          {% endif %}
                            data-href='{{ path('file_manager_rename', fileManager.queryParameters|merge({'fileName':file.fileName})) }}'>
                             <span class="material-symbols-sharp">edit</span>
                         </a>
