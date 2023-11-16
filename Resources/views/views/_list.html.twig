@@ -75,7 +75,8 @@
                                    type="button"
                                    data-bs-toggle="modal"
                                    data-bs-target="#{{ fileEntity.isPdf ? 'js-display-pdf' : fileEntity.isImage ? 'js-display-image' : fileEntity.video ? 'js-display-video' : 'js-display-audio' }}"
-                                   data-href='{{ fileEntity.preview.path }}'>
+                                   data-href='{{ fileEntity.preview.path }}'
+                                   data-filename="{{ file.fileName }}">
                                  {{ (fileEntity.preview.folder is defined ? fileEntity.preview.folder|raw : file.fileName) }}
                                 </a>
                             </span>

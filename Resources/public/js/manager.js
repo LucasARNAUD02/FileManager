@@ -171,7 +171,13 @@ $(function () {
                 break;
 
             case "#js-display-pdf":
-                modalPdfBody.html(`<object type="" data="${href}" width="100%" height="600"></object>`);
+
+                const indexConf = href.indexOf('?conf');
+                const confParameters = href.substring(indexConf);
+
+                const newHref = '/bibliotheque/file/' + previewModalButton.data('filename') + confParameters;
+
+                modalPdfBody.html(`<object type="application/pdf" data="${newHref}" width="100%" height="600"></object>`);
                 modalPdfBody.find('object').parent().prepend(loader);
                 modal.show();
                 modalPdfBody.find('object').on('load', function () {
