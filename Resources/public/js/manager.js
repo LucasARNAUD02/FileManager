@@ -183,6 +183,7 @@ $(function () {
                 modalPdfBody.find('object').on('load', function () {
                     modalPdfBody.find('.spinner-border').remove();
                 });
+
                 break;
 
             case "#js-display-video":
