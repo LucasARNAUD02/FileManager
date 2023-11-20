@@ -170,7 +170,6 @@ class ManagerController extends AbstractController
             ->add('name', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                    new Length(null, 1, 40)
                 ],
                 'label' => false,
                 'data' => $this->translator->trans('input.default'),
@@ -374,7 +373,6 @@ class ManagerController extends AbstractController
                 ],
                 'constraints' => [
                     new NotBlank(),
-                    new Length(null, 1, 40)
                 ],
                 'label' => false,
             ])
