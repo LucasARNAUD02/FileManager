@@ -360,8 +360,8 @@ $(function () {
 
             let message = `Le fichier ${file.name} n'a pas pu être ajouté.`;
 
-            if (file.size > 8388608) {
-                message = `Le fichier ${file.name} est trop volumineux pour être ajouté, sa taille ne doit pas dépasser 8 mo.`;
+            if (file.size > 62914560) {
+                message = `Le fichier ${file.name} est trop volumineux pour être ajouté, sa taille ne doit pas dépasser 60 mo.`;
             }
 
             displayToast("error", message, 3000, {transition: "pinItUp"});
