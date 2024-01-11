@@ -118,7 +118,7 @@ class UploadHandler
             'replace_dots_in_filenames' => '-',
             // The php.ini settings upload_max_filesize and post_max_size
             // take precedence over the following max_file_size setting:
-            'max_file_size' => 62914560,
+//            'max_file_size' => 62914560,
             'min_file_size' => 1,
             // The maximum number of files for the upload directory:
             'max_number_of_files' => null,
@@ -451,11 +451,11 @@ class UploadHandler
         $content_length = $this->fix_integer_overflow(
             (int)$this->get_server_var('CONTENT_LENGTH')
         );
-        $post_max_size = $this->get_config_bytes(ini_get('post_max_size'));
-        if ($post_max_size && ($content_length > $post_max_size)) {
-            $file->error = $this->get_error_message('post_max_size');
-            return false;
-        }
+//        $post_max_size = $this->get_config_bytes(ini_get('post_max_size'));
+//        if ($post_max_size && ($content_length > $post_max_size)) {
+//            $file->error = $this->get_error_message('post_max_size');
+//            return false;
+//        }
         if (!preg_match($this->options['accept_file_types'], $file->name)) {
             $file->error = $this->get_error_message('accept_file_types');
             return false;
@@ -465,13 +465,13 @@ class UploadHandler
         } else {
             $file_size = $content_length;
         }
-        if ($this->options['max_file_size'] && (
-                $file_size > $this->options['max_file_size'] ||
-                $file->size > $this->options['max_file_size'])
-        ) {
-            $file->error = $this->get_error_message('max_file_size');
-            return false;
-        }
+//        if ($this->options['max_file_size'] && (
+//                $file_size > $this->options['max_file_size'] ||
+//                $file->size > $this->options['max_file_size'])
+//        ) {
+//            $file->error = $this->get_error_message('max_file_size');
+//            return false;
+//        }
         if ($this->options['min_file_size'] &&
             $file_size < $this->options['min_file_size']) {
             $file->error = $this->get_error_message('min_file_size');
