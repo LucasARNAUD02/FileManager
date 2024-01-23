@@ -7,11 +7,11 @@
     <link rel="shortcut icon" href="{{ asset('assets/img/favicons/favicon-120x120.png') }}" type="image/x-icon">
     {% block stylesheets %}
 
-        <link rel="stylesheet" href="{{ asset('assets/css/theme.bundle.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/libs.bundle.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/theme.bundle.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/css/libs.bundle.css') }}">
 
-        <link rel="stylesheet" href="{{ asset('assets/css/material-symbols.css') }}"/>
-        <link rel="stylesheet" href="{{ asset('assets/css/toast.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('build/css/material-symbols.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('build/css/toast.css') }}"/>
 
         <link rel="stylesheet" href="{{ asset('bundles/filemanager/libs/fontawesome-free-5.15.4-web/css/all.css') }}">
         <link rel="stylesheet"
@@ -155,15 +155,15 @@
     </div>
 {% endblock %}
 {% block javascripts %}
-    <script src='{{ asset('assets/js/utils.js') }}'></script>
-    <script src="{{ asset('assets/js/Toasty/toasty.min.js') }}"></script>
-    <script src="{{ asset('assets/js/Toasty/toasty-config.js') }}"></script>
-    <script src='{{ asset('assets/js/Toasty/notification.js') }}'></script>
+    <script src='{{ asset('build/js/utils.js') }}'></script>
+    <script src="{{ asset('build/js/Toasty/toasty.min.js') }}"></script>
+    <script src="{{ asset('build/js/Toasty/toasty-config.js') }}"></script>
+    <script src='{{ asset('build/js/Toasty/notification.js') }}'></script>
     <script src="{{ asset('bundles/filemanager/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/popper-js-2.11.6/popper.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/jstree/dist/jstree.min.js') }}"></script>
-    <script src='{{ asset('assets/js/jquery-cookie.js') }}'></script>
+    <script src='{{ asset('build/js/jquery-cookie.js') }}'></script>
     <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/vendor/jquery.ui.widget.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/jquery.iframe-transport.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/jquery.fileupload.js') }}"></script>
