@@ -160,14 +160,11 @@
 {% endblock %}
 {% block javascripts %}
     <script src='{{ asset('build/js/utils.js') }}'></script>
-    <script src="{{ asset('build/js/Toasty/toasty.min.js') }}"></script>
-    <script src="{{ asset('build/js/Toasty/toasty-config.js') }}"></script>
-    <script src='{{ asset('build/js/Toasty/notification.js') }}'></script>
     <script src="{{ asset('bundles/filemanager/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/popper-js-2.11.6/popper.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/bootstrap/bootstrap.min.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/jstree/dist/jstree.min.js') }}"></script>
-    <script src='{{ asset('build/js/jquery-cookie.js') }}'></script>
+    <script src="{{ asset('bundles/filemanager/js/jquery-cookie.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/vendor/jquery.ui.widget.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/jquery.iframe-transport.js') }}"></script>
     <script src="{{ asset('bundles/filemanager/libs/blueimp-file-upload/js/jquery.fileupload.js') }}"></script>
@@ -177,7 +174,8 @@
     <script src="{{ asset('bundles/filemanager/libs/jQuery-contextMenu/dist/jquery.contextMenu.min.js') }}"></script>
     <script type="text/javascript"
             src="{{ asset('bundles/filemanager/libs/jquery-lazy/jquery.lazy.min.js') }}"></script>
-
+    <script src="{{ asset('bundles/filemanager/js/toasty.min.js') }}"></script>
+    <script src="{{ asset('bundles/filemanager/js/toasty-config.js') }}"></script>
     <script>
 
         const treedata = {{ treeData|raw }};
