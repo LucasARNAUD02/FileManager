@@ -528,8 +528,15 @@ class ManagerController extends AbstractController
     public function binaryFileResponseAction(Request $request, string $fileName): BinaryFileResponse|RedirectResponse
     {
         $fileManager = $this->newFileManager($request->query->all());
+        $filePath = $file = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR;
 
-        $file = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . urldecode($fileName);
+        // url decode nécéssaire si le fichier est affiché dans une autre page (par exemple depuis les documents récents) car nom récup depuis l'url
+        // pas nécéssaire si appellé en js depuis l'iframe du cloud directement car pas dans une url
+        if(is_readable($filePath . $fileName)){
+            $file = $filePath . $fileName;
+        } else {
+            $file = $filePath . urldecode($fileName);
+        }
 
         if (!is_readable($file)) {
             $this->addFlash("error", "Le fichier n'existe pas, il a été renommé ou supprimé.");
