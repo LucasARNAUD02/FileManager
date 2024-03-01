@@ -418,6 +418,8 @@ class ManagerController extends AbstractController
 
                     $path = $queryParameters["route"] ?? "";
 
+                    $isDossier = is_dir($oldFilePath);
+
                     $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
 
                     if ($documentRecent !== null) {
@@ -432,7 +434,34 @@ class ManagerController extends AbstractController
                         $fs = new Filesystem();
 
                         try {
+
                             $fs->rename($oldFilePath, $newFilePath);
+
+                            if($isDossier){
+
+                                $pathReplace = str_replace("\\", "/", $path);
+                                $documents = $this->documentRecentRepository->getLastDocuments();
+
+                                foreach ($documents as $document){
+
+                                    // path du document récent
+                                    $path = $document["path"];
+
+                                    if(str_starts_with($path, $pathReplace)){
+
+                                        $pathReplaceLength = strlen($pathReplace);
+                                        $newPath = $newFileName . substr($path, $pathReplaceLength);
+
+                                        $documentDataBase = $this->documentRecentRepository->find($document["id"]);
+
+                                        dd($document);
+
+                                        $document->setPath($newPath);
+                                        $this->em->flush();
+                                    }
+                                }
+                            }
+
                             $this->addFlash('success', $this->translator->trans('file.renamed.success'));
                             //File has been renamed successfully
                         } catch (IOException $exception) {
@@ -539,7 +568,7 @@ class ManagerController extends AbstractController
         }
 
         if (!is_readable($file)) {
-            $this->addFlash("error", "Le fichier n'existe pas, il a été renommé ou supprimé.");
+            $this->addFlash("error", "Le fichier n'existe pas, il a été déplacé ou supprimé.");
             return $this->redirectToRoute('file_manager', $fileManager->getQueryParameters());
         }
 
