@@ -414,9 +414,8 @@ class ManagerController extends AbstractController
                     $newFilePath = $fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $newFileName;
                     $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
 
-                    // on renomme le document récent si on change le nom du document original
-
                     $path = $queryParameters["route"] ?? "";
+                    dump("current dossier : $path");
 
                     $isDossier = is_dir($oldFilePath);
 
@@ -435,31 +434,29 @@ class ManagerController extends AbstractController
 
                         try {
 
-                            $fs->rename($oldFilePath, $newFilePath);
+//                            $fs->rename($oldFilePath, $newFilePath);
 
                             if($isDossier){
 
-                                $pathReplace = str_replace("\\", "/", $path);
                                 $documents = $this->documentRecentRepository->getLastDocuments();
+
+                                dump($documents);
+
+                                $oldPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $fileName);
+
+                                dd($oldPath);
 
                                 foreach ($documents as $document){
 
-                                    // path du document récent
-                                    $path = $document["path"];
+                                    // path actuel du document récent
+                                    $documentPath = $document["path"];
 
-                                    if(str_starts_with($path, $pathReplace)){
+                                    if(str_starts_with($documentPath, $oldPath)){
 
-                                        $pathReplaceLength = strlen($pathReplace);
-                                        $newPath = $newFileName . substr($path, $pathReplaceLength);
-
-                                        $documentDataBase = $this->documentRecentRepository->find($document["id"]);
-
-                                        dd($document);
-
-                                        $document->setPath($newPath);
-                                        $this->em->flush();
                                     }
                                 }
+
+                                dd("finito");
                             }
 
                             $this->addFlash('success', $this->translator->trans('file.renamed.success'));
@@ -468,6 +465,7 @@ class ManagerController extends AbstractController
                             $this->addFlash('error', $this->translator->trans('file.renamed.danger'));
                         }
                     }
+
                 } else {
                     $this->addFlash('info', $this->translator->trans('file.renamed.nochanged'));
                 }
