@@ -599,15 +599,31 @@ class ManagerController extends AbstractController
 
                 $is_delete = false;
 
+                // null = dossier racine
+                $currentPath = $fileManager->getCurrentRoute();
+
                 foreach ($queryParameters['delete'] as $fileName) {
 
                     $filePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
+                    $filePathHistorique = $fileManager->getCurrentRoute() . \DIRECTORY_SEPARATOR . $fileName;
 
                     if (!str_starts_with($filePath, $fileManager->getCurrentPath())) {
                         $this->addFlash('error', $this->translator->trans('file.deleted.danger'));
                     } else {
                         $this->dispatch(FileManagerEvents::PRE_DELETE_FILE);
                         try {
+
+                            if($currentPath === null){
+                                $txtHistoriquePath = "depuis le dossier racine.";
+                            } else {
+                                $txtHistoriquePath  = "depuis le dossier « $currentPath ».";
+                            }
+
+                            if(is_dir($filePath)){
+                                $this->makeHistoriqueCloud("Suppression du dossier « $filePathHistorique ».", false);
+                            } else {
+                                $this->makeHistoriqueCloud("Suppression du fichier « $fileName » $txtHistoriquePath", false);
+                            }
 
                             $fs->remove($filePath);
                             $is_delete = true;
@@ -633,8 +649,6 @@ class ManagerController extends AbstractController
 
                 try {
 
-                    $path = $fileManager->getCurrentPath();
-
                     $this->makeHistoriqueCloud("Suppression du dossier « {$fileManager->getCurrentRoute()} » depuis le dossier courant.");
 
                     $fs->remove($fileManager->getCurrentPath());
@@ -659,7 +673,7 @@ class ManagerController extends AbstractController
         return $this->redirectToRoute('file_manager', $queryParameters);
     }
 
-    private function makeHistoriqueCloud(string $description)
+    private function makeHistoriqueCloud(string $description, bool $flush = true)
     {
         $historiqueCloud = new HistoriqueCloud();
 
@@ -669,6 +683,9 @@ class ManagerController extends AbstractController
             ->setDescription($description);
 
         $this->em->persist($historiqueCloud);
-        $this->em->flush();
+
+        if($flush){
+            $this->em->flush();
+        }
     }
 }
