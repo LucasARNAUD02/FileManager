@@ -425,6 +425,9 @@ class ManagerController extends AbstractController
 
                         try {
 
+                            /*
+                             * Même utilité que str_replace mais seulement avec la première occurence trouvée dans la chaine
+                             */
                             function left_replace($text, $find, $replace)
                             {
                                 return implode($replace, explode($find, $text, 2));
@@ -432,6 +435,7 @@ class ManagerController extends AbstractController
 
                             $fs->rename($oldFilePath, $newFilePath);
 
+                            // on change le path tous les documents récents qui sont contenus dans le dossier renommé pour qu'ils continuent de s'afficher
                             if ($isDossier) {
 
                                 $documents = $this->documentRecentRepository->getLastDocuments();
