@@ -199,22 +199,16 @@ class ManagerController extends AbstractController
                     $directorytmp = "{$directory} ({$i})";
                     ++$i;
                 }
+
                 $directory = $directorytmp;
 
                 try {
 
+                    $formatedPath = $fileManager->getCurrentRoute() . \DIRECTORY_SEPARATOR . $data['name'];
+
                     $fs->mkdir($directory);
 
-                    $historiqueCloud = new HistoriqueCloud();
-
-                    $historiqueCloud
-                        ->setAction("Ajout")
-                        ->setDate(new \DateTime())
-                        ->setUser($this->getUser())
-                        ->setPath(explode("\bibliotheque", $directory)[1]);
-
-                    $this->em->persist($historiqueCloud);
-                    $this->em->flush();
+                    $this->makeHistoriqueCloud("Création du dossier « $formatedPath » a été créé.");
 
                     $this->addFlash('success', $this->translator->trans('folder.add.success'));
                 } catch (IOExceptionInterface $e) {
@@ -425,6 +419,8 @@ class ManagerController extends AbstractController
 
                         try {
 
+                            $user = $this->getUser();
+
                             /*
                              * Même utilité que str_replace mais seulement avec la première occurence trouvée dans la chaine
                              */
@@ -435,13 +431,15 @@ class ManagerController extends AbstractController
 
                             $fs->rename($oldFilePath, $newFilePath);
 
+                            $oldPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $fileName);
+                            $newPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $newFileName);
+
                             // on change le path tous les documents récents qui sont contenus dans le dossier renommé pour qu'ils continuent de s'afficher
                             if ($isDossier) {
 
                                 $documents = $this->documentRecentRepository->getLastDocuments();
 
-                                $oldPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $fileName);
-                                $newPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $newFileName);
+                                $this->makeHistoriqueCloud("Dossier « $fileName », renommé en « $newFileName ». Dossier parent « $path ».");
 
                                 foreach ($documents as $key => $document) {
 
@@ -458,6 +456,8 @@ class ManagerController extends AbstractController
                                 }
 
                             } else {
+
+                                $this->makeHistoriqueCloud("Fichier « $fileName » renommé en « $newFileName ». Dossier parent « $path ».");
 
                                 $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
 
@@ -530,24 +530,18 @@ class ManagerController extends AbstractController
 
                 $file->url = $this->generateUrl('file_manager_file', array_merge($fileManager->getQueryParameters(), ['fileName' => $file->url]));
 
+                $path = str_replace("\\", "/", urldecode($fileManager->getQueryParameter('route')));
+
                 $documentRecent = (new DocumentRecent())
                     ->setDate(new \DateTime())
                     ->setUser($this->getUser())
-                    ->setPath(str_replace("\\", "/", urldecode($fileManager->getQueryParameter('route'))))
+                    ->setPath($path)
                     ->setFileName($file->name)
                     ->setExt(pathinfo($file->name, PATHINFO_EXTENSION));
 
+                $this->makeHistoriqueCloud("Ajout du fichier « $file->name » dans le dossier « $path ».");
+
                 $this->em->persist($documentRecent);
-
-                $historiqueCloud = new HistoriqueCloud();
-
-                $historiqueCloud
-                    ->setDate(new \DateTime())
-                    ->setUser($this->getUser())
-                    ->setPath(urldecode($fileManager->getQueryParameter('route')) . "/" . $file->name)
-                    ->setAction("Ajout");
-
-                $this->em->persist($historiqueCloud);
             }
         }
 
@@ -600,8 +594,11 @@ class ManagerController extends AbstractController
             $fileManager = $this->newFileManager($queryParameters);
 
             $fs = new Filesystem();
+
             if (isset($queryParameters['delete'])) {
+
                 $is_delete = false;
+
                 foreach ($queryParameters['delete'] as $fileName) {
 
                     $filePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
@@ -614,16 +611,6 @@ class ManagerController extends AbstractController
 
                             $fs->remove($filePath);
                             $is_delete = true;
-
-                            $historiqueCloud = new HistoriqueCloud();
-
-                            $historiqueCloud
-                                ->setDate(new \DateTime())
-                                ->setUser($this->getUser())
-                                ->setAction('Suppression')
-                                ->setPath(explode("\bibliotheque", $filePath)[1]);
-
-                            $this->em->persist($historiqueCloud);
 
                         } catch (IOException $exception) {
                             $this->addFlash('error', $this->translator->trans('file.deleted.unauthorized'));
@@ -641,22 +628,16 @@ class ManagerController extends AbstractController
                 unset($queryParameters['delete']);
 
             } else {
+
                 $this->dispatch(FileManagerEvents::PRE_DELETE_FOLDER);
+
                 try {
 
                     $path = $fileManager->getCurrentPath();
 
+                    $this->makeHistoriqueCloud("Suppression du dossier « {$fileManager->getCurrentRoute()} » depuis le dossier courant.");
+
                     $fs->remove($fileManager->getCurrentPath());
-
-                    // suppression du dossier courant
-
-                    $historiqueCloud = (new HistoriqueCloud())
-                        ->setDate(new \DateTime())
-                        ->setUser($this->getUser())
-                        ->setAction('Suppression')
-                        ->setPath(explode("\bibliotheque", $path)[1]);
-
-                    $this->em->persist($historiqueCloud);
 
                     $this->em->flush();
 
@@ -676,5 +657,18 @@ class ManagerController extends AbstractController
         }
 
         return $this->redirectToRoute('file_manager', $queryParameters);
+    }
+
+    private function makeHistoriqueCloud(string $description)
+    {
+        $historiqueCloud = new HistoriqueCloud();
+
+        $historiqueCloud
+            ->setDate(new \DateTimeImmutable())
+            ->setUser($this->getUser())
+            ->setDescription($description);
+
+        $this->em->persist($historiqueCloud);
+        $this->em->flush();
     }
 }
