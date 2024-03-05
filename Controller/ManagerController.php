@@ -23,7 +23,6 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -37,10 +36,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @author Arthur Gribet <a.gribet@gmail.com>
@@ -189,7 +186,7 @@ class ManagerController extends AbstractController
 
         if ($form->isSubmitted()) {
 
-            if($form->isValid()){
+            if ($form->isValid()) {
 
                 $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
 
@@ -402,7 +399,7 @@ class ManagerController extends AbstractController
 
         if ($formRename->isSubmitted()) {
 
-            if($formRename->isValid()){
+            if ($formRename->isValid()) {
 
                 $data = $formRename->getData();
                 $extension = $data['extension'] ? '.' . $data['extension'] : '';
@@ -415,16 +412,10 @@ class ManagerController extends AbstractController
                     $oldFilePath = realpath($fileManager->getCurrentPath() . \DIRECTORY_SEPARATOR . $fileName);
 
                     $path = $queryParameters["route"] ?? "";
-                    dump("current dossier : $path");
+                    $path = str_replace("\\", "/", $path);
+                    $path = urldecode($path);
 
                     $isDossier = is_dir($oldFilePath);
-
-                    $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
-
-                    if ($documentRecent !== null) {
-                        $documentRecent->setFileName($newFileName);
-                        $this->em->flush();
-                    }
 
                     if (0 !== mb_strpos($newFilePath, $fileManager->getCurrentPath())) {
                         $this->addFlash('danger', $this->translator->trans('file.renamed.unauthorized'));
@@ -434,29 +425,42 @@ class ManagerController extends AbstractController
 
                         try {
 
-//                            $fs->rename($oldFilePath, $newFilePath);
+                            function left_replace($text, $find, $replace)
+                            {
+                                return implode($replace, explode($find, $text, 2));
+                            }
 
-                            if($isDossier){
+                            $fs->rename($oldFilePath, $newFilePath);
+
+                            if ($isDossier) {
 
                                 $documents = $this->documentRecentRepository->getLastDocuments();
 
-                                dump($documents);
-
                                 $oldPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $fileName);
+                                $newPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $newFileName);
 
-                                dd($oldPath);
+                                foreach ($documents as $key => $document) {
 
-                                foreach ($documents as $document){
-
-                                    // path actuel du document récent
                                     $documentPath = $document["path"];
 
-                                    if(str_starts_with($documentPath, $oldPath)){
+                                    if (str_starts_with($documentPath, $oldPath)) {
 
+                                        $newPathDocument = left_replace($documentPath, $oldPath, $newPath);
+
+                                        $documentEntity = $this->documentRecentRepository->find($document["id"]);
+                                        $documentEntity->setPath($newPathDocument);
+                                        $this->em->flush();
                                     }
                                 }
 
-                                dd("finito");
+                            } else {
+
+                                $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
+
+                                if ($documentRecent !== null) {
+                                    $documentRecent->setFileName($newFileName);
+                                    $this->em->flush();
+                                }
                             }
 
                             $this->addFlash('success', $this->translator->trans('file.renamed.success'));
@@ -469,6 +473,7 @@ class ManagerController extends AbstractController
                 } else {
                     $this->addFlash('info', $this->translator->trans('file.renamed.nochanged'));
                 }
+
             } else {
 
                 $errors = $formRename->getErrors(true);
@@ -524,7 +529,7 @@ class ManagerController extends AbstractController
                 $documentRecent = (new DocumentRecent())
                     ->setDate(new \DateTime())
                     ->setUser($this->getUser())
-                    ->setPath(urldecode($fileManager->getQueryParameter('route')))
+                    ->setPath(str_replace("\\", "/", urldecode($fileManager->getQueryParameter('route'))))
                     ->setFileName($file->name)
                     ->setExt(pathinfo($file->name, PATHINFO_EXTENSION));
 
@@ -559,7 +564,7 @@ class ManagerController extends AbstractController
 
         // url decode nécéssaire si le fichier est affiché dans une autre page (par exemple depuis les documents récents) car nom récup depuis l'url
         // pas nécéssaire si appellé en js depuis l'iframe du cloud directement car pas dans une url
-        if(is_readable($filePath . $fileName)){
+        if (is_readable($filePath . $fileName)) {
             $file = $filePath . $fileName;
         } else {
             $file = $filePath . urldecode($fileName);
