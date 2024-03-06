@@ -208,7 +208,7 @@ class ManagerController extends AbstractController
 
                     $fs->mkdir($directory);
 
-                    $this->makeHistoriqueCloud("Création du dossier « $formatedPath » a été créé.");
+                    $this->makeHistoriqueCloud("Création du dossier « $formatedPath ».");
 
                     $this->addFlash('success', $this->translator->trans('folder.add.success'));
                 } catch (IOExceptionInterface $e) {
@@ -434,12 +434,14 @@ class ManagerController extends AbstractController
                             $oldPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $fileName);
                             $newPath = str_replace("\\", "/", $path . \DIRECTORY_SEPARATOR . $newFileName);
 
+                            $pathHistorique = (empty($path) ? "depuis le dossier racine." : "depuis le dossier « $path ».");
+
                             // on change le path tous les documents récents qui sont contenus dans le dossier renommé pour qu'ils continuent de s'afficher
                             if ($isDossier) {
 
                                 $documents = $this->documentRecentRepository->getLastDocuments();
 
-                                $this->makeHistoriqueCloud("Dossier « $fileName », renommé en « $newFileName ». Dossier parent « $path ».");
+                                $this->makeHistoriqueCloud("Dossier « $fileName », renommé en « $newFileName » $pathHistorique");
 
                                 foreach ($documents as $key => $document) {
 
@@ -457,7 +459,7 @@ class ManagerController extends AbstractController
 
                             } else {
 
-                                $this->makeHistoriqueCloud("Fichier « $fileName » renommé en « $newFileName ». Dossier parent « $path ».");
+                                $this->makeHistoriqueCloud("Fichier « $fileName » renommé en « $newFileName » $pathHistorique");
 
                                 $documentRecent = $this->documentRecentRepository->findOneBy(array('fileName' => $fileName, 'path' => $path));
 
@@ -680,7 +682,7 @@ class ManagerController extends AbstractController
         $historiqueCloud
             ->setDate(new \DateTimeImmutable())
             ->setCollaborateur($this->getUser()->getCollaborateur())
-            ->setDescription($description);
+            ->setDescription(str_replace("\\", "/", $description));
 
         $this->em->persist($historiqueCloud);
 
