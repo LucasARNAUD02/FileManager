@@ -679,7 +679,7 @@ class ManagerController extends AbstractController
 
         $historiqueCloud
             ->setDate(new \DateTimeImmutable())
-            ->setUser($this->getUser())
+            ->setCollaborateur($this->getUser()->getCollaborateur())
             ->setDescription($description);
 
         $this->em->persist($historiqueCloud);
