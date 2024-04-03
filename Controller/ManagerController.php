@@ -419,8 +419,6 @@ class ManagerController extends AbstractController
 
                         try {
 
-                            $user = $this->getUser();
-
                             /*
                              * Même utilité que str_replace mais seulement avec la première occurence trouvée dans la chaine
                              */
@@ -536,7 +534,6 @@ class ManagerController extends AbstractController
 
                 $documentRecent = (new DocumentRecent())
                     ->setDate(new \DateTime())
-                    ->setUser($this->getUser())
                     ->setPath($path)
                     ->setFileName($file->name)
                     ->setExt(pathinfo($file->name, PATHINFO_EXTENSION));
