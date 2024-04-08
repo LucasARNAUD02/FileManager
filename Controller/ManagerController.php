@@ -2,7 +2,7 @@
 
 namespace Lucas\FileManager\Controller;
 
-use App\Constants\PermissionsIds;
+use App\Constants\Ids;
 use App\Entity\Cloud\DocumentRecent;
 use App\Entity\Cloud\HistoriqueCloud;
 use App\Repository\Cloud\DocumentRecentRepository;
@@ -188,7 +188,7 @@ class ManagerController extends AbstractController
 
             if ($form->isValid()) {
 
-                $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+                $this->permissionChecker->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
 
                 $data = $form->getData();
                 $fs = new Filesystem();
@@ -382,7 +382,7 @@ class ManagerController extends AbstractController
      */
     public function renameFileAction(Request $request, string $fileName): RedirectResponse
     {
-        $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+        $this->permissionChecker->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
 
         $queryParameters = $request->query->all();
 
@@ -496,7 +496,7 @@ class ManagerController extends AbstractController
      */
     public function uploadFileAction(Request $request): JsonResponse|Response
     {
-        $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+        $this->permissionChecker->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
 
         $fileManager = $this->newFileManager($request->query->all());
 
@@ -582,7 +582,7 @@ class ManagerController extends AbstractController
      */
     public function deleteAction(Request $request): RedirectResponse
     {
-        $this->permissionChecker->checkPermissionUser(PermissionsIds::GERER_CLOUD_COMMUN, true);
+        $this->permissionChecker->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
 
         $form = $this->createDeleteForm();
         $form->handleRequest($request);
