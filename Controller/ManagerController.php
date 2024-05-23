@@ -58,7 +58,7 @@ class ManagerController extends AbstractController
         private FormFactoryInterface              $formFactory,
         private EntityManagerInterface            $em,
         private PermissionChecker                 $permissionChecker,
-        private readonly DocumentRecentRepository $documentRecentRepository
+        private DocumentRecentRepository $documentRecentRepository
     )
     {
     }
