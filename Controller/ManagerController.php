@@ -6,7 +6,7 @@ use App\Constants\Ids;
 use App\Entity\Cloud\DocumentRecent;
 use App\Entity\Cloud\HistoriqueCloud;
 use App\Repository\Cloud\DocumentRecentRepository;
-use App\Service\PermissionChecker;
+use App\Service\PermissionCheckerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lucas\FileManager\Event\FileManagerEvents;
 use Lucas\FileManager\Helpers\File;
@@ -57,7 +57,7 @@ class ManagerController extends AbstractController
         private RouterInterface                   $router,
         private FormFactoryInterface              $formFactory,
         private EntityManagerInterface            $em,
-        private PermissionChecker                 $permissionChecker,
+        private PermissionCheckerService          $permissionCheckerService,
         private DocumentRecentRepository $documentRecentRepository
     )
     {
@@ -188,7 +188,7 @@ class ManagerController extends AbstractController
 
             if ($form->isValid()) {
 
-                $this->permissionChecker->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
+                $this->permissionCheckerService->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
 
                 $data = $form->getData();
                 $fs = new Filesystem();
@@ -382,7 +382,7 @@ class ManagerController extends AbstractController
      */
     public function renameFileAction(Request $request, string $fileName): RedirectResponse
     {
-        $this->permissionChecker->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
+        $this->permissionCheckerService->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
 
         $queryParameters = $request->query->all();
 
@@ -496,7 +496,7 @@ class ManagerController extends AbstractController
      */
     public function uploadFileAction(Request $request): JsonResponse|Response
     {
-        $this->permissionChecker->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
+        $this->permissionCheckerService->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
 
         $fileManager = $this->newFileManager($request->query->all());
 
@@ -582,7 +582,7 @@ class ManagerController extends AbstractController
      */
     public function deleteAction(Request $request): RedirectResponse
     {
-        $this->permissionChecker->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
+        $this->permissionCheckerService->checkPermissionUser(Ids::PERMISSION_GERER_CLOUD_COMMUN_ID, true);
 
         $form = $this->createDeleteForm();
         $form->handleRequest($request);
